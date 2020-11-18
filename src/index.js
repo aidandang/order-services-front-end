@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 // components
 import ScrollToTop from './components/scroll-to-top/scroll-to-top.component';
-import App from './app';
+import App from './App';
 
 // redux
 import { Provider } from 'react-redux';
