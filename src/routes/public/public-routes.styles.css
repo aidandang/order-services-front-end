@@ -1,0 +1,11 @@
+.public-main-wrapper {
+  min-height: 100vh;
+  background-color: #ECEBF2;
+}
+
+.landing-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}

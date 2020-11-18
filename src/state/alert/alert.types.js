@@ -1,0 +1,4 @@
+export const AlertActionTypes = {
+  SET_ALERT_MESSAGE: 'SET_ALERT_MESSAGE',
+  CLEAR_ALERT_MESSAGE: 'CLEAR_ALERT_MESSAGE'
+}
