@@ -1,0 +1,19 @@
+.social-media {
+  color: #ECEBF2;
+}
+
+.footer-line {
+  height: 1px;
+  background-color: #ECEBF2;
+  border: none;
+}
+
+.footer {
+  background-color: rgb(131, 129, 140, 1);
+}
+
+.footer-a {
+  color: #BCBABF;
+  text-decoration: underline;
+  font-weight: normal;
+}

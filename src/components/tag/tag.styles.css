@@ -1,0 +1,39 @@
+.btn-custom {
+  border-radius: 20px;
+  background-color: #5D8C87;
+  border: 1px solid rgba(93, 140, 135, 1);
+  cursor: default;
+}
+
+.btn-custom.btn-custom-google {
+  background-color: #4285F4;
+  border: 1px solid #4285F4;
+}
+
+.btn-custom.btn-custom-google:hover {
+  background-color: #357AE8;
+  border: 1px solid #357AE8;
+}
+
+.symbol-link-cs {
+  color: #5D8C87;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.symbol-link-cs:hover {
+  text-decoration: none;
+}
+
+.symbol-disabled-link-cs {
+  color: #999999;
+  text-decoration: none;
+  font-weight: normal;
+  cursor: default;
+}
+
+.symbol-disabled-link-cs:hover {
+  color: #999999 !important;
+  text-decoration: none;
+  cursor: default;
+}

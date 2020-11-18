@@ -1,0 +1,11 @@
+.nav-background {
+  background-color: rgba(188, 186, 191, 1);
+}
+
+.nav-background-landing {
+  background-color: rgba(188, 186, 191, .2);
+}
+
+.nav-link-collapse:hover {
+  background-color: #5D8C87 !important;
+}

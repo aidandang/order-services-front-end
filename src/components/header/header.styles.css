@@ -1,0 +1,15 @@
+.nav-landing-page {
+  background-color: rgba(188, 186, 191, .2);
+}
+
+.nav-public-page {
+  background-color: rgba(188, 186, 191, 1);
+}
+
+.nav-private-page {
+  background-color: rgba(188, 186, 191, 1);
+}
+
+.collapse-link:hover {
+  background-color: #5D8C87 !important;
+}
