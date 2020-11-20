@@ -1,6 +1,7 @@
 import React from 'react';
 
 // components
+import OrderStatus from './order-status.component';
 import OrderMerchant from './order-merchant.component';
 import OrderItem from './order-item.component';
 import OrderReceiving from './order-receiving.component';
@@ -17,6 +18,7 @@ const OrderInfo = ({
   return <>
     {
       byId && <>
+        <OrderStatus />
         <OrderMerchant />
         <OrderItem />
         <OrderReceiving />

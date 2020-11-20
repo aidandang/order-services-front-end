@@ -35,7 +35,10 @@ const SaveCustomerToOrder = ({
       patchReq(`/orders/${orderId}`, fetchSuccess, updateOrder, setSuccess, 'order-edit');
     } else {
       let newOrder = {
-        customer
+        customer,
+        status: {
+          type: 'created'
+        }
       }
       postReq('/orders', fetchSuccess, newOrder, setSuccess, 'order-add')
     }
