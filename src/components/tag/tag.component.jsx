@@ -219,3 +219,11 @@ export const TextareaInput = ({
     </div>
   </>
 }
+
+export const Badge = ({
+  name
+}) => {
+  return <>
+    <span class="badge badge-info badge-cs">{name}</span>
+  </>
+}
