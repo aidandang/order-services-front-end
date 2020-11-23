@@ -14,6 +14,7 @@ import isFetchingReducer from './is-fetching/is-fetching.reducer';
 import apiReducer from './api/api.reducer';
 import merchantReducer from './merchant/merchant.reducer';
 import warehouseReducer from './warehouse/warehouse.reducer';
+import receivingReducer from './receiving/receiving.reducer';
 
 const persistConfig = {
   key: 'root',
@@ -33,7 +34,8 @@ const appReducer = combineReducers({
   order: orderReducer,
   api: apiReducer,
   merchant: merchantReducer,
-  warehouse: warehouseReducer
+  warehouse: warehouseReducer,
+  receiving: receivingReducer
 });
 
 const rootReducer = (state, action) => {

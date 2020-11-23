@@ -11,6 +11,7 @@ import DashboardPage from '../../pages/dashboard-page/dashboard-page.component';
 import ProductPage from '../../pages/product-page/product-page.component';
 import OrderPage from '../../pages/order-page/order-page.component';
 import CustomerPage from '../../pages/customer-page/customer-page.component';
+import ReceivingPage from '../../pages/receiving-page/receiving-page.component';
 
 // ui settings
 import './private-routes.styles.css';
@@ -35,6 +36,7 @@ const PrivateRoutes = () => {
                     <Route path="/app/order" render={() => <OrderPage />} />
                     <Route path="/app/customer" render={() => <CustomerPage />} />
                     <Route exact path="/app" render={() => <DashboardPage />} />
+                    <Route path="/app/receiving" render={() => <ReceivingPage />} />
                   </Switch>
                 </div>
               </div>
