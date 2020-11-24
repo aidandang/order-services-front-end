@@ -11,8 +11,3 @@ export const selectOrderItem = createSelector(
   [selectOrder],
   order => order.item
 )
-
-export const selectOrderEditing = createSelector(
-  [selectOrder],
-  order => order.editing
-)

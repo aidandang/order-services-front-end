@@ -8,7 +8,7 @@ export const currencyMask = (value, limit) => {
     if (str.match(/^[1-9]{1}$/)) {
       return `.0${str}`;
     } else if (str === '0') {
-      return ''
+      return '0'
     }
   }
 

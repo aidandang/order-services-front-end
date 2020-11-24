@@ -137,7 +137,7 @@ const CustomerForm = ({
       pathname = location.pathname.split(byId._id)[0] + byId._id;
     } else {
       // remove /add from the path to go back to Customer List
-      pathname = location.pathname.slice(-4)
+      pathname = location.pathname.slice(0, -4)
     }
 
     if (success) history.push(pathname)

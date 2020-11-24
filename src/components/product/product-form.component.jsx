@@ -107,7 +107,7 @@ const ProductForm = ({
       pathname = location.pathname.split(productTemp._id)[0] + productTemp._id;
     } else {
       // remove /add from the path to go back to Product List
-      pathname = location.pathname.slice(-4)
+      pathname = location.pathname.slice(0, -4)
     }
 
     if (success) history.push(pathname)

@@ -39,9 +39,9 @@ const ReceivingSearchForm = ({
               </a>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a href="" name="account" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Tracking Number</a>
+                <a href="" name="tracking" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Tracking Number</a>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a href="" name="phone" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Order Reference</a>
+                <a href="" name="orderRef" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Order Reference</a>
               </div>
             </div>
           </form>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 // dependencies
+import moment from 'moment';
 import { useLocation, useHistory } from 'react-router-dom';
 
 const ReceivingListRow = ({
@@ -22,7 +23,7 @@ const ReceivingListRow = ({
       onClick={e => handleOnClick(e, receiving)}
     >
       <th scope="row">{receiving.tracking}</th>
-      <td>{receiving.recvDate}</td>
+      <td>{moment(receiving.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
       <td>{receiving.orderRef}</td>
     </tr>
   </>
