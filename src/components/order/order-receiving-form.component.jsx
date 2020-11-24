@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import moment from 'moment';
 import { useLocation, useHistory, useParams, Redirect } from 'react-router-dom';
 
 // components
-import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.component';
+import { Card, Ul, Li, TextInput, SelectInput } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import Warehouse from '../warehouse/warehouse.component';
@@ -26,10 +25,6 @@ const formSchema = Yup.object().shape({
   status: Yup
     .string()
     .required(),
-  tracking: Yup
-    .string(),
-  recvDate: Yup
-    .string(),
   warehouse: Yup
     .string()
     .required()
@@ -38,7 +33,6 @@ const formSchema = Yup.object().shape({
 const formState = {
   status: "",
   tracking: "",
-  recvDate: "",
   warehouse: ""
 }
 
@@ -69,8 +63,6 @@ const OrderReceivingForm = ({
     orderEditing = {
       ...formState,
       status: byId.receiving.status,
-      tracking: byId.receiving.tracking,
-      recvDate: moment(byId.receiving.recvDate).format('yyyy-MM-DD'),
       warehouse: byId.receiving.warehouse._id
     }
   }
@@ -122,7 +114,7 @@ const OrderReceivingForm = ({
             <Ul>
               <Li>
                 <TextInput
-                  label="Status (*)" 
+                  label="Status Description (*)" 
                   name="status"
                   errors={errors}
                   smallText="Status of the order is required."
@@ -131,35 +123,10 @@ const OrderReceivingForm = ({
                 />
               </Li>
               <Li>
-                <div className="row">
-                  <div className="col-xl-6">
-                    <TextInput
-                      label="Tracking Number" 
-                      name="tracking"
-                      errors={errors}
-                      smallText="Tracking is optional."
-                      value={formData.tracking}
-                      onChange={onInputChange}
-                    />
-                  </div>
-                  <div className="col-xl-6">
-                    <DateInput
-                      label="Received Date" 
-                      name="recvDate"
-                      errors={errors}
-                      smallText="Received date is optional."
-                      value={formData.recvDate}
-                      onChange={onInputChange}
-                    />
-                  </div>
-                </div>
-              </Li>
-              <Li>
                 <SelectInput
                   label="Warehouse (*)" 
                   name="warehouse"
                   errors={errors}
-                  size="col-xl-6"
                   smallText="Select a warehouse, add new if there is no warehouse."
                   defaultValue=""
                   defaultText="..."

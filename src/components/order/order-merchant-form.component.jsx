@@ -166,7 +166,7 @@ const OrderMerchantForm = ({
                   defaultText="Choose..."
                   value={formData.orderType ? formData.orderType : ""}
                   onChange={onInputChange}
-                  data={[{ type: 'Online'}, { type: 'Walk-in'}]}
+                  data={[{ type: 'Online'}, { type: 'Walk-in'}, { type: 'Shipping'}]}
                   valueKey="type"
                   textKey="type" 
                 />

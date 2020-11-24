@@ -53,6 +53,7 @@ const OrderListTable = ({
             <thead>
               <tr>
                 <th scope="col">Order#</th>
+                <th scope="col">Status</th>
                 <th scope="col">Customer</th>
                 <th scope="col">Order Number</th>
                 <th scope="col">Date</th>

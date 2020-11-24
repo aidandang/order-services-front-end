@@ -91,7 +91,7 @@ const OrderCustomer = ({
             to={`${location.pathname}/select-customer`}
             className="a-link-cs"
           >
-            {`${byId && byId.customer ? 'Reselect Customer' : 'Select Customer'}`}
+            Reselect Customer
           </Link>
         </Li> 
       </Ul>

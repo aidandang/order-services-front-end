@@ -121,6 +121,7 @@ const CustomerInfo = ({
                 </div>
               </div>
             </Li>
+            
             <Li>
               <div className="row">
                 <div className="col">
@@ -137,6 +138,7 @@ const CustomerInfo = ({
                 </div>
               </div>
             </Li>
+  
           </Ul>
         </Card>
       </>
