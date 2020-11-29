@@ -24,7 +24,7 @@ const ReceivingListRow = ({
     >
       <th scope="row">{receiving.tracking}</th>
       <td>{moment(receiving.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
-      <td>{receiving.orderRef}</td>
+      <td>{receiving.note}</td>
     </tr>
   </>
 }

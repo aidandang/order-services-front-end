@@ -32,7 +32,7 @@ const OrderListRow = ({
       <td><span className="text-info">{status && status.type}</span></td>
       <td>{`${customer.account} - ${customer.nickname}`}</td>
       <td>{info ? info.orderNumber : 'not order'}</td>
-      <td>{info ? moment(info.orderDate).format('MM-DD-YYYY') : 'not order'}</td>
+      <td>{info ? moment(info.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'not order'}</td>
       <td>{info ? info.merchant.name : 'not order'}</td>
       <td className="text-right">{integerMask(items.reduce((a, c) => a + c.qty, 0).toString())}</td>
       <td className="text-right">{acctToStr(items.reduce((a, c) => a + c.qty * c.price, cost && cost.shippingCost + cost.saleTax))}</td>

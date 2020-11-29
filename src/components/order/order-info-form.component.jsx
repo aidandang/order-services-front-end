@@ -10,6 +10,7 @@ import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.comp
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import Merchant from '../merchant/merchant.component';
+import Warehouse from '../warehouse/warehouse.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -18,6 +19,7 @@ import { OrderActionTypes } from '../../state/order/order.types';
 import { patchReq } from '../../state/api/api.requests';
 import { selectMerchantData } from '../../state/merchant/merchant.selectors';
 import { selectOrderData } from '../../state/order/order.selectors';
+import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors';
 
 // inital values
 const formSchema = Yup.object().shape({
@@ -32,6 +34,9 @@ const formSchema = Yup.object().shape({
     .required(),
   orderType: Yup
     .string()
+    .required(),
+  warehouse: Yup
+    .string()
     .required()
 });
 
@@ -39,13 +44,15 @@ const formState = {
   merchant: "",
   orderNumber: "",
   orderDate: "",
-  orderType: ""
+  orderType: "",
+  warehouse: ""
 }
 
-const OrderMerchantForm = ({
+const OrderInfoForm = ({
   data,
   patchReq,
-  merchantData
+  merchantData,
+  warehouseData
 }) => {
 
   const location = useLocation();
@@ -54,7 +61,7 @@ const OrderMerchantForm = ({
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-order-merchant')[0];
+  const parentRoute = location.pathname.split('/update-order-info')[0];
 
   const [success, setSuccess] = useState(false)
 
@@ -68,13 +75,16 @@ const OrderMerchantForm = ({
       merchant: byId.info.merchant._id,
       orderNumber: byId.info.orderNumber,
       orderDate: moment(byId.info.orderDate).format('yyyy-MM-DD'),
-      orderType: byId.info.orderType
+      orderType: byId.info.orderType,
+      warehouse: byId.info.warehouse._id,
     }
   }
 
   let merchants = null;
+  let warehouses = null;
 
   if (merchantData.allIds) merchants = merchantData.allIds;
+  if (warehouseData.allIds) warehouses = warehouseData.allIds;
 
   const [
     formData,
@@ -88,10 +98,12 @@ const OrderMerchantForm = ({
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
     
     const merchantObj = merchantData.allIds.find(item => item._id === formData.merchant)
+    const warehouseObj = warehouseData.allIds.find(item => item._id === formData.warehouse)
 
     const obj = { 
       ...formData,
       merchant: merchantObj,
+      warehouse: warehouseObj
     }
 
     patchReq(`/orders/${orderId}`, fetchSuccess, { info: obj }, setSuccess, 'order-merchant-form')
@@ -171,6 +183,22 @@ const OrderMerchantForm = ({
                   textKey="type" 
                 />
               </Li>
+              <Li>
+                <SelectInput
+                  label="Warehouse (*)" 
+                  name="warehouse"
+                  errors={errors}
+                  size="col-xl-6"
+                  smallText="Select a warehouse, add new if there is no warehouse."
+                  defaultValue=""
+                  defaultText="..."
+                  value={formData.warehouse ? formData.warehouse : ""}
+                  onChange={onInputChange}
+                  data={warehouses}
+                  valueKey="_id"
+                  textKey="name"
+                />
+              </Li>
               <SubmitOrReset
                 buttonName={'Save'}
                 buttonDisabled={buttonDisabled}
@@ -181,11 +209,19 @@ const OrderMerchantForm = ({
           </Card>
         </div>
         <div className="col-12 col-xl-4">
-          <Card width="col" title="Update Merchants">
+          <Card width="col-12" title="Update Merchants">
             <Ul>
               <Merchant
                 pathname={'/merchants'}
                 component={'merchant'}
+              />
+            </Ul>
+          </Card>
+          <Card width="col-12" title="Update Warehouses">
+            <Ul>
+              <Warehouse
+                pathname={'/warehouses'}
+                component={'warehouse'}
               />
             </Ul>
           </Card>
@@ -197,7 +233,8 @@ const OrderMerchantForm = ({
 
 const mapStateToProps = createStructuredSelector({
   data: selectOrderData,
-  merchantData: selectMerchantData
+  merchantData: selectMerchantData,
+  warehouseData: selectWarehouseData
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -206,4 +243,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderMerchantForm);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderInfoForm);

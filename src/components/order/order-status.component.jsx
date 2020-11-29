@@ -1,7 +1,6 @@
 import React from 'react';
 
 // dependencies
-import moment from 'moment';
 import { Link, useLocation } from 'react-router-dom';
 
 // components
@@ -23,20 +22,16 @@ const OrderStatus = ({
 }) => {
 
   const location = useLocation();
+  const { status, info, items, cost } = data.byId;
 
-  const { byId } = data;
-
-  const handlePlaceOrder = (orderId) => {
+  const handlePlaceOrder = () => {
+    const status = {
+      type: 'ordered',
+      code: 'Not available'
+    }
 
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-
-    const obj = { 
-      status: {
-        type: 'ordered'
-      }
-    };
-
-    patchReq(`/orders/${orderId}`, fetchSuccess, obj, null, 'order-item-form')
+    patchReq(`/orders/${data.byId._id}`, fetchSuccess, { status }, null, 'order-status')
   }
 
   return <>
@@ -46,7 +41,7 @@ const OrderStatus = ({
     <Card width="col" title="Order Status">
       <Ul>
         {
-          byId && byId.status && <>
+          status && <>
             <Li>
               <div className="row">
                 <div className="col">
@@ -55,15 +50,15 @@ const OrderStatus = ({
                       <span>Status:</span>
                     </div>
                     <div className="col-8">
-                      <span className="text-info">{byId.status.type}</span>
+                      <span className="text-info">{status.type}</span>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <span>Updated Date:</span>
+                      <span>Status Details:</span>
                     </div>
                     <div className="col-8">
-                      <span>{moment(byId.status.date).format('MMM DD, YYYY')}</span>
+                      <span>{status.code}</span>
                     </div>
                   </div>
                 </div>
@@ -71,8 +66,9 @@ const OrderStatus = ({
             </Li>
           </>
         }
-        { 
-          byId && byId.status && byId.status.type === 'created' &&
+       
+        {
+          status && status.type === 'created' && info && items.length > 0 && cost &&
           <Li>
             <div className="row">
               <div className="col">
@@ -81,9 +77,7 @@ const OrderStatus = ({
                   className="a-link-cs"
                   onClick={e => {
                     e.preventDefault();
-                    if (byId && byId.status && byId.status.type === 'created') {
-                      handlePlaceOrder(byId._id)
-                    } 
+                    handlePlaceOrder();
                   }}
                 >
                   Place Order
@@ -92,6 +86,7 @@ const OrderStatus = ({
             </div> 
           </Li> 
         }
+
       </Ul>
     </Card>  
   </>
