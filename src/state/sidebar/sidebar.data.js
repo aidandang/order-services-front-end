@@ -32,9 +32,9 @@ export const SIDEBAR_LIST = {
     },
     {
       id: 6,
-      text: 'Warehouse',
-      link: '/app/warehouse',
-      icon: 'fas fa-warehouse'
+      text: 'Inventory',
+      link: '/app/inventory',
+      icon: 'fas fa-truck-loading'
     },
     {
       id: 7,

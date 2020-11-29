@@ -1,32 +1,128 @@
 import React from 'react';
 
-// components
-import OrderStatus from './order-status.component';
-import OrderMerchant from './order-merchant.component';
-import OrderItem from './order-item.component';
-import OrderReceiving from './order-receiving.component';
-import OrderCustomer from './order-customer.component';
-import OrderSale from './order-sale.component';
-import withOrderData from '../api/withOrderData';
+// dependencies
+import moment from 'moment';
+import { useLocation, Link } from 'react-router-dom';
 
-const OrderInfo = ({
+// components
+import { Card, Ul, Li } from '../tag/tag.component';
+
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector} from 'reselect';
+import { selectOrderData } from '../../state/order/order.selectors';
+
+const OrderInfo = ({ 
   data
 }) => {
 
-  const { byId } = data;
+  const location = useLocation()
+
+  const { byId } = data
 
   return <>
-    {
-      byId && <>
-        <OrderStatus />
-        <OrderMerchant />
-        <OrderItem />
-        <OrderReceiving />
-        <OrderCustomer />
-        <OrderSale />
-      </>
-    }
+    <Card width="col" title="Order Information">
+      <Ul>
+        {
+          byId.info && <>
+            <Li>
+              <div className="row">
+                <div className="col">
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Order Number:</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{byId.info.orderNumber}</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Order Date:</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{moment(byId.info.orderDate).format('MMM DD, YYYY')}</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Order Type:</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{byId.info.orderType}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Li>
+            <Li>
+              <div className="row">
+                <div className="col">
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Merchant:</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{byId.info.merchant.name}</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Official Website:</span>
+                    </div>
+                    <div className="col-8">
+                      <a 
+                        href={byId.info.merchant.url}
+                        className="a-link-cs"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {byId.info.merchant.url}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Li>
+            <Li>
+              <div className="row">
+                <div className="col">
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Warehouse:</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{byId.info.warehouse.name}</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Type:</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{byId.info.warehouse.type}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Li>
+          </>
+        }
+        <Li>
+          <Link
+            to={`${location.pathname}/update-order-info`}
+            className="a-link-cs"
+          >
+            Update Order Information
+          </Link>
+        </Li> 
+      </Ul>
+    </Card>  
   </>
 }
 
-export default withOrderData(OrderInfo);
+const mapStateToProps = createStructuredSelector({
+  data: selectOrderData
+})
+
+export default connect(mapStateToProps)(OrderInfo);

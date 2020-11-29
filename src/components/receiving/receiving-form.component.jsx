@@ -24,12 +24,17 @@ import { selectReceivingList } from '../../state/receiving/receiving.selectors';
 const formSchema = Yup.object().shape({
   tracking: Yup
     .string()
-    .required()
+    .required(),
+  note: Yup
+    .string()
 });
 
 const formState = {
-  tracking: ""
+  tracking: "",
+  note: ""
 }
+
+const WAREHOUSE = "5f9afc8fac9c490cd193b3ee";
 
 // main component
 const ReceivingForm = ({
@@ -55,8 +60,9 @@ const ReceivingForm = ({
 
   const formSubmit = () => {
     const obj = {};
-    obj.tracking = formData.tracking
+    obj.tracking = formData.tracking;
     obj.recvDate = Date.now();
+    obj.warehouse = WAREHOUSE;
 
     addTrackingToList(obj);
     setValues(formState)
@@ -159,6 +165,17 @@ const ReceivingForm = ({
                 size="col"
                 smallText="Input tracking numbers either by scanning or typing."
                 value={formData.tracking}
+                onChange={onInputChange} 
+              />
+            </Li>
+            <Li>
+              <TextInput
+                label="Note" 
+                name="note"
+                errors={errors}
+                size="col"
+                smallText="Additional information about the tracking."
+                value={formData.note}
                 onChange={onInputChange} 
               />
             </Li>
