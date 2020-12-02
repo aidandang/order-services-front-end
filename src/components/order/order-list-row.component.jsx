@@ -29,7 +29,7 @@ const OrderListRow = ({
       onClick={(e) => handleOnClick(e, order)}
     >
       <th scope="row">{order.orderRef} </th>
-      <td><span className="text-info">{status && status.type}</span></td>
+      <td><span className="text-info">{status}</span></td>
       <td>{`${customer.account} - ${customer.nickname}`}</td>
       <td>{info ? info.orderNumber : 'not order'}</td>
       <td>{info ? moment(info.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'not order'}</td>

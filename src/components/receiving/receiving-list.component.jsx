@@ -1,24 +1,13 @@
 import React from 'react';
 
 // dependencies
-import * as Yup from "yup";
 import { useLocation, useHistory, Link } from 'react-router-dom';
+import queryString from 'query-string';
 
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
-import { useForm } from '../hook/use-form';
 import ReceivingSearchForm from './receiving-search-form.component';
 import ReceivingListTable from './receiving-list-table.component';
-import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
-
-// initial values
-const formSchema = Yup.object().shape({
-  search: Yup
-    .string()
-});
-const formState = {
-  search: ''
-}
 
 // main component
 const ReceivingList = () => {
@@ -26,17 +15,16 @@ const ReceivingList = () => {
   const history = useHistory();
   const location = useLocation();
 
-  const [
-    formData,
-    errors, 
-    onInputChange,
-    buttonDisabled
-  ] = useForm(formState, formState, formSchema);
+  const formSubmit = (key, value) => {
+    let queryStr = undefined;
 
-  const formSubmit = (e) => {
-    e.preventDefault();
-    
-    let queryStr = convertSearchFormToQueryString(e, formData);
+    if (value.length > 0 ) {
+      if (key.length > 0) {
+        queryStr = '?' + queryString.stringify({ [key]: value });
+      }
+    } else if (value === '') {
+      queryStr = '';
+    }
 
     if (queryStr !== undefined) {
       history.push(`${location.pathname}${queryStr}`)
@@ -47,11 +35,7 @@ const ReceivingList = () => {
     <Card width="col" title="Search For Tracking Numbers" >
       <Ul>
         <ReceivingSearchForm
-          formSubmit={formSubmit} 
-          formData={formData}
-          errors={errors}
-          onInputChange={onInputChange}
-          buttonDisabled={buttonDisabled}
+          formSubmit={formSubmit}
         />
         <Li>
           <div className="row">

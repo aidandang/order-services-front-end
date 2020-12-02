@@ -50,15 +50,7 @@ const OrderStatus = ({
                       <span>Status:</span>
                     </div>
                     <div className="col-8">
-                      <span className="text-info">{status.type}</span>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-4">
-                      <span>Status Details:</span>
-                    </div>
-                    <div className="col-8">
-                      <span>{status.code}</span>
+                      <span className="text-info">{status}</span>
                     </div>
                   </div>
                 </div>

@@ -24,7 +24,7 @@ const ReceivingListRow = ({
     >
       <th scope="row">{receiving.tracking}</th>
       <td>{moment(receiving.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
-      <td>{receiving.note}</td>
+      <td><span className={`${receiving.status === 'scanned' ? 'text-danger' : 'text-success'}`}>{receiving.status}</span></td>
     </tr>
   </>
 }
