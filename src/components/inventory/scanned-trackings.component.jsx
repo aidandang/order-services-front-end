@@ -3,17 +3,22 @@ import React, { useState, useEffect } from 'react';
 // dependencies
 import moment from 'moment';
 
+// components
+import AlertMesg from '../alert-mesg/alert-mesg.component';
+
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getReq, patchReq } from '../../state/api/api.requests';
 import { ReceivingActionTypes } from '../../state/receiving/receiving.types';
 import { selectReceivingData } from '../../state/receiving/receiving.selectors';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 const ScannedTrackings = ({
   data,
   getReq,
-  patchReq
+  patchReq,
+  alertMessage
 }) => {
 
   const [success, setSuccess] = useState(false);
@@ -34,7 +39,9 @@ const ScannedTrackings = ({
   }, [success])
 
   return <>
-    {/* customer table */}
+  
+    { alertMessage && alertMessage.component === 'scanned-trackings' && <AlertMesg /> }
+
     <div className="row mb-2">
       <div className="col">
         <div className="table-responsive-sm">
@@ -85,7 +92,8 @@ const ScannedTrackings = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectReceivingData
+  data: selectReceivingData,
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
