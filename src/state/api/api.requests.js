@@ -7,7 +7,7 @@ import { batch } from 'react-redux';
 import { IsFetchingActionTypes } from '../is-fetching/is-fetching.types';
 import { AlertActionTypes } from '../alert/alert.types';
 
-import { BASE_API_URL } from './base-api-url';
+import { BASE_API_URL } from './api.data';
 
 const handleErrorMesg = (err, component, request) => {
   const payload = {}

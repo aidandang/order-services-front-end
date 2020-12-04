@@ -26,8 +26,7 @@ export const searchList = {
         text: 'processed',
         value: 'processed'
       }
-    ],
-    defaultValue: 'scanned'
+    ]
   },
   recvDate: {
     type: 'date-input',

@@ -1,0 +1,1 @@
+export const INVENTORY_QUERY_STRING = '?orderStatus=ordered,received&receivingStatus=scanned';

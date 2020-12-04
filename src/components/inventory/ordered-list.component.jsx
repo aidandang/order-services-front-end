@@ -1,27 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
+// components
 import OrderListItemProcessing from './order-list-item-processing.component';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { getReq } from '../../state/api/api.requests';
-import { OrderActionTypes } from '../../state/order/order.types';
-import { selectOrderData } from '../../state/order/order.selectors';
-
 const OrderedList = ({
-  data,
-  getReq
+  ordereds,
+  setSuccess
 }) => {
-
-  const [success, setSuccess] = useState(false);
-  const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-  const { allIds } = data;
-
-  useEffect(() => {
-    getReq('/orders', fetchSuccess, '?status=ordered', null, 'ordered-list');
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [success])
 
   return <>
     <div className="row mb-2">
@@ -42,9 +27,9 @@ const OrderedList = ({
             </thead>
             <tbody>
               {
-                allIds && allIds.length > 0 
+                ordereds.length > 0 
                 ? 
-                allIds.map(order => 
+                ordereds.map(order => 
                   <OrderListItemProcessing 
                     order={order} 
                     key={order._id} 
@@ -65,14 +50,4 @@ const OrderedList = ({
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectOrderData
-})
-
-const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
-  )
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrderedList);
+export default OrderedList;
