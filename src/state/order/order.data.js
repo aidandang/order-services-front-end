@@ -62,4 +62,6 @@ export const searchList = {
   },
 }
 
-export const defaultFilter = 'orderRef'
+export const defaultFilter = 'orderRef';
+
+export const searchTitle = 'Search for Orders'

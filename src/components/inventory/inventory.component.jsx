@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 // components
 import ScannedTrackings from './scanned-trackings.component';
 import OrderedList from './ordered-list.component';
+import ReceivedList from './received-list.component';
 import Tab from '../tab/tab.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
@@ -17,11 +18,15 @@ import { selectAlertMessage } from '../../state/alert/alert.selectors';
 // initial data
 const items = [
   {
-    name: 'Scanned',
+    name: 'Scanned Trackings',
     badge: 0
   },
   {
-    name: 'Ordered',
+    name: 'Ordered List',
+    badge: 0
+  },
+  {
+    name: 'Received List',
     badge: 0
   }
 ]
@@ -45,6 +50,10 @@ const Inventory = ({
     items[1].badge = orders.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0)
   }
 
+  if (orders && orders.length > 0) {
+    items[2].badge = orders.reduce((a, c) => c.status === 'received' ? a + 1 : a, 0)
+  }
+
   const fetchSuccess = InventoryActionTypes.INVENTORY_FETCH_SUCCESS;
   useEffect(() => {
     getReq('/inventory', fetchSuccess, INVENTORY_QUERY_STRING, null, 'inventory');
@@ -59,17 +68,24 @@ const Inventory = ({
     <div className="row">
       <div className="col">
         { 
-          action === 'Scanned' && 
+          action === items[0].name && 
           <ScannedTrackings 
             setSuccess={setSuccess} 
             scanneds={trackings ? trackings.filter(el => el.status === 'scanned') : []}
           />
         }
         { 
-          action === 'Ordered' && 
+          action === items[1].name && 
           <OrderedList 
             setSuccess={setSuccess} 
             ordereds={orders ? orders.filter(el => el.status === 'ordered') : []}
+          />
+        }
+        { 
+          action === items[2].name && 
+          <ReceivedList 
+            setSuccess={setSuccess} 
+            receiveds={orders ? orders.filter(el => el.status === 'received') : []}
           />
         }
       </div>

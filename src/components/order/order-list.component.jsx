@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 // components
 import OrderListTable from './order-list-table.component';
 import Search from '../search/search.component';
-import { queryState, searchList, defaultFilter, addLink } from '../../state/order/order.data';
+import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/order/order.data';
 
 // main component
 const OrderList = () => {
@@ -18,6 +18,7 @@ const OrderList = () => {
       searchList={searchList}
       defaultFilter={defaultFilter}
       addLink={addLink}
+      searchTitle={searchTitle}
     />
     <OrderListTable
       queryStr={location.search}

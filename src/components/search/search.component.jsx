@@ -11,7 +11,8 @@ const Search = ({
   queryState,
   searchList,
   defaultFilter,
-  addLink
+  addLink,
+  searchTitle
 }) => {
 
   const history = useHistory();
@@ -40,6 +41,7 @@ const Search = ({
       searchList={searchList}
       defaultFilter={defaultFilter}
       addLink={addLink}
+      searchTitle={searchTitle}
     />
   </>
 }

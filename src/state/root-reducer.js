@@ -15,6 +15,7 @@ import merchantReducer from './merchant/merchant.reducer';
 import warehouseReducer from './warehouse/warehouse.reducer';
 import receivingReducer from './receiving/receiving.reducer';
 import inventoryReducer from './inventory/inventory.reducer';
+import shippingReducer from './shipping/shipping.reducer';
 
 const persistConfig = {
   key: 'root',
@@ -35,7 +36,8 @@ const appReducer = combineReducers({
   merchant: merchantReducer,
   warehouse: warehouseReducer,
   receiving: receivingReducer,
-  inventory: inventoryReducer
+  inventory: inventoryReducer,
+  shipping: shippingReducer
 });
 
 const rootReducer = (state, action) => {

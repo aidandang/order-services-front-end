@@ -34,4 +34,6 @@ export const searchList = {
   }
 }
 
-export const defaultFilter = 'tracking'
+export const defaultFilter = 'tracking';
+
+export const searchTitle =  'Search for Tracking Numbers'

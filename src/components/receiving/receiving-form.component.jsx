@@ -4,13 +4,11 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import * as Yup from "yup";
 import { Link } from 'react-router-dom';
-
 // component
 import { Card, Ul, Li, TextInput } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';

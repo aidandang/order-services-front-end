@@ -77,7 +77,7 @@ const OrderCustomer = ({
                           <span>Phone# {address.phone}</span>
                         </>
                         : 
-                        <span>Same as Address</span>
+                        <span>Same as Billing Address</span>
                       }
                     </div>
                   </div>
