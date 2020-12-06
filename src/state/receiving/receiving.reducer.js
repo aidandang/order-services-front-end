@@ -32,6 +32,11 @@ const receivingReducer = (state = INITIAL_STATE, action) => {
         ...state,
         list: removeItemInArray(state.list, action.payload)
       }
+    case ReceivingActionTypes.RECEIVING_EMPTY_LIST:
+      return {
+        ...state,
+        list: []
+      }
     default:
       return state
   }

@@ -34,4 +34,6 @@ export const searchList = {
   }
 }
 
-export const defaultFilter = 'account'
+export const defaultFilter = 'account';
+
+export const searchTitle = 'Search for Customers'

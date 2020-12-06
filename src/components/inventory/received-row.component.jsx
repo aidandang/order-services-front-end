@@ -4,19 +4,11 @@ import React, { useState } from 'react';
 import moment from 'moment';
 
 // components
-import { Button } from '../tag/tag.component';
 import { acctToStr } from '../utils/acctToStr';
 import { integerMask } from '../utils/helpers';
 
-// redux
-import { connect } from 'react-redux';
-import { patchReq } from '../../state/api/api.requests';
-import { OrderActionTypes } from '../../state/order/order.types';
-
-const OrderListItemProcessing = ({
-  order,
-  setSuccess,
-  patchReq
+const ReceivedRow = ({
+  order
 }) => {
 
   const { items } = order;
@@ -26,36 +18,6 @@ const OrderListItemProcessing = ({
   const formState = {}
   for (i = 0; i < items.length; i++) {
     formState[i] = items[i].tracking ? items[i].tracking : ""
-  }
-
-  const [formData, setFormData] = useState(formState);
-
-  const onInputChange = e => {
-    e.persist();
-    setFormData(prevState => ({...prevState, [e.target.name]: e.target.value }))    
-  }
-
-  const formSubmit = () => {
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
-
-    let j = null;
-    let isReceived = true
-    for (j = 0; j < items.length; j++) {
-      items[j].tracking = formData[j]
-      if (formData[j].length === 0) isReceived = false
-    }
-
-    const obj = {
-      items: items
-    }
-
-    if (isReceived) {
-      obj.status = 'received'
-    } else {
-      obj.status = 'ordered'
-    }
-
-    patchReq(`/orders/${order._id}`, fetchSuccess, obj, setSuccess, 'ordered-list')
   }
 
   return <>
@@ -90,37 +52,19 @@ const OrderListItemProcessing = ({
                       name={index} 
                       type="text"
                       className="form-control"
-                      value={formData[index]}
-                      onChange={onInputChange}
+                      value={item.shipmentNumber ? item.shipmentNumber : ''}
+                      readOnly
                     />
-                    <small>Scan or type tracking number here.</small>
+                    <small>Shipment number. Go to Shipping to update.</small>
                   </div>
                 </div>
               </div>
             )
           }
-          <div className="row mx-0 mb-2">
-            <div className="col">
-              <Button
-                onClick={e => {
-                  e.preventDefault()
-                  formSubmit()
-                }}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
         </td>
       </tr>
     }
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
-})
-
-export default connect(null, mapDispatchToProps)(OrderListItemProcessing);
+export default ReceivedRow;

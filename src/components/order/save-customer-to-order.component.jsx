@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 // dependencies
 import { Redirect, useParams } from 'react-router-dom';
-
+// components
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderData } from '../../state/order/order.selectors';
 import { postReq, patchReq } from '../../state/api/api.requests'; 
 import { OrderActionTypes } from '../../state/order/order.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // initial values
 const pathname = '/app/order';
@@ -17,7 +19,8 @@ const SaveCustomerToOrder = ({
   data,
   customer,
   postReq,
-  patchReq
+  patchReq,
+  alertMessage
 }) => {
 
   const params = useParams();
@@ -38,16 +41,16 @@ const SaveCustomerToOrder = ({
     } else {
       let newOrder = {
         customer,
-        status: {
-          type: 'created'
-        }
+        status: 'created'
       }
-      postReq('/orders', fetchSuccess, newOrder, setSuccess, 'order-add')
+      postReq('/orders', fetchSuccess, newOrder, setSuccess, 'save-customer-to-order')
     }
     // eslint-disable-next-line
   }, [])
 
   return <>
+    { alertMessage && alertMessage.component === 'save-customer-to-order' && <AlertMesg /> }
+
     {
       success && 
       <Redirect 
@@ -58,7 +61,8 @@ const SaveCustomerToOrder = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectOrderData
+  data: selectOrderData,
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({

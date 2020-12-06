@@ -26,8 +26,7 @@ export const searchList = {
         text: 'processed',
         value: 'processed'
       }
-    ],
-    defaultValue: 'scanned'
+    ]
   },
   recvDate: {
     type: 'date-input',
@@ -35,4 +34,6 @@ export const searchList = {
   }
 }
 
-export const defaultFilter = 'tracking'
+export const defaultFilter = 'tracking';
+
+export const searchTitle =  'Search for Tracking Numbers'

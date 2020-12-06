@@ -11,7 +11,8 @@ const SearchForm = ({
   queryState,
   searchList,
   defaultFilter,
-  addLink
+  addLink,
+  searchTitle
 }) => {
 
   const location = useLocation()
@@ -33,7 +34,7 @@ const SearchForm = ({
   } 
 
   return <>
-    <Card width="col" title="Search For Tracking Numbers" >
+    <Card width="col" title={searchTitle} >
       <Ul>
         <Li>
           <div className="row">

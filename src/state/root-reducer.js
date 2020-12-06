@@ -11,10 +11,11 @@ import customerReducer from './customer/customer.reducer';
 import orderReducer from './order/order.reducer';
 import alertReducer from './alert/alert.reducer';
 import isFetchingReducer from './is-fetching/is-fetching.reducer';
-import apiReducer from './api/api.reducer';
 import merchantReducer from './merchant/merchant.reducer';
 import warehouseReducer from './warehouse/warehouse.reducer';
 import receivingReducer from './receiving/receiving.reducer';
+import inventoryReducer from './inventory/inventory.reducer';
+import shippingReducer from './shipping/shipping.reducer';
 
 const persistConfig = {
   key: 'root',
@@ -32,10 +33,11 @@ const appReducer = combineReducers({
   customer: customerReducer,
   isFetching: isFetchingReducer,
   order: orderReducer,
-  api: apiReducer,
   merchant: merchantReducer,
   warehouse: warehouseReducer,
-  receiving: receivingReducer
+  receiving: receivingReducer,
+  inventory: inventoryReducer,
+  shipping: shippingReducer
 });
 
 const rootReducer = (state, action) => {

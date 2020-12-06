@@ -3,15 +3,15 @@ import React from 'react';
 // dependencies
 import { useLocation } from 'react-router-dom';
 // components
-import CustomerListTable from './customer-list-table.component';
+import ShippingListTable from './shipping-list-table.component';
 import Search from '../search/search.component';
-import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/customer/customer.data';
+import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/shipping/shipping.data';
 
 // main component
-const CustomerList = () => {
+const ShippingList = () => {
 
   const location = useLocation();
-
+  
   return <>
     <Search
       queryState={queryState}
@@ -20,10 +20,10 @@ const CustomerList = () => {
       addLink={addLink}
       searchTitle={searchTitle}
     />
-    <CustomerListTable
+    <ShippingListTable
       queryStr={location.search}
     />
   </>
 }
 
-export default CustomerList;
+export default ShippingList;

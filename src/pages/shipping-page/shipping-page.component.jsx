@@ -6,15 +6,15 @@ import { Switch, Route } from 'react-router-dom';
 // components
 import Title from '../../components/title/title.component';
 import Breadcrumb from '../../components/breadcrumb/breadcrumb.component';
-import routes from '../../routes/private/receiving.routes';
+import routes from '../../routes/private/shipping.routes';
 
 // initial values
 const title = {
-  name: 'Receiving',
-  message: 'Scan barcode to receive a package. Tracking number can be sorted by couriers.'
+  name: 'Shipping',
+  message: 'Add shipments, keep track and update status.'
 }
 
-const ReceivingPage = () => {
+const ShippingPage = () => {
 
   return <>
     <Title title={title} />
@@ -39,4 +39,4 @@ const ReceivingPage = () => {
   </>
 }
 
-export default ReceivingPage;
+export default ShippingPage;

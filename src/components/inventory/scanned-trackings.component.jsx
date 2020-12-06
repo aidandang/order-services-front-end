@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // dependencies
 import moment from 'moment';
-
 // components
 import AlertMesg from '../alert-mesg/alert-mesg.component';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { getReq, patchReq } from '../../state/api/api.requests';
+import { patchReq } from '../../state/api/api.requests';
 import { ReceivingActionTypes } from '../../state/receiving/receiving.types';
-import { selectReceivingData } from '../../state/receiving/receiving.selectors';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 const ScannedTrackings = ({
-  data,
-  getReq,
+  scanneds,
+  setSuccess,
   patchReq,
   alertMessage
 }) => {
 
-  const [success, setSuccess] = useState(false);
   const fetchSuccess = ReceivingActionTypes.RECEIVING_FETCH_SUCCESS;
-  const { allIds } = data;
 
   const handleProcessing = (id) => {
     const obj = {
@@ -32,11 +27,6 @@ const ScannedTrackings = ({
 
     patchReq(`/receiving/${id}`, fetchSuccess, obj, setSuccess, 'scanned-trackings');
   }
-
-  useEffect(() => {
-    getReq('/receiving', fetchSuccess, '?status=scanned', null, 'scanned-trackings');
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [success])
 
   return <>
   
@@ -55,9 +45,9 @@ const ScannedTrackings = ({
             </thead>
             <tbody>
               {
-                allIds && allIds.length > 0 
+                scanneds.length > 0 
                 ? 
-                allIds.map(receiving => 
+                scanneds.map(receiving => 
                   <tr key={receiving._id} className="table-row-cs">
                     <th scope="row">{receiving.tracking}</th>
                     <td>{moment(receiving.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
@@ -92,14 +82,10 @@ const ScannedTrackings = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectReceivingData,
   alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
-  ),
   patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   )

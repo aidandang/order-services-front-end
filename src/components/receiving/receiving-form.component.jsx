@@ -3,21 +3,19 @@ import React, { useState, useEffect } from 'react';
 // dependecies
 import moment from 'moment';
 import * as Yup from "yup";
-import { useHistory, useLocation, Link } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 // component
 import { Card, Ul, Li, TextInput } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { postReq } from '../../state/api/api.requests';
 import { ReceivingActionTypes } from '../../state/receiving/receiving.types';
-import { addTrackingToList, removeTrackingInList } from '../../state/receiving/receiving.actions';
+import { addTrackingToList, removeTrackingInList, emptyList } from '../../state/receiving/receiving.actions';
 import { selectReceivingList } from '../../state/receiving/receiving.selectors';
 
 // initial values
@@ -42,11 +40,9 @@ const ReceivingForm = ({
   list,
   addTrackingToList,
   removeTrackingInList,
+  emptyList,
   alertMessage
 }) => {
-
-  const history = useHistory();
-  const location = useLocation();
 
   const [success, setSuccess] = useState(false);
 
@@ -85,7 +81,7 @@ const ReceivingForm = ({
   }
 
   useEffect(() => {
-    if (success) history.push(location.pathname.split('/add')[0])
+    if (success) emptyList()
     // eslint-disable-next-line
   }, [success])
   
@@ -202,7 +198,8 @@ const mapDispatchToProps = dispatch => ({
     postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   ),
   addTrackingToList: tracking => dispatch(addTrackingToList(tracking)),
-  removeTrackingInList: index => dispatch(removeTrackingInList(index))
+  removeTrackingInList: index => dispatch(removeTrackingInList(index)),
+  emptyList: () => dispatch(emptyList())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReceivingForm);

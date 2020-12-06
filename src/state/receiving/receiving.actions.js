@@ -9,3 +9,7 @@ export const removeTrackingInList = index => ({
   type: ReceivingActionTypes.RECEIVING_REMOVE_TRACKING_IN_LIST,
   payload: index
 })
+
+export const emptyList = () => ({
+  type: ReceivingActionTypes.RECEIVING_EMPTY_LIST
+})

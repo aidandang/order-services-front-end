@@ -1,10 +1,10 @@
 import React from 'react';
 
 // components
-import OrderListItemProcessing from './order-list-item-processing.component';
+import ReceivedRow from './received-row.component';
 
-const OrderedList = ({
-  ordereds,
+const ReceivedList = ({
+  receiveds,
   setSuccess
 }) => {
 
@@ -27,10 +27,10 @@ const OrderedList = ({
             </thead>
             <tbody>
               {
-                ordereds.length > 0 
+                receiveds.length > 0 
                 ? 
-                ordereds.map(order => 
-                  <OrderListItemProcessing 
+                receiveds.map(order => 
+                  <ReceivedRow
                     order={order} 
                     key={order._id} 
                     setSuccess={setSuccess}
@@ -50,4 +50,4 @@ const OrderedList = ({
   </>
 }
 
-export default OrderedList;
+export default ReceivedList;
