@@ -3,30 +3,27 @@ import React, { useState, useEffect } from 'react';
 // dependencies
 import * as Yup from "yup";
 // components
-import { Li, TextInput, SelectInput } from '../tag/tag.component';
+import { Li, TextInput } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 // redux
 import { connect } from 'react-redux';
 import { postReq, patchReq, deleteReq } from '../../state/api/api.requests';
-import { WarehouseActionTypes } from '../../state/warehouse/warehouse.types'; 
+import { CourierActionTypes } from '../../state/courier/courier.types'; 
 
 // form schema
 const formSchema = Yup.object().shape({
   name: Yup
     .string()
-    .required(),
-  type: Yup
-    .string()
     .required()
 });
+// form state
 const formState = {
-  name: "",
-  type: ""
-};
+  name: ''
+}
 
-const WarehouseForm = ({
-  warehouse,
+const CourierForm = ({
+  courier,
   action,
   setAction,
   postReq,
@@ -42,20 +39,20 @@ const WarehouseForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(warehouse ? warehouse : formState, formState, formSchema);
+  ] = useForm(courier ? courier : formState, formState, formSchema);
 
   const formSubmit = (e) => {
-    const fetchSuccess = WarehouseActionTypes.WAREHOUSE_FETCH_SUCCESS;
+    const fetchSuccess = CourierActionTypes.COURIER_FETCH_SUCCESS;
     const obj = { ...formData }
 
     if (action === 'add') {
-      postReq('/warehouses', fetchSuccess, obj, setSuccess, 'warehouse');
+      postReq('/couriers', fetchSuccess, obj, setSuccess, 'courier');
     }
     if (action === 'edit') {
-      patchReq('/warehouses/' + warehouse._id, fetchSuccess, obj, setSuccess, 'warehouse');
+      patchReq('/couriers/' + courier._id, fetchSuccess, obj, setSuccess, 'courier');
     }
     if (action === 'remove') {
-      deleteReq('/warehouses/' + warehouse._id, fetchSuccess, setSuccess, 'warehouse');
+      deleteReq('/couriers/' + courier._id, fetchSuccess, setSuccess, 'courier');
     }
   }
 
@@ -100,25 +97,9 @@ const WarehouseForm = ({
               name="name"
               errors={errors}
               size="col"
-              smallText="Name of the warehouse."
+              smallText="Name of the courier."
               value={formData.name}
               onChange={onInputChange}
-            />
-          </Li>
-          <Li>
-            <SelectInput
-              label="Warehouse Type" 
-              name="type"
-              errors={errors}
-              size="col"
-              smallText="Company or Customer warehouse."
-              defaultValue=""
-              defaultText="Choose..."
-              value={formData.type ? formData.type : ""}
-              onChange={onInputChange}
-              data={[{ type: 'Company'}, { type: 'Customer'}]}
-              valueKey="type"
-              textKey="type" 
             />
           </Li>
         </>
@@ -151,4 +132,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(null, mapDispatchToProps)(WarehouseForm);
+export default connect(null, mapDispatchToProps)(CourierForm)

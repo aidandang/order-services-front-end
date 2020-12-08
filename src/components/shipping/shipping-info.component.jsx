@@ -75,15 +75,21 @@ const ShippingInfo = ({
                       <span>Warehouse:</span>
                     </div>
                     <div className="col-8">
-                      <span>{byId.info.sender.name}</span>
+                      <span>{byId.info.warehouse.name}</span>
                     </div>
                   </div>
+                </div>
+              </div>
+            </Li>
+            <Li>
+              <div className="row">
+                <div className="col">
                   <div className="row">
                     <div className="col-4">
-                      <span>Type:</span>
+                      <span>Courier:</span>
                     </div>
                     <div className="col-8">
-                      <span>{byId.info.sender.type}</span>
+                      <span>{byId.info.courier.name}</span>
                     </div>
                   </div>
                 </div>
@@ -97,7 +103,7 @@ const ShippingInfo = ({
                       <span>Consignee:</span>
                     </div>
                     <div className="col-8">
-                      <span>{byId.info.consignee.fullname}</span>
+                      <span>{byId.info.consignee.name}</span>
                     </div>
                   </div>
                   <div className="row">

@@ -1,43 +1,43 @@
 import React, { useState } from 'react'
 
 // components
-import withConsigneeData from '../api/withConsigneeData'
+import withCourierData from '../api/withCourierData'
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
-import ConsigneeForm from './consignee-form.component'
+import CourierForm from './courier-form.component'
 
-const Consignee = ({
+const Courier = ({
   data
 }) => {
 
-  const cneeObj = {};
+  const courObj = {};
   if (data.allIds) {
     let i = 0;
     for (i = 0; i < data.allIds.length; i++) {
-      cneeObj[data.allIds[i]._id] = data.allIds[i] 
+      courObj[data.allIds[i]._id] = data.allIds[i] 
     }
   }
 
-  const [cneeId, setCneeId] = useState('')
+  const [courId, setcourId] = useState('')
   const [action, setAction] = useState('')
 
   const onInputChange = e => {
     e.preventDefault();
     const id = e.target.value
 
-    if (cneeObj[id]) {
-      setCneeId(cneeObj[id]._id)
+    if (courObj[id]) {
+      setcourId(courObj[id]._id)
     } else {
-      setCneeId('')
+      setcourId('')
     }
   }
 
   return <>
-    <Card width="col-12" title="Update Consignees">
+    <Card width="col-12" title="Update Couriers">
       <Ul>
         {
           action === 'add'
           ? 
-          <ConsigneeForm 
+          <CourierForm 
             action={action} 
             setAction={setAction} 
           />           
@@ -45,12 +45,12 @@ const Consignee = ({
           <>
             <Li>
               <SelectInput
-                label='Consignee List'
-                name='cneeId'
-                smallText='Select a consignee to edit.'
+                label='Courier List'
+                name='courId'
+                smallText='Select a courier to edit.'
                 defaultValue=''
                 defaultText='...'
-                value={cneeId}
+                value={courId}
                 onChange={onInputChange}
                 data={data.allIds ? data.allIds : []}
                 valueKey='_id'
@@ -58,13 +58,13 @@ const Consignee = ({
               />
             </Li>
             {
-              cneeId !== "" && cneeObj[cneeId] &&
+              courId !== "" && courObj[courId] &&
               <Li>
                 <div className="row">
                   <div className="col">
-                    {cneeObj[cneeId].name},
+                    {courObj[courId].name},
                     <span>{' '}</span> 
-                    {cneeObj[cneeId].cneeNumber}
+                    {courObj[courId].courNumber}
                   </div>
                 </div>
                 <div className="row">
@@ -84,16 +84,16 @@ const Consignee = ({
             }
             {
               action === 'edit' &&
-              <ConsigneeForm
-                consignee={cneeObj[cneeId]} 
+              <CourierForm
+                courier={courObj[courId]} 
                 action={action} 
                 setAction={setAction} 
               />
             }
             {
               action === 'remove' &&
-              <ConsigneeForm 
-                consignee={cneeObj[cneeId]} 
+              <CourierForm 
+                courier={courObj[courId]} 
                 action={action} 
                 setAction={setAction} 
               />
@@ -104,7 +104,7 @@ const Consignee = ({
                   <a href="/" className="a-link-cs" onClick={e => {
                     e.preventDefault();
                     setAction('add')
-                  }}>( + ) Add a New Consignee</a>
+                  }}>( + ) Add a New Courier</a>
                 </div>
               </div>
             </Li>
@@ -115,4 +115,4 @@ const Consignee = ({
   </>
 }
 
-export default withConsigneeData(Consignee)
+export default withCourierData(Courier)

@@ -9,12 +9,16 @@ import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 import Consignee from '../consignee/consignee.component';
+import Warehouse from '../warehouse/warehouse.component';
+import Courier from '../courier/courier.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { selectShippingData } from '../../state/shipping/shipping.selectors';
+import { selectConsigneeData } from '../../state/consignee/consignee.selectors';
 import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors';
+import { selectCourierData } from '../../state/courier/courier.selectors';
 import { postReq } from '../../state/api/api.requests';
 import { ShippingActionTypes } from '../../state/shipping/shipping.types';
 
@@ -26,26 +30,41 @@ const formSchema = Yup.object().shape({
   pkupDate: Yup
     .string()
     .required(),
-  sender: Yup
+  warehouse: Yup
+    .string()
+    .required(),
+  courier: Yup
+    .string()
+    .required(),
+  consignee: Yup
     .string()
     .required()
 });
 const formState = {
   shptDate: "",
   pkupDate: "",
-  sender: ""
+  warehouse: "",
+  courier: "",
+  consignee: "",
 }
 
 const ShippingAdd = ({
   data,
   postReq,
   alertMessage,
-  warehouseData
+  whseData,
+  cneeData,
+  courData
 }) => {
 
   const { byId } = data;
-  let warehouses = null;
-  if (warehouseData.allIds) warehouses = warehouseData.allIds;
+
+  let cnees = null;
+  if (cneeData.allIds) cnees = cneeData.allIds;
+  let whses = null;
+  if (whseData.allIds) whses = whseData.allIds;
+  let cours = null;
+  if (courData.allIds) cours = courData.allIds
 
   const location = useLocation();
   const [success, setSuccess] = useState(false)
@@ -61,8 +80,11 @@ const ShippingAdd = ({
   const formSubmit = () => {
     const fetchSuccess = ShippingActionTypes.SHIPPING_FETCH_SUCCESS
     const obj = { ...formData }
+    obj.warehouse = whses.find(el => el._id === formData.warehouse)
+    obj.courier = cours.find(el => el._id === formData.courier)
+    obj.consignee = cnees.find(el => el._id === formData.consignee)
 
-    postReq('/shipping', fetchSuccess, obj, setSuccess, 'shippment-add')
+    postReq('/shipping', fetchSuccess, { info: obj }, setSuccess, 'shippment-add')
   }
 
   const formReset = () => {
@@ -82,6 +104,22 @@ const ShippingAdd = ({
       <div className="col-xl-8">
         <Card width="col" title="Create a New Shipment">
           <Ul>
+            <Li>
+              <SelectInput
+                label="Warehouse (*)" 
+                name="warehouse"
+                errors={errors}
+                size="col-xl-6"
+                smallText="Select a cnee, add new if there is no cnee."
+                defaultValue=""
+                defaultText="..."
+                value={formData.warehouse ? formData.warehouse : ""}
+                onChange={onInputChange}
+                data={whses}
+                valueKey="_id"
+                textKey="name"
+              />
+            </Li>
             <Li>
               <div className="row">
                 <div className="col-xl-6">
@@ -108,16 +146,32 @@ const ShippingAdd = ({
             </Li>
             <Li>
               <SelectInput
-                label="Sender (*)" 
-                name="sender"
+                label="Courier (*)" 
+                name="courier"
                 errors={errors}
                 size="col-xl-6"
-                smallText="Select a warehouse, add new if there is no warehouse."
+                smallText="Select a cnee, add new if there is no cnee."
                 defaultValue=""
                 defaultText="..."
-                value={formData.sender ? formData.sender : ""}
+                value={formData.courier ? formData.courier : ""}
                 onChange={onInputChange}
-                data={warehouses}
+                data={cours}
+                valueKey="_id"
+                textKey="name"
+              />
+            </Li>
+            <Li>
+              <SelectInput
+                label="Consignee (*)" 
+                name="consignee"
+                errors={errors}
+                size="col-xl-6"
+                smallText="Select a cnee, add new if there is no cnee."
+                defaultValue=""
+                defaultText="..."
+                value={formData.consignee ? formData.consignee : ""}
+                onChange={onInputChange}
+                data={cnees}
                 valueKey="_id"
                 textKey="name"
               />
@@ -132,7 +186,9 @@ const ShippingAdd = ({
         </Card>
       </div>
       <div className="col-xl-4">
+        <Warehouse />
         <Consignee />
+        <Courier />
       </div>
     </div>
   </>
@@ -141,7 +197,9 @@ const ShippingAdd = ({
 const mapStateToProps = createStructuredSelector({
   data: selectShippingData,
   alertMessage: selectAlertMessage,
-  warehouseData: selectWarehouseData
+  cneeData: selectConsigneeData,
+  whseData: selectWarehouseData,
+  courData: selectCourierData
 })
 
 const mapDispatchToProps = dispatch => ({

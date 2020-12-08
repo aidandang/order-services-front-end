@@ -17,6 +17,7 @@ import receivingReducer from './receiving/receiving.reducer';
 import inventoryReducer from './inventory/inventory.reducer';
 import shippingReducer from './shipping/shipping.reducer';
 import consigneeReducer from './consignee/consignee.reducer';
+import courierReducer from './courier/courier.reducer';
 
 const persistConfig = {
   key: 'root',
@@ -39,7 +40,8 @@ const appReducer = combineReducers({
   receiving: receivingReducer,
   inventory: inventoryReducer,
   shipping: shippingReducer,
-  consignee: consigneeReducer
+  consignee: consigneeReducer,
+  courier: courierReducer
 });
 
 const rootReducer = (state, action) => {
