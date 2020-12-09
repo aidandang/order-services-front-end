@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 // components
 import AlertMesg from '../alert-mesg/alert-mesg.component';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { WarehouseActionTypes } from '../../state/warehouse/warehouse.types';
+import { ConsigneeActionTypes } from '../../state/consignee/consignee.types';
 import { getReq } from '../../state/api/api.requests';
-import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors';
+import { selectConsigneeData } from '../../state/consignee/consignee.selectors';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
-const withWarehouseData = (WrapperComponent) => {
-  const WithWarehouseData = ({ 
+const withConsigneeData = (WrapperComponent) => {
+  const WithConsigneeData = ({ 
     data, 
     getReq,
     alertMessage,
@@ -21,9 +20,9 @@ const withWarehouseData = (WrapperComponent) => {
   }) => {
 
     const [success, setSuccess] = useState(false);
-    const pathname = '/warehouses'
-    const fetchSuccess = WarehouseActionTypes.WAREHOUSE_FETCH_SUCCESS
-    const component = 'warehouse'
+    const pathname = '/consignees'
+    const fetchSuccess = ConsigneeActionTypes.CONSIGNEE_FETCH_SUCCESS
+    const component = 'consignee'
 
     useEffect(() => {
       getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
@@ -37,7 +36,7 @@ const withWarehouseData = (WrapperComponent) => {
   }
 
   const mapStateToProps = createStructuredSelector({
-    data: selectWarehouseData,
+    data: selectConsigneeData,
     alertMessage: selectAlertMessage
   })
 
@@ -47,7 +46,7 @@ const withWarehouseData = (WrapperComponent) => {
     )
   })
 
-  return connect(mapStateToProps, mapDispatchToProps)(WithWarehouseData);
+  return connect(mapStateToProps, mapDispatchToProps)(WithConsigneeData);
 }
 
-export default withWarehouseData;
+export default withConsigneeData;

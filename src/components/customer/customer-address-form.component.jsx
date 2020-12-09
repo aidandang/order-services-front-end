@@ -10,13 +10,9 @@ import { Li, TextInput, SelectInput } from '../tag/tag.component';
 import { stateList, provinceList } from '../../state/data/data';
 
 const CustomerAddressForm = ({ 
-  formData,
-  formSubmit,
-  formReset, 
+  formData, 
   errors,
-  onInputChange,
-  buttonDisabled,
-  buttonText
+  onInputChange
 }) => {
 
   const country = [

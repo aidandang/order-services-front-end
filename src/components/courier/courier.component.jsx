@@ -1,43 +1,43 @@
 import React, { useState } from 'react'
 
 // components
-import withWarehouseData from '../api/withWarehouseData'
+import withCourierData from '../api/withCourierData'
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
-import WarehouseForm from './warehouse-form.component'
+import CourierForm from './courier-form.component'
 
-const Warehouse = ({
+const Courier = ({
   data
 }) => {
 
-  const whseObj = {};
+  const courObj = {};
   if (data.allIds) {
     let i = 0;
     for (i = 0; i < data.allIds.length; i++) {
-      whseObj[data.allIds[i]._id] = data.allIds[i] 
+      courObj[data.allIds[i]._id] = data.allIds[i] 
     }
   }
 
-  const [whseId, setWhseId] = useState('')
+  const [courId, setcourId] = useState('')
   const [action, setAction] = useState('')
 
   const onInputChange = e => {
     e.preventDefault();
     const id = e.target.value
 
-    if (whseObj[id]) {
-      setWhseId(whseObj[id]._id)
+    if (courObj[id]) {
+      setcourId(courObj[id]._id)
     } else {
-      setWhseId('')
+      setcourId('')
     }
   }
 
   return <>
-    <Card width="col-12" title="Update Warehouses">
+    <Card width="col-12" title="Update Couriers">
       <Ul>
         {
           action === 'add'
           ? 
-          <WarehouseForm
+          <CourierForm 
             action={action} 
             setAction={setAction} 
           />           
@@ -45,26 +45,26 @@ const Warehouse = ({
           <>
             <Li>
               <SelectInput
-                label="Warehouse List"
-                name="whseId"
-                smallText="Select a warehouse to edit."
-                defaultValue=""
-                defaultText="..."
-                value={whseId}
+                label='Courier List'
+                name='courId'
+                smallText='Select a courier to edit.'
+                defaultValue=''
+                defaultText='...'
+                value={courId}
                 onChange={onInputChange}
                 data={data.allIds ? data.allIds : []}
-                valueKey={'_id'}
-                textKey={'name'}
+                valueKey='_id'
+                textKey='name'
               />
             </Li>
             {
-              whseId !== "" && whseObj[whseId] &&
+              courId !== "" && courObj[courId] &&
               <Li>
                 <div className="row">
                   <div className="col">
-                    {whseObj[whseId].name},
+                    {courObj[courId].name},
                     <span>{' '}</span> 
-                    {whseObj[whseId].type}
+                    {courObj[courId].courNumber}
                   </div>
                 </div>
                 <div className="row">
@@ -84,17 +84,17 @@ const Warehouse = ({
             }
             {
               action === 'edit' &&
-              <WarehouseForm 
-                warehouse={whseObj[whseId]}
+              <CourierForm
+                courier={courObj[courId]} 
                 action={action} 
                 setAction={setAction} 
               />
             }
             {
               action === 'remove' &&
-              <WarehouseForm 
-                warehouse={whseObj[whseId]} 
-                action={action}
+              <CourierForm 
+                courier={courObj[courId]} 
+                action={action} 
                 setAction={setAction} 
               />
             }
@@ -104,7 +104,7 @@ const Warehouse = ({
                   <a href="/" className="a-link-cs" onClick={e => {
                     e.preventDefault();
                     setAction('add')
-                  }}>( + ) Add a New Warehouse</a>
+                  }}>( + ) Add a New Courier</a>
                 </div>
               </div>
             </Li>
@@ -115,4 +115,4 @@ const Warehouse = ({
   </>
 }
 
-export default withWarehouseData(Warehouse)
+export default withCourierData(Courier)

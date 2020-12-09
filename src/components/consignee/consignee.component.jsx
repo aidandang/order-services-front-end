@@ -1,43 +1,43 @@
 import React, { useState } from 'react'
 
 // components
-import withWarehouseData from '../api/withWarehouseData'
+import withConsigneeData from '../api/withConsigneeData'
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
-import WarehouseForm from './warehouse-form.component'
+import ConsigneeForm from './consignee-form.component'
 
-const Warehouse = ({
+const Consignee = ({
   data
 }) => {
 
-  const whseObj = {};
+  const cneeObj = {};
   if (data.allIds) {
     let i = 0;
     for (i = 0; i < data.allIds.length; i++) {
-      whseObj[data.allIds[i]._id] = data.allIds[i] 
+      cneeObj[data.allIds[i]._id] = data.allIds[i] 
     }
   }
 
-  const [whseId, setWhseId] = useState('')
+  const [cneeId, setCneeId] = useState('')
   const [action, setAction] = useState('')
 
   const onInputChange = e => {
     e.preventDefault();
     const id = e.target.value
 
-    if (whseObj[id]) {
-      setWhseId(whseObj[id]._id)
+    if (cneeObj[id]) {
+      setCneeId(cneeObj[id]._id)
     } else {
-      setWhseId('')
+      setCneeId('')
     }
   }
 
   return <>
-    <Card width="col-12" title="Update Warehouses">
+    <Card width="col-12" title="Update Consignees">
       <Ul>
         {
           action === 'add'
           ? 
-          <WarehouseForm
+          <ConsigneeForm 
             action={action} 
             setAction={setAction} 
           />           
@@ -45,26 +45,26 @@ const Warehouse = ({
           <>
             <Li>
               <SelectInput
-                label="Warehouse List"
-                name="whseId"
-                smallText="Select a warehouse to edit."
-                defaultValue=""
-                defaultText="..."
-                value={whseId}
+                label='Consignee List'
+                name='cneeId'
+                smallText='Select a consignee to edit.'
+                defaultValue=''
+                defaultText='...'
+                value={cneeId}
                 onChange={onInputChange}
                 data={data.allIds ? data.allIds : []}
-                valueKey={'_id'}
-                textKey={'name'}
+                valueKey='_id'
+                textKey='name'
               />
             </Li>
             {
-              whseId !== "" && whseObj[whseId] &&
+              cneeId !== "" && cneeObj[cneeId] &&
               <Li>
                 <div className="row">
                   <div className="col">
-                    {whseObj[whseId].name},
+                    {cneeObj[cneeId].name},
                     <span>{' '}</span> 
-                    {whseObj[whseId].type}
+                    {cneeObj[cneeId].cneeNumber}
                   </div>
                 </div>
                 <div className="row">
@@ -84,17 +84,17 @@ const Warehouse = ({
             }
             {
               action === 'edit' &&
-              <WarehouseForm 
-                warehouse={whseObj[whseId]}
+              <ConsigneeForm
+                consignee={cneeObj[cneeId]} 
                 action={action} 
                 setAction={setAction} 
               />
             }
             {
               action === 'remove' &&
-              <WarehouseForm 
-                warehouse={whseObj[whseId]} 
-                action={action}
+              <ConsigneeForm 
+                consignee={cneeObj[cneeId]} 
+                action={action} 
                 setAction={setAction} 
               />
             }
@@ -104,7 +104,7 @@ const Warehouse = ({
                   <a href="/" className="a-link-cs" onClick={e => {
                     e.preventDefault();
                     setAction('add')
-                  }}>( + ) Add a New Warehouse</a>
+                  }}>( + ) Add a New Consignee</a>
                 </div>
               </div>
             </Li>
@@ -115,4 +115,4 @@ const Warehouse = ({
   </>
 }
 
-export default withWarehouseData(Warehouse)
+export default withConsigneeData(Consignee)

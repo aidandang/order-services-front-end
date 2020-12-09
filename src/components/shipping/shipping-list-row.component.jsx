@@ -4,7 +4,6 @@ import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import moment from 'moment';
 // components
-import { acctToStr } from '../utils/acctToStr';
 import { integerMask } from '../utils/helpers';
 
 const OrderListRow = ({
