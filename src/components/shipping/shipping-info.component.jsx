@@ -130,7 +130,7 @@ const ShippingInfo = ({
         }
         <Li>
           <Link
-            to={`${location.pathname}/update-shipping-info`}
+            to={`${location.pathname}/update-shipment-info`}
             className="a-link-cs"
           >
             Update Shipping Information
