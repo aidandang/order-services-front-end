@@ -1,8 +1,8 @@
 // search values
 export const queryState = {
-  orderRef: "",
   orderNumber: "",
-  status: ""
+  purchasingNumber: "",
+  orderStatus: ""
 }
 
 export const addLink = {
@@ -10,15 +10,15 @@ export const addLink = {
 }
 
 export const searchList = {
-  orderRef: {
-    type: 'text-input',
-    placeholder: 'Order Reference'
-  },
   orderNumber: {
     type: 'text-input',
     placeholder: 'Order Number'
   },
-  status: {
+  purchasingNumber: {
+    type: 'text-input',
+    placeholder: 'Purchasing Number'
+  },
+  orderStatus: {
     type: 'select-input',
     placeholder: 'Status',
     items: [
@@ -31,28 +31,20 @@ export const searchList = {
         value: 'ordered'
       },
       {
-        text: 'partially-received',
-        value: 'partially-received'
-      },
-      {
         text: 'received',
         value: 'received'
-      },
-      {
-        text: 'partially-shipped',
-        value: 'partially-shipped'
       },
       {
         text: 'shipped',
         value: 'shipped'
       },
       {
-        text: 'partially-delivered',
-        value: 'partially-delivered'
-      },
-      {
         text: 'delivered',
         value: 'delivered'
+      },
+      {
+        text: 'returned',
+        value: 'returned'
       },
       {
         text: 'cancelled',
@@ -62,6 +54,6 @@ export const searchList = {
   },
 }
 
-export const defaultFilter = 'orderRef';
+export const defaultFilter = 'orderNumber';
 
 export const searchTitle = 'Search for Orders'

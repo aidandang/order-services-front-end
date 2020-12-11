@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 // dependencies
 import * as Yup from "yup";
 import { Link, useLocation, useHistory, useParams, Redirect } from 'react-router-dom';
-
 // components
 import { Card, Ul, Li, TextInput } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
@@ -11,7 +10,6 @@ import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 import { integerStrToNum } from '../utils/helpers';
 import { strToAcct } from '../utils/strToAcct';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';

@@ -2,15 +2,13 @@ import React from 'react';
 
 // dependencies
 import { Link, useLocation, useHistory } from 'react-router-dom';
-
 // components
 import { acctToStr } from '../utils/acctToStr';
 import { integerMask } from '../utils/helpers';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectOrderData } from '../../state/order/order.selectors';
+import { selectItemData } from '../../state/item/item.selectors';
 import { copyOrderItemToEdit } from '../../state/order/order.actions';
 
 const OrderItem = ({
@@ -161,7 +159,7 @@ const OrderItem = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectOrderData
+  data: selectItemData
 })
 
 const mapDispatchToProps = dispatch => ({

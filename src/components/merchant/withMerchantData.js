@@ -16,14 +16,14 @@ const withMerchantData = (WrapperComponent) => {
     data, 
     getReq,
     alertMessage,
-    pathname,
     queryStr,
-    component, 
     ...props 
   }) => {
 
     const [success, setSuccess] = useState(false);
+    const pathname = '/merchants'
     const fetchSuccess = MerchantActionTypes.MERCHANT_FETCH_SUCCESS
+    const component = 'merchant'
 
     useEffect(() => {
       getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
@@ -42,19 +42,9 @@ const withMerchantData = (WrapperComponent) => {
   })
 
   const mapDispatchToProps = dispatch => ({
-    getReq: (
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
-    ) => dispatch(getReq(
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
-    ))
+    getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
+      getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
+    )
   })
 
   return connect(mapStateToProps, mapDispatchToProps)(WithMerchantData);
