@@ -2,10 +2,8 @@ import React from 'react';
 
 // dependencies
 import { Link, useLocation } from 'react-router-dom';
-
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector} from 'reselect';
@@ -18,12 +16,8 @@ const OrderCustomer = ({
   const location = useLocation();
   const { byId } = data;
 
-  let address = null
-
-  if (byId && byId.customer) {
-    address = byId.customer.shippingInfo.find(item => item._id === byId.customer.shippingAddress)
-  }
-
+  const address = byId.customer.shippingInfo.find(item => item._id === byId.customer.shippingAddress)
+  
   return <>
     <Card width="col" title="Customer Information">
       <Ul>
@@ -50,12 +44,19 @@ const OrderCustomer = ({
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <span>Address:</span>
+                      <span>Billing Address:</span>
                     </div>
                     <div className="col-8">
                       <span>{byId.customer.fullname}</span><br />
                       <span>{byId.customer.streetAddress1}, {byId.customer.city}, {byId.customer.state}</span><br />
-                      <span>Phone# {byId.customer.phone}</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Phone#</span>
+                    </div>
+                    <div className="col-8">
+                      <span>{byId.customer.phone}</span>
                     </div>
                   </div>
                 </div>

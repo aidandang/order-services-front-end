@@ -55,10 +55,10 @@ const OrderListTable = ({
                 <th scope="col">Order#</th>
                 <th scope="col">Status</th>
                 <th scope="col">Customer</th>
-                <th scope="col">Order Number</th>
-                <th scope="col">Date</th>
                 <th scope="col">Merchant</th>
-                <th scope="col" className="text-right">Items</th>
+                <th scope="col">Purchase#</th>
+                <th scope="col">Purchase Date</th>
+                <th scope="col">Type</th>
                 <th scope="col" className="text-right">Order Cost</th>
               </tr>
             </thead>

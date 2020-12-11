@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 // components
-import withWarehouseData from '../api/withWarehouseData'
+import withWarehouseData from './withWarehouseData'
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
 import WarehouseForm from './warehouse-form.component'
 

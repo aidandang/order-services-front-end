@@ -13,7 +13,7 @@ const SubmitOrReset = ({
   return <>
     <Li>      
       <div className="row">
-        <div className="col my-3">
+        <div className="col my-2">
           <Button
             onClick={e => {
               e.preventDefault();

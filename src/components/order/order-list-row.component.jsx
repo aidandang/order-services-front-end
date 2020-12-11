@@ -4,15 +4,16 @@ import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import moment from 'moment';
 
-// components
-import { acctToStr } from '../utils/acctToStr';
-import { integerMask } from '../utils/helpers';
-
 const OrderListRow = ({
   order
 }) => {
 
-  const { info, items, customer, cost, status } = order;
+  const { 
+    orderNumber, 
+    status,
+    purchasing,
+    selling
+  } = order;
 
   const location = useLocation();
   const history = useHistory();
@@ -28,14 +29,14 @@ const OrderListRow = ({
       className="table-row-cs" 
       onClick={(e) => handleOnClick(e, order)}
     >
-      <th scope="row">{order.orderRef} </th>
+      <th scope="row">{orderNumber} </th>
       <td><span className="text-info">{status}</span></td>
-      <td>{`${customer.account} - ${customer.nickname}`}</td>
-      <td>{info ? info.orderNumber : 'not order'}</td>
-      <td>{info ? moment(info.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'not order'}</td>
-      <td>{info ? info.merchant.name : 'not order'}</td>
-      <td className="text-right">{integerMask(items.reduce((a, c) => a + c.qty, 0).toString())}</td>
-      <td className="text-right">{acctToStr(items.reduce((a, c) => a + c.qty * c.price, cost && cost.shippingCost + cost.saleTax))}</td>
+      <td>{selling && selling.customer ? `${selling.customer.account} - ${selling.customer.nickname}` : 'n/a'}</td>
+      <td>{purchasing && purchasing.merchant ? purchasing.merchant.name : 'n/a'}</td>
+      <td>{purchasing && purchasing.orderNumber ? purchasing.orderNumber : 'n/a'}</td>
+      <td>{purchasing && purchasing.orderDate ? moment(purchasing.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'n/a'}</td>
+      <td>{purchasing && purchasing.type ? purchasing.type : 'n/a'}</td>
+      <td className="text-right">{purchasing && purchasing.totalCost ? purchasing.totalCost : 0}</td>
     </tr>
   </>
 }
