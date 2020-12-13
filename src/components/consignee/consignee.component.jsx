@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 // components
-import withConsigneeData from '../api/withConsigneeData'
+import withConsigneeData from './withConsigneeData'
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
 import ConsigneeForm from './consignee-form.component'
 

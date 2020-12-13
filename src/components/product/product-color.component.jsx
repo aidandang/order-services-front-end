@@ -53,7 +53,7 @@ const ProductColor = ({
 
   const handleSelectColorToOrder = () => {
     const pathname = location.pathname.split('/select-product')[0]
-    history.push(pathname, { product: byId, color: colorTemp})
+    history.push(pathname, { product: byId, color: colorTemp })
   }
 
   return <>

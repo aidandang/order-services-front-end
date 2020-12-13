@@ -1,69 +1,64 @@
 import React, { useState } from 'react';
 
 // components
-import withBrandData from '../api/withBrandData';
+import withBrandData from './withBrandData';
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component';
-import BrandEdit from './brand-edit.component';
-import BrandRemove from './brand-remove.component';
-import BrandAdd from './brand-add.component';
+import BrandForm from './brand-form.component';
 
-// main component
 const Brand = ({
   data
 }) => {
 
-  const { allIds } = data;
-
-  const initialState = {
-    _id: '',
-    name: '',
-    preferredName: '',
-    createdAt: ''
+  const brndObj = {};
+  if (data.allIds) {
+    let i = 0;
+    for (i = 0; i < data.allIds.length; i++) {
+      brndObj[data.allIds[i]._id] = data.allIds[i] 
+    }
   }
 
-  const [brand, setBrand] = useState(initialState);
+  const [brndId, setBrndId] = useState('');
   const [action, setAction] = useState('');
 
   const onInputChange = e => {
     e.preventDefault();
-
     const id = e.target.value;
 
-    const selectedBrand = allIds.find(item => item._id === id)
-
-    if (selectedBrand) {
-      setBrand(prevState => ({ ...prevState, ...selectedBrand }))
+    if (brndObj[id]) {
+      setBrndId(brndObj[id]._id)
     } else {
-      setBrand(prevState => ({ ...prevState, ...initialState }))
+      setBrndId('')
     }
   }
 
   return <>
-    <Card width="col" title={'Update Brand'}>
+    <Card width="col" title='Update Brands'>
       <Ul>
         {
           action === 'add'
           ? 
-          <BrandAdd setAction={setAction} />           
+          <BrandForm
+            action={action}  
+            setAction={setAction} 
+          />           
           :
           <>
             <Li>
               <SelectInput
                 label="Brand List"
-                name="brand"
-                size="col-12"
+                name="brndId"
                 smallText="Select a brand to edit."
                 defaultValue=""
                 defaultText="..."
-                value={brand._id}
+                value={brndId}
                 onChange={onInputChange}
-                data={allIds ? allIds : []}
-                valueKey={'_id'}
-                textKey={'name'}
+                data={data.allIds ? data.allIds : []}
+                valueKey="_id"
+                textKey="name"
               />
             </Li>
             {
-              brand._id !== "" && allIds.find(item => item._id === brand._id) &&
+              brndId !== "" && brndObj[brndId] &&
               <Li>
                 <div className="row">
                   <div className="col">
@@ -82,11 +77,19 @@ const Brand = ({
             }
             {
               action === 'edit' &&
-              <BrandEdit brand={brand} setAction={setAction} />
+              <BrandForm 
+                brand={brndObj[brndId]} 
+                action={action}
+                setAction={setAction} 
+              />
             }
             {
               action === 'remove' &&
-              <BrandRemove brand={brand} setAction={setAction} />
+              <BrandForm 
+                brand={brndObj[brndId]} 
+                action={action}
+                setAction={setAction} 
+              />
             }
             <Li>
               <div className="row">

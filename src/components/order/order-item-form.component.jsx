@@ -62,7 +62,7 @@ const OrderItemForm = ({
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-order-item')[0];
+  const parentRoute = location.pathname.split('/update-purchasing-info')[0];
 
   const [success, setSuccess] = useState(false)
 
@@ -120,6 +120,8 @@ const OrderItemForm = ({
     }
     // eslint-disable-next-line
   }, [success])
+
+  console.log(location.state)
 
   return <>
 
