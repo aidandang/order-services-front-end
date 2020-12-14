@@ -4,7 +4,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 // components
-import withProductData from '../api/withProductData';
+import withProductData from './withProductData';
 import { Card, Ul, Li } from '../tag/tag.component';
 import ProductColor from './product-color.component';
 

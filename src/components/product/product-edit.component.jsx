@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import withProductData from '../api/withProductData';
+import withProductData from './withProductData';
 import ProductForm from './product-form.component';
 import Brand from '../brand/brand.component';
 

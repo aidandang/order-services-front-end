@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import withCustomerData from '../api/withCustomerData';
+import withCustomerData from './withCustomerData';
 import CustomerAddress from './customer-address.component';
 
 const CustomerShippingInfo = ({

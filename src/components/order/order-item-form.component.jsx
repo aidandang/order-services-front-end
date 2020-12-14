@@ -205,7 +205,7 @@ const OrderItemForm = ({
                       name="cost"
                       id="currencyMask-order-item-form-cost"
                       errors={errors}
-                      smallText="cost per unit."
+                      smallText="Cost per unit."
                       value={formData.cost}
                       onChange={onInputChange}
                     />

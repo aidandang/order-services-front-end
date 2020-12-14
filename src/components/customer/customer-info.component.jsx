@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
 // components
-import withCustomerData from '../api/withCustomerData';
+import withCustomerData from './withCustomerData';
 import { Card, Ul, Li } from '../tag/tag.component';
 import SaveCustomerToOrder from '../../components/order/save-customer-to-order.component';
 

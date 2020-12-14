@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import withShippingData from '../api/withShippingData';
+import withShippingData from './withShippingData';
 import ShippingInfo from './shipping-info.component';
 
 const Shipping = ({

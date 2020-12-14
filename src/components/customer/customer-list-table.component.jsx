@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { useLocation, useHistory } from 'react-router-dom';
 
 // components
-import withCustomerData from '../api/withCustomerData';
+import withCustomerData from './withCustomerData';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
 import CustomerListRow from './customer-list-row.component';
 
