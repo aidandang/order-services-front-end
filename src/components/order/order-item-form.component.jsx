@@ -29,7 +29,7 @@ const formSchema = Yup.object().shape({
   qty: Yup
     .string()
     .required(),
-  price: Yup
+  cost: Yup
     .string()
     .required(),
   note: Yup
@@ -41,7 +41,7 @@ const formState = {
   color: null,
   size: "",
   qty: "",
-  price: "",
+  cost: "",
   note: ""
 }
 
@@ -84,8 +84,8 @@ const OrderItemForm = ({
 
     const qty = integerStrToNum(obj.qty);
     obj.qty = qty;
-    const price = strToAcct(obj.price);
-    obj.price = price;
+    const cost = strToAcct(obj.cost);
+    obj.cost = cost;
 
     let updateItems = null
 
@@ -120,8 +120,6 @@ const OrderItemForm = ({
     }
     // eslint-disable-next-line
   }, [success])
-
-  console.log(location.state)
 
   return <>
 
@@ -203,12 +201,12 @@ const OrderItemForm = ({
                   </div>
                   <div className="col-xl-4">
                     <TextInput
-                      label="Price (*)" 
-                      name="price"
-                      id="currencyMask-order-item-form-price"
+                      label="Cost (*)" 
+                      name="cost"
+                      id="currencyMask-order-item-form-cost"
                       errors={errors}
-                      smallText="Price per unit."
-                      value={formData.price}
+                      smallText="cost per unit."
+                      value={formData.cost}
                       onChange={onInputChange}
                     />
                   </div>
