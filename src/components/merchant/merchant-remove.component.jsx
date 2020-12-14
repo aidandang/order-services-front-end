@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 // components
 import { Li, Button } from '../tag/tag.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { deleteReq } from '../../state/api/api.requests';
-import { BrandActionTypes } from '../../state/brand/brand.types';
+import { MerchantActionTypes } from '../../state/merchant/merchant.types'; 
 
-const BrandRemove = ({
-  brand,
+const MerchantRemove = ({
+  merchant,
   deleteReq,
   alertMessage,
   setAction
@@ -21,9 +21,8 @@ const BrandRemove = ({
   const [success, setSuccess] = useState(false);
 
   const formSubmit = () => {
-
-    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
-    deleteReq(`/brands/${brand._id}`, fetchSuccess, setSuccess, 'brand-remove');
+    const fetchSuccess = MerchantActionTypes.MERCHANT_FETCH_SUCCESS;
+    deleteReq('/merchants/' + merchant._id, fetchSuccess, setSuccess, 'merchant-remove');
   }
 
   useEffect(() => {
@@ -31,27 +30,26 @@ const BrandRemove = ({
     // eslint-disable-next-line
   }, [success])
 
-  // main component
   return <>
 
-    { alertMessage && alertMessage.component === 'brand-remove' && <AlertMesg/> }
+    { alertMessage && alertMessage.component === 'merchant-remove' && <AlertMesg/> }
 
     <form>
       <Li>
-        <div className="row">
-          <div className="col text-right">
-            <a
-              href="/"
-              className="a-link-cs"
-              onClick={e => {
-                e.preventDefault();
-                setAction('')
-              }}
-            >
-              Cancel
-            </a>
-          </div>  
-        </div>
+          <div className="row">
+            <div className="col text-right">
+              <a
+                href="/"
+                className="a-link-cs"
+                onClick={e => {
+                  e.preventDefault();
+                  setAction('')
+                }}
+              >
+                Cancel
+              </a>
+            </div>  
+          </div>
       </Li>
     </form>
     <form>
@@ -72,7 +70,7 @@ const BrandRemove = ({
           </Button>
         </div>
       </div>
-    </Li> 
+    </Li>  
   </>
 }
 
@@ -83,15 +81,15 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   deleteReq: (
     pathname, 
-    fetchSuccess, 
+    fetchSuccess,
     setSuccess, 
     component
   ) => dispatch(deleteReq(
     pathname, 
-    fetchSuccess, 
+    fetchSuccess,
     setSuccess, 
     component
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandRemove);
+export default connect(mapStateToProps, mapDispatchToProps)(MerchantRemove);

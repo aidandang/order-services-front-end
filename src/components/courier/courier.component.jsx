@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 // components
-import withCourierData from '../api/withCourierData'
+import withCourierData from './withCourierData'
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
 import CourierForm from './courier-form.component'
 
