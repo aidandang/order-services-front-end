@@ -18,3 +18,8 @@ export const copyItemToEdit = item => ({
   type: ItemActionTypes.COPY_ITEM_TO_EDIT,
   payload: item
 })
+
+export const copyItemsToList = items => ({
+  type: ItemActionTypes.COPY_ITEMS_TO_LIST,
+  payload: items
+})

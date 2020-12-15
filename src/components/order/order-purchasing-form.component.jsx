@@ -200,7 +200,7 @@ const OrderPurchasingForm = ({
               </Li>
             </Ul>
           </Card>
-          <OrderItem queryStr={`?orderNumber=${byId.orderNumber}`} />
+          <OrderItem order={byId} />
         </div>
         <div className="col-12 col-xl-4">
           <Card width="col" title="Update">

@@ -1,31 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // dependencies
 import { Link, useLocation, useHistory } from 'react-router-dom'
 // components
+import AlertMesg from '../alert-mesg/alert-mesg.component'
 import { acctToStr } from '../utils/acctToStr'
 import { integerMask } from '../utils/helpers'
+// redux
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { selectItemData } from '../../state/item/item.selectors'
+import { getReq } from '../../state/api/api.requests'
+import { ItemActionTypes } from '../../state/item/item.types'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
 
 const OrderItem = ({
-  order
+  orderNumber,
+  data,
+  alertMessage,
+  getReq
 }) => {
 
-  const history = useHistory()
   const location = useLocation()
+  const history = useHistory()
+  const { allIds } = data
 
-  const { items } = order
-
-  const handleItemEdit = (item, index) => {
-    const obj = { ...item }
-    obj.unitCost = acctToStr(item.unitCost)
-    obj.itemCost = acctToStr(item.itemCost)
-    obj.qty = integerMask(item.qty.toString())
-    obj.index = index
-
-    history.push(`${location.pathname}/item`, { ...obj })
-  }
+  const pathname = '/items'
+  const fetchSuccess = ItemActionTypes.ITEM_FETCH_SUCCESS
+  const queryStr = `?orderNumber=${orderNumber}`
+  const component = 'order-item'
+  
+  useEffect(() => {
+    getReq(pathname, fetchSuccess, queryStr, null, component)
+    // eslint-disable-next-line
+  }, [])
 
   return <>
+
+    { alertMessage && alertMessage.component === component && <AlertMesg /> }
+
     {/* Item Table */}
     <div className="row mb-2">
       <div className="col">
@@ -37,21 +50,22 @@ const OrderItem = ({
                 <th scope="col">Item/Description</th>
                 <th scope="col" className="text-right">Qty</th>
                 <th scope="col" className="text-right">Item Cost</th>
+                <th scope="col" className="text-right">Sales Tax</th>
                 <th scope="col" className="text-right">Amount</th>
               </tr>
             </thead>
             <tbody>
               {
-                items && items.length > 0 
+                allIds && allIds.length > 0 
                 ? <>
                   { 
-                    items.map((item, index) => 
+                    allIds.map((item, index) => 
                       <tr 
                         key={index} 
                         className="table-row-no-link-cs span-link-cs"
                         onClick={e => {
                           e.preventDefault()
-                          handleItemEdit(item, index)
+                          history.push(`${location.pathname}/item`, item )
                         }}
                       >
                         <td>{item.product.styleCode}</td>
@@ -85,4 +99,15 @@ const OrderItem = ({
   </>
 }
 
-export default OrderItem;
+const mapStateToProps = createStructuredSelector({
+  data: selectItemData,
+  alertMessage: selectAlertMessage
+})
+
+const mapDispatchToProps = dispatch => ({
+  getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
+    getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
+  )
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderItem);
