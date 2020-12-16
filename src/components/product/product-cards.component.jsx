@@ -6,7 +6,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 
 // components
 import { Card, Ul } from '../tag/tag.component';
-import withProductData from '../api/withProductData';
+import withProductData from './withProductData';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
 import ProductCard from './product-card.component';
 

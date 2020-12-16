@@ -6,8 +6,3 @@ export const selectOrderData = createSelector(
   [selectOrder],
   order => order.data
 )
-
-export const selectOrderItem = createSelector(
-  [selectOrder],
-  order => order.item
-)

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import withOrderData from '../api/withOrderData';
+import withOrderData from './withOrderData';
 import OrderInfo from './order-info.component';
 import OrderPurchasing from './order-purchasing.component';
 import OrderSelling from './order-selling.component';

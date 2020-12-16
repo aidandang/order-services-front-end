@@ -43,6 +43,11 @@ const itemReducer = (state = INITIAL_STATE, action) => {
         ...state,
         editing: action.payload
       }
+    case ItemActionTypes.COPY_ITEMS_TO_LIST:
+      return {
+        ...state,
+        list: action.payload
+      }
     default:
       return state;
   }

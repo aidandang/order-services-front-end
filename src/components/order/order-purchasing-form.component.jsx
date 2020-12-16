@@ -1,50 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 // dependencies
-import * as Yup from "yup";
-import moment from 'moment';
-import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom';
+import * as Yup from "yup"
+import moment from 'moment'
+import { useHistory, useLocation, useParams, Redirect, Link } from 'react-router-dom'
 // components
-import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.component';
-import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import Merchant from '../merchant/merchant.component';
-import Warehouse from '../warehouse/warehouse.component';
-import OrderItem from './order-item.component';
+import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.component'
+import { useForm } from '../hook/use-form'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
+import Merchant from '../merchant/merchant.component'
+import Warehouse from '../warehouse/warehouse.component'
+import OrderItem from './order-item.component'
+import OrderCost from './order-cost.component'
 // redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { OrderActionTypes } from '../../state/order/order.types';
-import { patchReq } from '../../state/api/api.requests';
-import { selectMerchantData } from '../../state/merchant/merchant.selectors';
-import { selectOrderData } from '../../state/order/order.selectors';
-import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors';
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { OrderActionTypes } from '../../state/order/order.types'
+import { patchReq } from '../../state/api/api.requests'
+import { selectMerchantData } from '../../state/merchant/merchant.selectors'
+import { selectOrderData } from '../../state/order/order.selectors'
+import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors'
 
 // inital values
 const formSchema = Yup.object().shape({
-  merchant: Yup
-    .string()
-    .required(),
-  orderNumber: Yup
-    .string()
-    .required(),
-  orderDate: Yup
-    .string()
-    .required(),
-  type: Yup
-    .string()
-    .required(),
-  warehouse: Yup
-    .string()
-    .required()
-});
+  merchant: Yup.string().required(),
+  orderNumber: Yup.string().required(),
+  orderDate: Yup.string().required(),
+  type: Yup.string().required(),
+  warehouse: Yup.string().required(),
+  subCost: Yup.string().required(),
+  salesTax: Yup.string(),
+  shippingCost: Yup.string(),
+  otherCost: Yup.string(),
+  totalCost: Yup.string().required()
+})
 
 const formState = {
   merchant: "",
   orderNumber: "",
   orderDate: "",
   type: "",
-  warehouse: ""
+  warehouse: "",
+  subCost: "",
+  salesTax: "",
+  shippingCost: "",
+  otherCost: "",
+  totalCost: ""
 }
 
 const OrderPurchasingForm = ({
@@ -54,20 +55,20 @@ const OrderPurchasingForm = ({
   warehouseData
 }) => {
 
-  const location = useLocation();
-  const history = useHistory();
-  const params = useParams();
+  const location = useLocation()
+  const history = useHistory()
+  const params = useParams()
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-purchasing-info')[0];
+  const parentRoute = location.pathname.split('/update-purchasing-info')[0]
 
   const [success, setSuccess] = useState(false)
 
-  const { orderId } = params;
-  const { byId } = data;
+  const { orderId } = params
+  const { byId } = data
 
-  let orderEditing = null;
+  let orderEditing = null
 
   if (byId && byId.purchasing) {
     orderEditing = {
@@ -79,11 +80,11 @@ const OrderPurchasingForm = ({
     }
   }
 
-  let merchants = null;
-  let warehouses = null;
+  let merchants = null
+  let warehouses = null
 
-  if (merchantData.allIds) merchants = merchantData.allIds;
-  if (warehouseData.allIds) warehouses = warehouseData.allIds;
+  if (merchantData.allIds) merchants = merchantData.allIds
+  if (warehouseData.allIds) warehouses = warehouseData.allIds
 
   const [
     formData,
@@ -91,10 +92,10 @@ const OrderPurchasingForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema);
+  ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema)
 
   const formSubmit = () => {
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     
     const merchantObj = merchantData.allIds.find(item => item._id === formData.merchant)
     const warehouseObj = warehouseData.allIds.find(item => item._id === formData.warehouse)
@@ -109,7 +110,7 @@ const OrderPurchasingForm = ({
   }
 
   const formReset = () => {
-    setValues(formState);
+    setValues(formState)
   }
 
   useEffect(() => {
@@ -200,7 +201,56 @@ const OrderPurchasingForm = ({
               </Li>
             </Ul>
           </Card>
-          <OrderItem queryStr={`?orderNumber=${byId.orderNumber}`} />
+          {/* Item Table */}
+          <div className="row mb-2">
+            <div className="col">
+              <div className="table-responsive">
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Style#</th>
+                      <th scope="col">Item/Description</th>
+                      <th scope="col" className="text-right">Qty</th>
+                      <th scope="col" className="text-right">Item Cost</th>
+                      <th scope="col" className="text-right">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      byId.items && byId.items.length > 0 && <>
+                        <OrderItem items={byId.items} />
+                      </>
+                    }
+                    <tr className="table-row-no-link-cs">
+                      <td colSpan="5">
+                        <Link
+                          to={`${location.pathname}/item`}
+                          className="a-link-cs"
+                        >
+                          Add Item
+                        </Link>
+                      </td>
+                    </tr>
+                    {
+                      byId.items && byId.items.length > 0 && <>
+                        <OrderCost order={byId} />
+                        <tr className="table-row-no-link-cs">
+                          <td colSpan="5">
+                            <Link
+                              to={`${location.pathname}/cost`}
+                              className="a-link-cs"
+                            >
+                              Update Purchasing Cost
+                            </Link>
+                          </td>
+                        </tr>
+                      </>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="col-12 col-xl-4">
           <Card width="col" title="Update">
@@ -233,4 +283,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderPurchasingForm);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderPurchasingForm)

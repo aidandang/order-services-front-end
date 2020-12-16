@@ -1,6 +1,6 @@
 import { OrderActionTypes } from './order.types';
 
-export const copyOrderItemToEdit = payload => ({
-  type: OrderActionTypes.COPY_ORDER_ITEM_TO_EDIT,
-  payload
+export const updateItemInOrder = order => ({
+  type: OrderActionTypes.UPDATE_ITEM_IN_ORDER,
+  payload: order
 })

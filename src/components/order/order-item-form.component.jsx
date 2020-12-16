@@ -1,56 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react'
 
 // dependencies
 import * as Yup from "yup";
-import { Link, useLocation, useHistory, useParams, Redirect } from 'react-router-dom';
+import { Link, useLocation, useHistory, useParams, Redirect } from 'react-router-dom'
 // components
-import { Card, Ul, Li, TextInput } from '../tag/tag.component';
-import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-import { integerStrToNum } from '../utils/helpers';
-import { strToAcct } from '../utils/strToAcct';
+import { Card, Ul, Li, TextInput } from '../tag/tag.component'
+import { useForm } from '../hook/use-form'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
+import { integerStrToNum } from '../utils/helpers'
+import { strToAcct } from '../utils/strToAcct'
 // redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectOrderData, selectOrderItem } from '../../state/order/order.selectors';
-import { patchReq } from '../../state/api/api.requests';
-import { OrderActionTypes } from '../../state/order/order.types';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { selectOrderData } from '../../state/order/order.selectors'
+import { updateItemInOrder } from '../../state/order/order.actions'
 
 // initial form state
 const formSchema = Yup.object().shape({
-  product: Yup
-    .object(),
-  color: Yup
-    .object(),
-  size: Yup
-    .string(),
-  qty: Yup
-    .string()
-    .required(),
-  cost: Yup
-    .string()
-    .required(),
-  note: Yup
-    .string()
+  product: Yup.object(),
+  color: Yup.object(),
+  size: Yup.string(),
+  qty: Yup.string().required(),
+  unitCost: Yup.string().required(),
+  note: Yup.string()
 })
-
 const formState = {
+  index: null,
   product: null,
   color: null,
   size: "",
   qty: "",
-  cost: "",
+  unitCost: "",
   note: ""
 }
 
 // main component
 const OrderItemForm = ({
   data,
-  item,
-  patchReq,
-  alertMessage
+  updateItemInOrder
 }) => {
 
   const params = useParams();
@@ -62,9 +49,7 @@ const OrderItemForm = ({
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-purchasing-info')[0];
-
-  const [success, setSuccess] = useState(false)
+  const parentRoute = location.pathname.split('/item')[0];
 
   const [
     formData,
@@ -72,38 +57,36 @@ const OrderItemForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(Object.keys(item).length > 0 ? item : formState, formState, formSchema);
+  ] = useForm(formState, formState, formSchema);
 
   const { product, color } = formData;
 
   const formSubmit = () => {
 
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-
     const obj = { ...formData };
-
+    delete obj.index
     const qty = integerStrToNum(obj.qty);
     obj.qty = qty;
-    const cost = strToAcct(obj.cost);
-    obj.cost = cost;
+    const unitCost = strToAcct(obj.unitCost);
+    obj.unitCost = unitCost;
+    const itemCost = qty * unitCost
+    obj.itemCost = itemCost
+    
+    let items = null
 
-    let updateItems = null
-
-    if (obj._id) {
-      updateItems = byId.items.map(item => {
-        if (item._id !== obj._id) {
+    if (formData.index === null) {
+      items = [ ...byId.items, obj ]
+    } else {
+      items = byId.items.map((item, index) => {
+        if (index !== formData.index) {
           return item
         }
-        return {
-          ...item,
-          ...obj
-        }
+        return { ...item, ...obj }
       })
-    } else {
-      updateItems = [ ...byId.items, obj ]
     }
 
-    patchReq(`/orders/${orderId}`, fetchSuccess, { items: updateItems }, setSuccess, 'order-item-form')
+    updateItemInOrder({ ...byId, items: items })
+    history.push(parentRoute)
   }
 
   const formReset = () => {
@@ -111,20 +94,13 @@ const OrderItemForm = ({
   }
 
   useEffect(() => {
-    if (success) {
-      history.push(parentRoute)
-    } else {
-      if (location.state) setValues(prevState => ({
-        ...prevState, ...location.state
-      }))
-    }
+    if (location.state) setValues(prevState => ({
+      ...prevState, ...location.state
+    }))
     // eslint-disable-next-line
-  }, [success])
+  }, [location.state])
 
   return <>
-
-    { alertMessage && alertMessage.component === 'order-item-form' && <AlertMesg /> }
-
     { 
       orderId && !byId 
       ? 
@@ -180,7 +156,7 @@ const OrderItemForm = ({
                 <div className="row">
                   <div className="col-xl-4">
                     <TextInput
-                      label="Size (*)" 
+                      label="Size" 
                       name="size"
                       errors={errors}
                       smallText="Size of the product."
@@ -201,12 +177,12 @@ const OrderItemForm = ({
                   </div>
                   <div className="col-xl-4">
                     <TextInput
-                      label="Cost (*)" 
-                      name="cost"
+                      label="Unit Cost (*)" 
+                      name="unitCost"
                       id="currencyMask-order-item-form-cost"
                       errors={errors}
-                      smallText="cost per unit."
-                      value={formData.cost}
+                      smallText="Cost per unit."
+                      value={formData.unitCost}
                       onChange={onInputChange}
                     />
                   </div>
@@ -237,15 +213,11 @@ const OrderItemForm = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectOrderData,
-  item: selectOrderItem,
-  alertMessage: selectAlertMessage
+  data: selectOrderData
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
+  updateItemInOrder: order => dispatch(updateItemInOrder(order))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderItemForm);

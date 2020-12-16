@@ -1,136 +1,39 @@
-import React, { useEffect, useState } from 'react';
-
-// dependencies
-import * as Yup from "yup";
-import { useLocation, useHistory, useParams, Redirect } from 'react-router-dom';
+import React from 'react'
 
 // components
-import { Card, Ul } from '../tag/tag.component';
-import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import OrderCostForm from './order-cost-form.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-import { strToAcct } from '../utils/strToAcct';
-import { acctToStr } from '../utils/acctToStr';
+import { acctToStr } from '../utils/acctToStr'
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/api.requests';
-import { OrderActionTypes } from '../../state/order/order.types';
-import { selectOrderData } from '../../state/order/order.selectors';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
-
-// initial form state
-const formSchema = Yup.object().shape({
-  shippingCost: Yup
-    .string(),
-  saleTax: Yup
-    .string()
-})
-
-const formState = {
-  shippingCost: "",
-  saleTax: ""
-}
-
-// main component
 const OrderCost = ({
-  data,
-  patchReq,
-  alertMessage
+  order
 }) => {
 
-  const params = useParams();
-  const location = useLocation();
-  const history = useHistory();
+  const { items, purchasing } = order
 
-  const { byId } = data;
-  const { orderId } = params;
+  const totalCalc = () => {
+    var total = items.reduce((a, c) => a + c.itemCost, 0)
+    if (purchasing) total += purchasing.salesTax + purchasing.otherCost
 
-  // back to parent's route when update was success 
-  // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-order-cost')[0];
-
-  const [success, setSuccess] = useState(false)
-
-  let orderEditing = null;
-
-  if (byId && byId.cost) {
-    orderEditing = {
-      ...formState,
-      shippingCost: acctToStr(byId.cost.shippingCost),
-      saleTax: acctToStr(byId.cost.saleTax)
-    }
+    return acctToStr(total)
   }
-
-  const [
-    formData,
-    errors, 
-    onInputChange, 
-    buttonDisabled,
-    setValues
-  ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema);
-
-  const formSubmit = () => {
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-
-    const obj = { ...formData }
-
-    const shippingCost = strToAcct(obj.shippingCost);
-    obj.shippingCost = shippingCost;
-    const saleTax = strToAcct(obj.saleTax);
-    obj.saleTax = saleTax;
-
-    patchReq(`/orders/${orderId}`, fetchSuccess, { cost: obj }, setSuccess, 'order-cost')
-  }
-
-  const formReset = () => {
-    setValues(formState);
-  }
-
-  useEffect(() => {
-    if (success) history.push(parentRoute)
-  }, [success, history, parentRoute])
 
   return <>
-    { alertMessage && alertMessage.component === 'order-cost' && <AlertMesg /> }
-
-    { 
-      orderId && !byId 
-      ? 
-      <Redirect to={parentRoute} />
-      :
-      <Card width="col" title="Local Costs">
-        <Ul>
-          <form onSubmit={formSubmit}>
-            <OrderCostForm
-              formData={formData}
-              errors={errors} 
-              onInputChange={onInputChange}
-            />
-            <SubmitOrReset
-              buttonName={'Save'}
-              buttonDisabled={buttonDisabled}
-              formSubmit={formSubmit}
-              formReset={formReset}
-            />
-          </form>
-        </Ul>
-      </Card>
-    } 
+    <tr className="table-row-no-link-cs">
+      <td colSpan="4" className="text-right">Subtotal</td>
+      <td colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}</td>
+    </tr>
+    <tr className="table-row-no-link-cs">
+      <td colSpan="4" className="text-right">Sales Tax</td>
+      <td colSpan="1" className="text-right">{purchasing ? acctToStr(purchasing.salesTax) : '.00'}</td>
+    </tr>
+    <tr className="table-row-no-link-cs">
+      <td colSpan="4" className="text-right">Other</td>
+      <td colSpan="1" className="text-right">{purchasing ? acctToStr(purchasing.otherCost) : '.00'}</td>
+    </tr>
+    <tr className="table-row-no-link-cs">
+      <th scope="col" colSpan="4" className="text-right">Total</th>
+      <th scope="col" colSpan="1" className="text-right">{totalCalc()}</th>
+    </tr>
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectOrderData,
-  alertMessage: selectAlertMessage
-})
-
-const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrderCost);
+export default OrderCost

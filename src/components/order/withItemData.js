@@ -7,13 +7,12 @@ import { useParams } from 'react-router-dom';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
-import { connect, batch } from 'react-redux';
+import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { ItemActionTypes } from '../../state/item/item.types';
 import { getReq } from '../../state/api/api.requests';
 import { selectItemData } from '../../state/item/item.selectors';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { clearAlertMessage } from '../../state/alert/alert.actions';
 
 const withItemData = (WrapperComponent) => {
   const WithItemData = ({ 
@@ -21,7 +20,6 @@ const withItemData = (WrapperComponent) => {
     getReq,
     alertMessage,
     queryStr,
-    clearAlertMessage, 
     ...props 
   }) => {
 
@@ -37,11 +35,7 @@ const withItemData = (WrapperComponent) => {
     const fetchSuccess = ItemActionTypes.ITEM_FETCH_SUCCESS
 
     useEffect(() => {
-      batch(() => {
-        clearAlertMessage()
-        getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
-      })
-      
+      getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
       // eslint-disable-next-line
     }, [queryStr])
     
@@ -57,20 +51,9 @@ const withItemData = (WrapperComponent) => {
   })
 
   const mapDispatchToProps = dispatch => ({
-    getReq: (
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
-    ) => dispatch(getReq(
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
-    )),
-    clearAlertMessage: () => dispatch(clearAlertMessage())
+    getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
+      getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
+    )
   })
 
   return connect(mapStateToProps, mapDispatchToProps)(WithItemData);

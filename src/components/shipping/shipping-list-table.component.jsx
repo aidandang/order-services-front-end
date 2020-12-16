@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // components
-import withShippingData from '../api/withShippingData';
+import withShippingData from './withShippingData';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
 import ShippingListRow from './shipping-list-row.component'
 

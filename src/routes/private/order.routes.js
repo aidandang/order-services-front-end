@@ -3,6 +3,7 @@ import OrderAdd from '../../components/order/order-add.component';
 import Order from '../../components/order/order.component';
 import OrderPurchasingForm from '../../components/order/order-purchasing-form.component';
 import OrderItemForm from '../../components/order/order-item-form.component';
+import OrderCostForm from '../../components/order/order-cost-form.component';
 import OrderSellingForm from '../../components/order/order-selling-form.component';
 import ProductList from '../../components/product/product-list.component';
 import ProductInfo from '../../components/product/product-info.component';
@@ -25,6 +26,7 @@ const routes = [
   { path: "/app/order/:orderId", name: "Order Details", Component: Order },
   { path: "/app/order/:orderId/update-purchasing-info", name: "Update Purchasing Information", Component: OrderPurchasingForm },
   { path: "/app/order/:orderId/update-purchasing-info/item", name: "Update Item", Component: OrderItemForm },
+  { path: "/app/order/:orderId/update-purchasing-info/cost", name: "Update Cost", Component: OrderCostForm },
   { path: "/app/order/:orderId/update-selling-info", name: "Update Selling Information", Component: OrderSellingForm },
   { path: "/app/order/:orderId/update-purchasing-info/item/select-product", name: "Select Product", Component: ProductList },
   { path: "/app/order/:orderId/update-purchasing-info/item/select-product/add", name: "Add Product", Component: ProductAdd },
