@@ -17,22 +17,13 @@ import { updateItemInOrder } from '../../state/order/order.actions'
 
 // initial form state
 const formSchema = Yup.object().shape({
-  product: Yup
-    .object(),
-  color: Yup
-    .object(),
-  size: Yup
-    .string(),
-  qty: Yup
-    .string()
-    .required(),
-  unitCost: Yup
-    .string()
-    .required(),
-  note: Yup
-    .string()
+  product: Yup.object(),
+  color: Yup.object(),
+  size: Yup.string(),
+  qty: Yup.string().required(),
+  unitCost: Yup.string().required(),
+  note: Yup.string()
 })
-
 const formState = {
   index: null,
   product: null,
