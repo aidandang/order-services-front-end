@@ -12,7 +12,7 @@ import { strToAcct } from '../utils/strToAcct'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectOrderData } from '../../state/order/order.selectors'
+import { selectOrderData, selectOrderOrder } from '../../state/order/order.selectors'
 import { updateItemInOrder } from '../../state/order/order.actions'
 
 // initial form state
@@ -37,6 +37,7 @@ const formState = {
 // main component
 const OrderItemForm = ({
   data,
+  order,
   updateItemInOrder
 }) => {
 
@@ -85,7 +86,14 @@ const OrderItemForm = ({
       })
     }
 
-    updateItemInOrder({ ...byId, items: items })
+    updateItemInOrder({ 
+      ...order, 
+      items: items, 
+      costing: { 
+        ...order.costing,
+        subCost: items.reduce((a, c) => a + c.itemCost, 0) 
+      } 
+    })
     history.push(parentRoute)
   }
 
@@ -213,7 +221,8 @@ const OrderItemForm = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectOrderData
+  data: selectOrderData,
+  order: selectOrderOrder
 })
 
 const mapDispatchToProps = dispatch => ({

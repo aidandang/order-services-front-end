@@ -1,28 +1,42 @@
 import React from 'react'
 
 // dependencies
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import moment from 'moment'
 // components
 import { Card, Ul, Li } from '../tag/tag.component'
+// redux
+import { connect } from 'react-redux'
+import { copyOrderToEdit } from '../../state/order/order.actions'
 
 // main component
 const OrderPurchasing = ({ 
-  byId
+  byId,
+  copyOrderToEdit
 }) => {
 
   const location = useLocation()
+  const history = useHistory()
   const { purchasing } = byId
 
+  const handleUpdatePurchasingOrder = () => {
+    copyOrderToEdit({ ...byId })
+    history.push(`${location.pathname}/update-purchasing-order`)
+  }
+
   return <>
-    <Card width="col" title="Purchasing Information">
+    <Card width="col" title="Purchasing Order">
       <Ul>
         <Li>
           <Link 
-            to={`${location.pathname}/update-purchasing-info`}
+            to={`${location.pathname}/update-purchasing-order`}
             className="a-link-cs"
+            onClick={e => {
+              e.preventDefault()
+              handleUpdatePurchasingOrder()
+            }}
           >
-            Update Purchasing Information
+            Update Purchasing Order
           </Link>
         </Li>
         {
@@ -93,4 +107,8 @@ const OrderPurchasing = ({
   </>
 }
 
-export default OrderPurchasing
+const mapDispatchToProps = dispatch => ({
+  copyOrderToEdit: order => dispatch(copyOrderToEdit(order))
+})
+
+export default connect(null, mapDispatchToProps)(OrderPurchasing)

@@ -2,7 +2,6 @@ import React from 'react';
 
 // dependencies
 import * as Yup from "yup"
-import { useLocation, useHistory, useParams, Redirect } from 'react-router-dom'
 // components
 import { Card, Ul, Li, TextInput } from '../tag/tag.component'
 import { useForm } from '../hook/use-form'
@@ -26,18 +25,11 @@ const formState = {
 
 const OrderCostForm = ({
   data,
-  updateItemInOrder
+  updateItemInOrder,
+  setAction
 }) => {
-  const params = useParams()
-  const location = useLocation()
-  const history = useHistory()
 
   const { byId } = data
-  const { orderId } = params
-
-  // back to parent's route when update was success 
-  // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/cost')[0]
 
   const [
     formData,
@@ -54,8 +46,8 @@ const OrderCostForm = ({
     obj.salesTax = formData.salesTax === "" ? 0 : strToAcct(formData.salesTax);
     obj.otherCost = formData.otherCost === "" ? 0 : strToAcct(formData.otherCost);
 
-    updateItemInOrder({ ...byId, purchasing: { ...byId.purchasing,  ...obj } })
-    history.push(parentRoute)
+    updateItemInOrder({ ...byId, costing: { ...byId.costing,  ...obj } })
+    setAction('')
   }
 
   const formReset = () => {
@@ -63,50 +55,42 @@ const OrderCostForm = ({
   }
 
   return <>
-    { 
-      orderId && !byId 
-      ? 
-      <Redirect to={parentRoute} /> 
-      :
-      <Card width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
-        <Ul>
-          <Li>
-            <div className="row">
-              <div className="col-xl-4">
-                <TextInput
-                  label="Sales Tax" 
-                  name="salesTax"
-                  id="currencyMask-order-cost-form-salesTax"
-                  errors={errors}
-                  size="col-xl-6"
-                  smallText="Sale tax applied to this order. Leave empty if there is no tax"
-                  value={formData.salesTax}
-                  onChange={onInputChange}
-                />
-              </div>
-              <div className="col-xl-4">
-                <TextInput
-                  label="Other Cost" 
-                  name="otherCost"
-                  id="currencyMask-order-cost-form-otherCost"
-                  errors={errors}
-                  size="col-xl-6"
-                  smallText="All other costs. Leave empty if there is no cost"
-                  value={formData.otherCost}
-                  onChange={onInputChange}
-                />
-              </div>
+    <Card width="col" title="Update Purchasing Cost">
+      <Ul>
+        <Li>
+          <div className="row">
+            <div className="col-xl-6">
+              <TextInput
+                label="Sales Tax" 
+                name="salesTax"
+                id="currencyMask-order-cost-form-salesTax"
+                errors={errors}
+                smallText="Sale tax applied to this order. Leave empty if there is no tax"
+                value={formData.salesTax}
+                onChange={onInputChange}
+              />
             </div>
-          </Li>
-          <SubmitOrReset
-            buttonName={'Save'}
-            buttonDisabled={buttonDisabled}
-            formSubmit={formSubmit}
-            formReset={formReset}
-          />
-        </Ul>
-      </Card>
-    }  
+            <div className="col-xl-6">
+              <TextInput
+                label="Other Cost" 
+                name="otherCost"
+                id="currencyMask-order-cost-form-otherCost"
+                errors={errors}
+                smallText="All other costs. Leave empty if there is no cost"
+                value={formData.otherCost}
+                onChange={onInputChange}
+              />
+            </div>
+          </div>
+        </Li>
+        <SubmitOrReset
+          buttonName={'Save'}
+          buttonDisabled={buttonDisabled}
+          formSubmit={formSubmit}
+          formReset={formReset}
+        />
+      </Ul>
+    </Card>
   </>
 }
 
