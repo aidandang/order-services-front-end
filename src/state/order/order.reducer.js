@@ -3,10 +3,7 @@ import { OrderActionTypes } from './order.types';
 const INITIAL_STATE = {
   data: {},
   order: {
-    purchasing: {},
-    items: [],
-    costing: {},
-    selling: {}
+    items: []
   }
 }
 
@@ -44,10 +41,7 @@ const orderReducer = (state = INITIAL_STATE, action) => {
     case OrderActionTypes.COPY_ORDER_TO_EDIT:
       return {
         ...state,
-        order: { 
-          ...state.order, 
-          ...action.payload
-        }
+        order: action.payload
       }
     case OrderActionTypes.UPDATE_ITEM_IN_ORDER:
       return {

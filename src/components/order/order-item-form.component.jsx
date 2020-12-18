@@ -66,6 +66,7 @@ const OrderItemForm = ({
 
     const obj = { ...formData };
     delete obj.index
+    obj.orderNumber = byId.orderNumber
     const qty = integerStrToNum(obj.qty);
     obj.qty = qty;
     const unitCost = strToAcct(obj.unitCost);
@@ -86,14 +87,7 @@ const OrderItemForm = ({
       })
     }
 
-    updateItemInOrder({ 
-      ...order, 
-      items: items, 
-      costing: { 
-        ...order.costing,
-        subCost: items.reduce((a, c) => a + c.itemCost, 0) 
-      } 
-    })
+    updateItemInOrder({ ...order, items: items })
     history.push(parentRoute)
   }
 

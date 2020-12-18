@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 
 // dependencies
 import * as Yup from "yup"
@@ -7,10 +7,11 @@ import { Card, Ul, Li, TextInput } from '../tag/tag.component'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import { strToAcct } from '../utils/strToAcct'
+import { acctToStr } from '../utils/acctToStr'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectOrderData } from '../../state/order/order.selectors'
+import { selectOrderOrder } from '../../state/order/order.selectors'
 import { updateItemInOrder } from '../../state/order/order.actions'
 
 // initial form state
@@ -24,12 +25,10 @@ const formState = {
 }
 
 const OrderCostForm = ({
-  data,
+  order,
   updateItemInOrder,
   setAction
 }) => {
-
-  const { byId } = data
 
   const [
     formData,
@@ -46,7 +45,7 @@ const OrderCostForm = ({
     obj.salesTax = formData.salesTax === "" ? 0 : strToAcct(formData.salesTax);
     obj.otherCost = formData.otherCost === "" ? 0 : strToAcct(formData.otherCost);
 
-    updateItemInOrder({ ...byId, costing: { ...byId.costing,  ...obj } })
+    updateItemInOrder({ ...order, costing: { ...order.costing,  ...obj } })
     setAction('')
   }
 
@@ -54,8 +53,19 @@ const OrderCostForm = ({
     setValues(formState)
   }
 
+  useEffect(() => {
+    if (order.costing && Object.keys(order.costing).length > 0) {
+      setValues(prevState => ({
+        ...prevState,
+        salesTax: acctToStr(order.costing.salesTax), 
+        otherCost: acctToStr(order.costing.otherCost)
+      }))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return <>
-    <Card width="col" title="Update Purchasing Cost">
+    <Card width="col" title="Update Sales Tax and Other">
       <Ul>
         <Li>
           <div className="row">
@@ -95,7 +105,7 @@ const OrderCostForm = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectOrderData
+  order: selectOrderOrder
 })
 const mapDispatchToProps = dispatch => ({
   updateItemInOrder: order => dispatch(updateItemInOrder(order))

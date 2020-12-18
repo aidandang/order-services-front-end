@@ -48,7 +48,7 @@ const OrderPurchasingForm = ({
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-purchasing-order/info')[0]
+  const parentRoute = location.pathname.split('/info')[0]
 
   const { orderId } = params
   const { byId } = data
