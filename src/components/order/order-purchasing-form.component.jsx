@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 // dependencies
 import * as Yup from "yup"
 import moment from 'moment'
-import { useHistory, useLocation, useParams, Redirect, Link } from 'react-router-dom'
+import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom'
 // components
 import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.component'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import Merchant from '../merchant/merchant.component'
 import Warehouse from '../warehouse/warehouse.component'
-import OrderItem from './order-item.component'
-import OrderCost from './order-cost.component'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { OrderActionTypes } from '../../state/order/order.types'
-import { patchReq } from '../../state/api/api.requests'
 import { selectMerchantData } from '../../state/merchant/merchant.selectors'
 import { selectOrderData } from '../../state/order/order.selectors'
 import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors'
+import { updatePurchasingInOrder } from '../../state/order/order.actions'
 
 // inital values
 const formSchema = Yup.object().shape({
@@ -27,12 +24,7 @@ const formSchema = Yup.object().shape({
   orderNumber: Yup.string().required(),
   orderDate: Yup.string().required(),
   type: Yup.string().required(),
-  warehouse: Yup.string().required(),
-  subCost: Yup.string().required(),
-  salesTax: Yup.string(),
-  shippingCost: Yup.string(),
-  otherCost: Yup.string(),
-  totalCost: Yup.string().required()
+  warehouse: Yup.string().required()
 })
 
 const formState = {
@@ -40,17 +32,12 @@ const formState = {
   orderNumber: "",
   orderDate: "",
   type: "",
-  warehouse: "",
-  subCost: "",
-  salesTax: "",
-  shippingCost: "",
-  otherCost: "",
-  totalCost: ""
+  warehouse: ""
 }
 
 const OrderPurchasingForm = ({
   data,
-  patchReq,
+  updatePurchasingInOrder,
   merchantData,
   warehouseData
 }) => {
@@ -61,9 +48,7 @@ const OrderPurchasingForm = ({
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/update-purchasing-info')[0]
-
-  const [success, setSuccess] = useState(false)
+  const parentRoute = location.pathname.split('/info')[0]
 
   const { orderId } = params
   const { byId } = data
@@ -94,9 +79,7 @@ const OrderPurchasingForm = ({
     setValues
   ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema)
 
-  const formSubmit = () => {
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
-    
+  const formSubmit = () => {  
     const merchantObj = merchantData.allIds.find(item => item._id === formData.merchant)
     const warehouseObj = warehouseData.allIds.find(item => item._id === formData.warehouse)
 
@@ -106,16 +89,13 @@ const OrderPurchasingForm = ({
       warehouse: warehouseObj
     }
 
-    patchReq(`/orders/${orderId}`, fetchSuccess, { purchasing: obj }, setSuccess, 'order-merchant-form')
+    updatePurchasingInOrder(obj)
+    history.push(parentRoute)
   }
 
   const formReset = () => {
     setValues(formState)
   }
-
-  useEffect(() => {
-    if (success) history.push(parentRoute)
-  }, [success, history, parentRoute])
 
   return <>
     { 
@@ -200,57 +180,7 @@ const OrderPurchasingForm = ({
                 />
               </Li>
             </Ul>
-          </Card>
-          {/* Item Table */}
-          <div className="row mb-2">
-            <div className="col">
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">Style#</th>
-                      <th scope="col">Item/Description</th>
-                      <th scope="col" className="text-right">Qty</th>
-                      <th scope="col" className="text-right">Item Cost</th>
-                      <th scope="col" className="text-right">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      byId.items && byId.items.length > 0 && <>
-                        <OrderItem items={byId.items} />
-                      </>
-                    }
-                    <tr className="table-row-no-link-cs">
-                      <td colSpan="5">
-                        <Link
-                          to={`${location.pathname}/item`}
-                          className="a-link-cs"
-                        >
-                          Add Item
-                        </Link>
-                      </td>
-                    </tr>
-                    {
-                      byId.items && byId.items.length > 0 && <>
-                        <OrderCost order={byId} />
-                        <tr className="table-row-no-link-cs">
-                          <td colSpan="5">
-                            <Link
-                              to={`${location.pathname}/cost`}
-                              className="a-link-cs"
-                            >
-                              Update Purchasing Cost
-                            </Link>
-                          </td>
-                        </tr>
-                      </>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          </Card>        
         </div>
         <div className="col-12 col-xl-4">
           <Card width="col" title="Update">
@@ -278,9 +208,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
+  updatePurchasingInOrder: purchasing => dispatch(updatePurchasingInOrder(purchasing))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPurchasingForm)

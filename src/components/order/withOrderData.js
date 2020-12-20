@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 // components
 import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
-import { connect, batch } from 'react-redux'
+import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { OrderActionTypes } from '../../state/order/order.types'
 import { getReq } from '../../state/api/api.requests'
@@ -38,11 +38,8 @@ const withOrderData = (WrapperComponent) => {
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
 
     useEffect(() => {
-      batch(() => {
-        clearAlertMessage()
-        getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
-      })
-      
+      getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
+
       // eslint-disable-next-line
     }, [queryStr])
     

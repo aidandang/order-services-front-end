@@ -6,3 +6,8 @@ export const selectOrderData = createSelector(
   [selectOrder],
   order => order.data
 )
+
+export const selectOrderOrder = createSelector(
+  [selectOrder],
+  order => order.order
+)

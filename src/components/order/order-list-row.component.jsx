@@ -1,8 +1,10 @@
-import React from 'react';
+import React from 'react'
 
 // dependencies
-import { useLocation, useHistory } from 'react-router-dom';
-import moment from 'moment';
+import { useLocation, useHistory } from 'react-router-dom'
+import moment from 'moment'
+// components
+import { acctToStr } from '../utils/acctToStr'
 
 const OrderListRow = ({
   order
@@ -12,7 +14,8 @@ const OrderListRow = ({
     orderNumber, 
     status,
     purchasing,
-    selling
+    selling,
+    costing
   } = order;
 
   const location = useLocation();
@@ -36,7 +39,7 @@ const OrderListRow = ({
       <td>{purchasing && purchasing.orderNumber ? purchasing.orderNumber : 'n/a'}</td>
       <td>{purchasing && purchasing.orderDate ? moment(purchasing.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'n/a'}</td>
       <td>{purchasing && purchasing.type ? purchasing.type : 'n/a'}</td>
-      <td className="text-right">{purchasing && purchasing.totalCost ? purchasing.totalCost : 0}</td>
+      <td className="text-right">{costing.totalCost === 0 ? '.00' : acctToStr(costing.totalCost)}</td>
     </tr>
   </>
 }

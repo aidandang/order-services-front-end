@@ -1,9 +1,9 @@
 import OrderList from '../../components/order/order-list.component';
 import OrderAdd from '../../components/order/order-add.component';
 import Order from '../../components/order/order.component';
-import OrderPurchasingForm from '../../components/order/order-purchasing-form.component';
-import OrderItemForm from '../../components/order/order-item-form.component';
-import OrderCostForm from '../../components/order/order-cost-form.component';
+import OrderPurchasingUpdate from '../../components/order/order-purchasing-update.component'
+import OrderPurchasingForm from '../../components/order/order-purchasing-form.component'
+import OrderItemForm from '../../components/order/order-item-form.component'
 import OrderSellingForm from '../../components/order/order-selling-form.component';
 import ProductList from '../../components/product/product-list.component';
 import ProductInfo from '../../components/product/product-info.component';
@@ -24,14 +24,14 @@ const routes = [
   { path: "/app/order/add/select-customer/:customerId/edit", name: "Edit Customer", Component: CustomerEdit },
   { path: "/app/order/add/select-customer/:customerId/shipping-info", name: "Edit Customer", Component: CustomerShipingInfo },
   { path: "/app/order/:orderId", name: "Order Details", Component: Order },
-  { path: "/app/order/:orderId/update-purchasing-info", name: "Update Purchasing Information", Component: OrderPurchasingForm },
-  { path: "/app/order/:orderId/update-purchasing-info/item", name: "Update Item", Component: OrderItemForm },
-  { path: "/app/order/:orderId/update-purchasing-info/cost", name: "Update Cost", Component: OrderCostForm },
+  { path: "/app/order/:orderId/update-purchasing-order", name: "Update Purchasing Order", Component: OrderPurchasingUpdate },
+  { path: "/app/order/:orderId/update-purchasing-order/info", name: "Update Purchasing Information", Component: OrderPurchasingForm },
+  { path: "/app/order/:orderId/update-purchasing-order/item", name: "Update Item", Component: OrderItemForm },
+  { path: "/app/order/:orderId/update-purchasing-order/item/select-product", name: "Select Product", Component: ProductList },
+  { path: "/app/order/:orderId/update-purchasing-order/item/select-product/add", name: "Add Product", Component: ProductAdd },
+  { path: "/app/order/:orderId/update-purchasing-order/item/select-product/:productId", name: "Product Details", Component: ProductInfo },
+  { path: "/app/order/:orderId/update-purchasing-order/item/select-product/:productId/edit", name: "Edit Product", Component: ProductEdit },
   { path: "/app/order/:orderId/update-selling-info", name: "Update Selling Information", Component: OrderSellingForm },
-  { path: "/app/order/:orderId/update-purchasing-info/item/select-product", name: "Select Product", Component: ProductList },
-  { path: "/app/order/:orderId/update-purchasing-info/item/select-product/add", name: "Add Product", Component: ProductAdd },
-  { path: "/app/order/:orderId/update-purchasing-info/item/select-product/:productId", name: "Product Details", Component: ProductInfo },
-  { path: "/app/order/:orderId/update-purchasing-info/item/select-product/:productId/edit", name: "Edit Product", Component: ProductEdit },
   { path: "/app/order/:orderId/update-selling-info/select-customer", name: "Select Customer", Component: CustomerList },
   { path: "/app/order/:orderId/update-selling-info/select-customer/add", name: "Add Customer", Component: CustomerAdd },
   { path: "/app/order/:orderId/update-selling-info/select-customer/:customerId", name: "Customer Details", Component: CustomerInfo },

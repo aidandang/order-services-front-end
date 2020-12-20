@@ -4,8 +4,9 @@ import React from 'react'
 import { Card, Ul, Li } from '../tag/tag.component'
 // initial values
 const statusColor = {
-  'created': 'text-info',
-  'ordered': 'text-danger'
+  'created': 'text-danger',
+  'editing': 'text-warning',
+  'ordered': 'text-success'
 }
 
 // main component
