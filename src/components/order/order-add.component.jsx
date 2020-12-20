@@ -26,7 +26,10 @@ const OrderAdd = ({
 
   const handleSubmit = () => {
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
-    const reqBody = { status: 'created' }
+    const reqBody = { 
+      status: 'created',
+      costing: {} 
+    }
     const component = 'order-add'
 
     postReq('/orders', fetchSuccess, reqBody, setSuccess, component)

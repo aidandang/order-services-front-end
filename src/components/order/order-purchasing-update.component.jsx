@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 
 // dependencies
+import moment from 'moment'
 import { useHistory, useLocation, useParams, Redirect, Link } from 'react-router-dom'
 // components
 import { Card, Ul, Li } from '../tag/tag.component'
-import moment from 'moment'
+import { acctToStr } from '../utils/acctToStr'
 import OrderItem from './order-item.component'
-import OrderCost from './order-cost.component'
 import OrderCostForm from './order-cost-form.component'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
+import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -16,12 +17,14 @@ import { OrderActionTypes } from '../../state/order/order.types'
 import { patchReq } from '../../state/api/api.requests'
 import { selectOrderOrder, selectOrderData } from '../../state/order/order.selectors'
 import { copyOrderToEdit } from '../../state/order/order.actions'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
 
 const OrderPurchasingUpdate = ({
   data,
   order,
   copyOrderToEdit,
-  patchReq
+  patchReq,
+  alertMessage
 }) => {
 
   const location = useLocation()
@@ -34,18 +37,42 @@ const OrderPurchasingUpdate = ({
 
   const [success, setSuccess] = useState(false)
   const [action, setAction] = useState(false)
+  const [radio, setRadio] = useState('editing')
 
   const { orderId } = params
   const { byId } = data
   const { purchasing, items, costing } = order
 
+  const totalCalc = () => {
+    var total = items.reduce((a, c) => a + c.itemCost, 0)
+    if (costing) {
+      total += costing.salesTax ? costing.salesTax : 0
+      total += costing.otherCost ? costing.otherCost : 0
+    }
+    return acctToStr(total)
+  }
+
+  const handleRadioOnChange = e => {
+    e.stopPropagation();
+    setRadio(e.target.value)
+  }
+
   const handleSubmit = () => {
+    // update the total cost
+    var total = items.reduce((a, c) => a + c.itemCost, 0)
+    total += costing.salesTax ? costing.salesTax : 0
+    total += costing.otherCost ? costing.otherCost : 0
+    costing.totalCost = total
+
+    // set parameters and update
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const obj = {
       purchasing: { ...purchasing },
       costing: { ...costing },
       items: [ ...items ]
     }
+
+    obj.status = radio
   
     patchReq(`/orders/${orderId}`, fetchSuccess, { ...obj }, setSuccess, 'order-purchasing-update')
   }
@@ -60,6 +87,9 @@ const OrderPurchasingUpdate = ({
   }, [success])
   
   return <>
+
+    { alertMessage && alertMessage.component === 'order-purchasing-update' && <AlertMesg /> }
+
     { 
       orderId && !byId 
       ? 
@@ -172,9 +202,28 @@ const OrderPurchasingUpdate = ({
                           </Link>
                         </td>
                       </tr>
-                      {
-                        items.length > 0 && <>
-                          <OrderCost order={order} />
+                    </tbody>
+                    {
+                      items.length > 0 && <>
+                        <tbody>
+                          <tr className="table-row-no-link-cs">
+                            <th scope="col" colSpan="4" className="text-right">Subtotal</th>
+                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}</th>
+                          </tr>
+                          <tr className="table-row-no-link-cs">
+                            <td colSpan="4" className="text-right">Sales Tax</td>
+                            <td colSpan="1" className="text-right">{costing && costing.salesTax ? acctToStr(costing.salesTax) : '.00'}</td>
+                          </tr>
+                          <tr className="table-row-no-link-cs">
+                            <td colSpan="4" className="text-right">Other</td>
+                            <td colSpan="1" className="text-right">{costing && costing.otherCost ? acctToStr(costing.otherCost) : '.00'}</td>
+                          </tr>
+                        </tbody>
+                        <tbody>
+                          <tr className="table-row-no-link-cs">
+                            <th scope="col" colSpan="4" className="text-right">Total</th>
+                            <th scope="col" colSpan="1" className="text-right">{totalCalc()}</th>
+                          </tr>
                           <tr className="table-row-no-link-cs">
                             <td colSpan="5">
                               <Link
@@ -189,9 +238,9 @@ const OrderPurchasingUpdate = ({
                               </Link>
                             </td>
                           </tr>
-                        </>
-                      }
-                    </tbody>
+                        </tbody>
+                      </>
+                    }
                   </table>
                 </div>
               </div>
@@ -204,6 +253,41 @@ const OrderPurchasingUpdate = ({
           <div className="col-12 col-xl-4">
             <Card width="col" title="Update">
               <Ul>
+                <Li>
+                  <div onChange={handleRadioOnChange}>
+                    <div className="row">
+                      <div className="col align-self-center">
+                        <div className="form-check">
+                          <label className="form-check-label" htmlFor='status'>
+                            <input 
+                              className="form-check-input" 
+                              type="radio" 
+                              name="status" 
+                              value='editing' 
+                              defaultChecked={true}
+                            />
+                              Save for editing later
+                            </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col align-self-center">
+                        <div className="form-check">
+                          <label className="form-check-label" htmlFor='status'>
+                            <input 
+                              className="form-check-input" 
+                              type="radio" 
+                              name="status" 
+                              value='ordered'
+                            />
+                              Place order
+                            </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Li>
                 <SubmitOrReset
                   buttonName={'Submit'}
                   buttonDisabled={
@@ -223,7 +307,8 @@ const OrderPurchasingUpdate = ({
 
 const mapStateToProps = createStructuredSelector({
   data: selectOrderData,
-  order: selectOrderOrder
+  order: selectOrderOrder,
+  alertMessage: selectAlertMessage
 })
 const mapDispatchToProps = dispatch => ({
   patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
