@@ -14,3 +14,8 @@ export const updatePurchasingInOrder = purchasing => ({
   type: OrderActionTypes.UPDATE_PURCHASING_IN_ORDER,
   payload: purchasing
 })
+
+export const updateCustomerInOrder = customer => ({
+  type: OrderActionTypes.UPDATE_CUSTOMER_IN_ORDER,
+  payload: customer
+})

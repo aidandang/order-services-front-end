@@ -14,7 +14,7 @@ const Order = ({ data }) => {
   return <> 
     <OrderInfo byId={byId} />
     <OrderPurchasing byId={byId} />
-    <OrderSelling byId={byId} />
+    { byId.items.length > 0 && <OrderSelling byId={byId} /> }
   </>
 }
 

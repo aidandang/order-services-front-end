@@ -5,6 +5,12 @@ import { useLocation, useHistory } from 'react-router-dom'
 import moment from 'moment'
 // components
 import { acctToStr } from '../utils/acctToStr'
+// initial values
+const statusColor = {
+  'created': 'text-danger',
+  'editing': 'text-warning',
+  'ordered': 'text-success'
+}
 
 const OrderListRow = ({
   order
@@ -33,7 +39,7 @@ const OrderListRow = ({
       onClick={(e) => handleOnClick(e, order)}
     >
       <th scope="row">{orderNumber} </th>
-      <td><span className="text-info">{status}</span></td>
+      <td><span className={statusColor[status]}>{status}</span></td>
       <td>{selling && selling.customer ? `${selling.customer.account} - ${selling.customer.nickname}` : 'n/a'}</td>
       <td>{purchasing && purchasing.merchant ? purchasing.merchant.name : 'n/a'}</td>
       <td>{purchasing && purchasing.orderNumber ? purchasing.orderNumber : 'n/a'}</td>

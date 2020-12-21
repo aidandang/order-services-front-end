@@ -182,7 +182,7 @@ const OrderPurchasingUpdate = ({
                         <th scope="col">Style#</th>
                         <th scope="col">Item/Description</th>
                         <th scope="col" className="text-right">Qty</th>
-                        <th scope="col" className="text-right">Item Cost</th>
+                        <th scope="col" className="text-right">Unit Cost</th>
                         <th scope="col" className="text-right">Amount</th>
                       </tr>
                     </thead>

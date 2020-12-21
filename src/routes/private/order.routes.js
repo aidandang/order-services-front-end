@@ -4,6 +4,7 @@ import Order from '../../components/order/order.component';
 import OrderPurchasingUpdate from '../../components/order/order-purchasing-update.component'
 import OrderPurchasingForm from '../../components/order/order-purchasing-form.component'
 import OrderItemForm from '../../components/order/order-item-form.component'
+import OrderSellingUpdate from '../../components/order/order-selling-update.component';
 import OrderSellingForm from '../../components/order/order-selling-form.component';
 import ProductList from '../../components/product/product-list.component';
 import ProductInfo from '../../components/product/product-info.component';
@@ -31,12 +32,13 @@ const routes = [
   { path: "/app/order/:orderId/update-purchasing-order/item/select-product/add", name: "Add Product", Component: ProductAdd },
   { path: "/app/order/:orderId/update-purchasing-order/item/select-product/:productId", name: "Product Details", Component: ProductInfo },
   { path: "/app/order/:orderId/update-purchasing-order/item/select-product/:productId/edit", name: "Edit Product", Component: ProductEdit },
-  { path: "/app/order/:orderId/update-selling-info", name: "Update Selling Information", Component: OrderSellingForm },
-  { path: "/app/order/:orderId/update-selling-info/select-customer", name: "Select Customer", Component: CustomerList },
-  { path: "/app/order/:orderId/update-selling-info/select-customer/add", name: "Add Customer", Component: CustomerAdd },
-  { path: "/app/order/:orderId/update-selling-info/select-customer/:customerId", name: "Customer Details", Component: CustomerInfo },
-  { path: "/app/order/:orderId/update-selling-info/select-customer/:customerId/edit", name: "Edit Customer", Component: CustomerEdit },
-  { path: "/app/order/:orderId/update-selling-info/select-customer/:customerId/shipping-info", name: "Edit Customer", Component: CustomerShipingInfo }
+  { path: "/app/order/:orderId/update-selling-order", name: "Update Selling Order", Component: OrderSellingUpdate },
+  { path: "/app/order/:orderId/update-selling-order/price", name: "Update Selling Price", Component: OrderSellingForm },
+  { path: "/app/order/:orderId/update-selling-order/select-customer", name: "Select Customer", Component: CustomerList },
+  { path: "/app/order/:orderId/update-selling-order/select-customer/add", name: "Add Customer", Component: CustomerAdd },
+  { path: "/app/order/:orderId/update-selling-order/select-customer/:customerId", name: "Customer Details", Component: CustomerInfo },
+  { path: "/app/order/:orderId/update-selling-order/select-customer/:customerId/edit", name: "Edit Customer", Component: CustomerEdit },
+  { path: "/app/order/:orderId/update-selling-order/select-customer/:customerId/shipping-info", name: "Edit Customer", Component: CustomerShipingInfo }
 ];
 
 export default routes;
