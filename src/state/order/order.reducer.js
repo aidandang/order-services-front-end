@@ -59,6 +59,16 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           purchasing: action.payload
         }
       }
+    case OrderActionTypes.UPDATE_CUSTOMER_IN_ORDER:
+      return {
+        ...state,
+        order: { 
+          ...state.order,
+          selling: {
+            customer: action.payload
+          }
+        }
+      }
     default:
       return state;
   }
