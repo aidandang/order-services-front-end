@@ -7,6 +7,7 @@ import { Card, Ul, Li } from '../tag/tag.component'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import AlertMesg from '../alert-mesg/alert-mesg.component'
 import OrderSellingItem from './order-selling-item.component'
+import OrderPriceForm from './order-price-form.component'
 import { acctToStr } from '../utils/acctToStr'
 // redux
 import { connect } from 'react-redux'
@@ -58,9 +59,21 @@ const OrderSellingUpdate = ({
 
   const handleSubmit = () => {
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
+    const itemsPrice = items.reduce((a, c) => a + c.price, 0)
+    const shippingPrice = items.reduce((a, c) => a + c.shippingPrice, 0)
+    const totalPrice = itemsPrice + shippingPrice
     const obj = {
-      selling: { ...selling }
+      selling: {
+        ...selling, 
+        itemsPrice,
+        shippingPrice,
+        totalPrice
+      },
+      items: [ ...items ]
     }
+
+    obj.status = 'editing'
+
     patchReq(`/orders/${orderId}`, fetchSuccess, { ...obj }, setSuccess, 'order-selling-update')
   }
 
@@ -237,6 +250,9 @@ const OrderSellingUpdate = ({
               </div>
             </div>
             {/* End of Item Table */} 
+            {
+              action === true && <OrderPriceForm setAction={setAction} />
+            } 
           </div>
           <div className="col-12 col-xl-4">
             <Card width="col" title="Update">
