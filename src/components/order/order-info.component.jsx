@@ -1,7 +1,14 @@
 import React from 'react'
 
 // components
-import { Card, Ul, Li } from '../tag/tag.component'
+import { Card, Ul, Li, Button } from '../tag/tag.component'
+import AlertMesg from '../alert-mesg/alert-mesg.component'
+// redux
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { patchReq } from '../../state/api/api.requests'
+import { OrderActionTypes } from '../../state/order/order.types'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
 // initial values
 const statusColor = {
   'created': 'text-danger',
@@ -11,9 +18,25 @@ const statusColor = {
 
 // main component
 const OrderInfo = ({ 
-  byId
+  byId,
+  alertMessage,
+  patchReq
 }) => {
+
+  const handlePlaceOrder = () => {
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
+    const obj = { 
+      ...byId,
+      status: 'ordered' 
+    }
+  
+    patchReq(`/orders/${byId._id}`, fetchSuccess, { ...obj }, null, 'order-info')
+  }
+
   return <>
+
+    { alertMessage && alertMessage.component === 'order-info' && <AlertMesg /> }
+
     <Card width="col" title="Order Information">
       <Ul>
         <Li>
@@ -34,9 +57,31 @@ const OrderInfo = ({
             </div>
           </div>
         </Li>
+        {
+          byId.status !== 'ordered' && byId.purchasing && byId.selling &&
+          <Li>
+            <Button 
+              onClick={e => {
+                e.preventDefault()
+                handlePlaceOrder()
+              }}
+            >
+              Place Order
+            </Button>
+          </Li>
+        }
       </Ul>
     </Card>  
   </>
 }
 
-export default OrderInfo
+const mapStateToProps = createStructuredSelector({
+  alertMessage: selectAlertMessage
+})
+const mapDispatchToProps = dispatch => ({
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, componenent) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, componenent)
+  )
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderInfo)

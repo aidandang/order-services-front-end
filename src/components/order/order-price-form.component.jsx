@@ -17,18 +17,20 @@ import { updateItemInOrder } from '../../state/order/order.actions'
 // initial form state
 const formSchema = Yup.object().shape({
   salesTax: Yup.string(),
-  otherCost: Yup.string()
+  discount: Yup.string()
 })
 const formState = {
   salesTax: "",
-  otherCost: ""
+  discount: ""
 }
 
-const OrderCostForm = ({
+const OrderPriceForm = ({
   order,
   updateItemInOrder,
   setAction
 }) => {
+
+  const { selling } = order
 
   const [
     formData,
@@ -43,9 +45,9 @@ const OrderCostForm = ({
     const obj = { ...formData };
   
     obj.salesTax = formData.salesTax === "" ? 0 : strToAcct(formData.salesTax);
-    obj.otherCost = formData.otherCost === "" ? 0 : strToAcct(formData.otherCost);
+    obj.discount = formData.discount === "" ? 0 : strToAcct(formData.discount);
 
-    updateItemInOrder({ ...order, costing: { ...order.costing,  ...obj } })
+    updateItemInOrder({ ...order, selling: { ...order.selling,  ...obj } })
     setAction(false)
   }
 
@@ -54,11 +56,11 @@ const OrderCostForm = ({
   }
 
   useEffect(() => {
-    if (order.costing && Object.keys(order.costing).length > 0) {
+    if (selling) {
       setValues(prevState => ({
         ...prevState,
-        salesTax: acctToStr(order.costing.salesTax), 
-        otherCost: acctToStr(order.costing.otherCost)
+        salesTax: selling.salesTax ? acctToStr(selling.salesTax) : '', 
+        discount: selling.discount ? acctToStr(selling.discount) : ''
       }))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,12 +84,12 @@ const OrderCostForm = ({
             </div>
             <div className="col-xl-6">
               <TextInput
-                label="Other Cost" 
-                name="otherCost"
-                id="currencyMask-order-cost-form-otherCost"
+                label="Discount" 
+                name="discount"
+                id="currencyMask-order-cost-form-discount"
                 errors={errors}
                 smallText="All other costs. Leave empty if there is no cost"
-                value={formData.otherCost}
+                value={formData.discount}
                 onChange={onInputChange}
               />
             </div>
@@ -111,4 +113,4 @@ const mapDispatchToProps = dispatch => ({
   updateItemInOrder: order => dispatch(updateItemInOrder(order))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderCostForm);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderPriceForm);

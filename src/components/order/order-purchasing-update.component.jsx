@@ -37,7 +37,6 @@ const OrderPurchasingUpdate = ({
 
   const [success, setSuccess] = useState(false)
   const [action, setAction] = useState(false)
-  const [radio, setRadio] = useState('editing')
 
   const { orderId } = params
   const { byId } = data
@@ -50,11 +49,6 @@ const OrderPurchasingUpdate = ({
       total += costing.otherCost ? costing.otherCost : 0
     }
     return acctToStr(total)
-  }
-
-  const handleRadioOnChange = e => {
-    e.stopPropagation();
-    setRadio(e.target.value)
   }
 
   const handleSubmit = () => {
@@ -72,7 +66,7 @@ const OrderPurchasingUpdate = ({
       items: [ ...items ]
     }
 
-    obj.status = radio
+    obj.status = 'editing'
   
     patchReq(`/orders/${orderId}`, fetchSuccess, { ...obj }, setSuccess, 'order-purchasing-update')
   }
@@ -253,41 +247,6 @@ const OrderPurchasingUpdate = ({
           <div className="col-12 col-xl-4">
             <Card width="col" title="Update">
               <Ul>
-                <Li>
-                  <div onChange={handleRadioOnChange}>
-                    <div className="row">
-                      <div className="col align-self-center">
-                        <div className="form-check">
-                          <label className="form-check-label" htmlFor='status'>
-                            <input 
-                              className="form-check-input" 
-                              type="radio" 
-                              name="status" 
-                              value='editing' 
-                              defaultChecked={true}
-                            />
-                              Save for editing later
-                            </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col align-self-center">
-                        <div className="form-check">
-                          <label className="form-check-label" htmlFor='status'>
-                            <input 
-                              className="form-check-input" 
-                              type="radio" 
-                              name="status" 
-                              value='ordered'
-                            />
-                              Place order
-                            </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Li>
                 <SubmitOrReset
                   buttonName={'Submit'}
                   buttonDisabled={
