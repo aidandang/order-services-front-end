@@ -1,4 +1,4 @@
-export const currencyMask = (value, limit) => {
+export const currencyMask = (value, limit = 10) => {
   let str = String(value);
   // remove (,) and (.) from the string
   str = str.split(',').join('');

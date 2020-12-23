@@ -47,16 +47,6 @@ const OrderSellingUpdate = ({
     address = selling.customer.shippingInfo.find(item => item._id === selling.customer.shippingAddress)
   }
 
-  const totalCalc = () => {
-    var total = items.reduce((a, c) => a + c.price, 0)
-    total += items.reduce((a, c) => a + c.shippingPrice, 0)
-    if (selling) {
-      total += selling.salesTax ? selling.salesTax : 0
-      total -= selling.discount ? selling.discount : 0
-    }
-    return acctToStr(total)
-  }
-
   const handleSubmit = () => {
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const itemsPrice = items.reduce((a, c) => a + c.price, 0)
@@ -188,12 +178,10 @@ const OrderSellingUpdate = ({
                       <tr>
                         <th scope="col">Style#</th>
                         <th scope="col">Item/Description</th>
-                        <th scope="col" className="text-right">Qty</th>
                         <th scope="col" className="text-right">Weight</th>
-                        <th scope="col" className="text-right">Cost</th>
-                        <th scope="col" className="text-right">Price</th>
                         <th scope="col" className="text-right">Shipping</th>
-                        <th scope="col" className="text-right">Selling</th>
+                        <th scope="col" className="text-right">$price</th>
+                        <th scope="col" className="text-right">đprice</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -207,26 +195,18 @@ const OrderSellingUpdate = ({
                       items.length > 0 && <>
                         <tbody>
                           <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="7" className="text-right">Subtotal</th>
-                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.price, 0))}</th>
+                            <th scope="col" colSpan="5" className="text-right">Total Shipping</th>
+                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.shippingPrice, 0) * 24000).split('.')[0]}</th>
                           </tr>
                           <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="7" className="text-right">Shipping Price</th>
-                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.shippingPrice, 0))}</th>
-                          </tr>
-                          <tr className="table-row-no-link-cs">
-                            <td colSpan="7" className="text-right">Sales Tax</td>
-                            <td colSpan="1" className="text-right">{selling && selling.salesTax ? acctToStr(selling.salesTax) : '.00'}</td>
-                          </tr>
-                          <tr className="table-row-no-link-cs">
-                            <td colSpan="7" className="text-right">Discount</td>
-                            <td colSpan="1" className="text-right">{selling && selling.discount ? acctToStr(selling.discount) : '.00'}</td>
+                            <td colSpan="5" className="text-right">Discount</td>
+                            <td colSpan="1" className="text-right">{selling && selling.discount ? acctToStr(selling.discount) : '0'}</td>
                           </tr>
                         </tbody>
                         <tbody>
                           <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="7" className="text-right">Total</th>
-                            <th scope="col" colSpan="1" className="text-right">{totalCalc()}</th>
+                            <th scope="col" colSpan="5" className="text-right">Total (included Shipping)</th>
+                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.totalPriceDong, 0)).split('.')[0]}</th>
                           </tr>
                           <tr className="table-row-no-link-cs">
                             <td colSpan="8">

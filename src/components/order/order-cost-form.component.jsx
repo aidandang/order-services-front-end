@@ -57,8 +57,8 @@ const OrderCostForm = ({
     if (order.costing && Object.keys(order.costing).length > 0) {
       setValues(prevState => ({
         ...prevState,
-        salesTax: acctToStr(order.costing.salesTax), 
-        otherCost: acctToStr(order.costing.otherCost)
+        salesTax: order.costing.salesTax === 0 ? '' : acctToStr(order.costing.salesTax), 
+        otherCost: order.costing.otherCost === 0 ? '' : acctToStr(order.costing.otherCost)
       }))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
