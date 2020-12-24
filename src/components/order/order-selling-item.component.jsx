@@ -12,15 +12,17 @@ const OrderSellingItem = ({
   const history = useHistory()
   const location = useLocation()
 
+  const priceInUsdCalc = (value, ex) => {
+    const price = value / ex
+    return acctToStr(Number(price.toFixed(0)))
+  }
+
   const handleItemEdit = (item, index) => {
     const obj = { ...item }
     obj.weight = item.weight === 0 ? '' : acctToStr(item.weight)
-    obj.qty = item.qty
     obj.index = index
-    obj.totalPrice = item.totalPrice === 0 ? '' : acctToStr(item.totalPrice)
-    obj.shippingPrice = item.shippingPrice === 0 ? '' : acctToStr(item.shippingPrice)
-    obj.totalPriceDong = item.totalPriceDong === 0 ? '' : acctToStr(item.totalPriceDong).split('.')
-
+    obj.totalDong = item.totalDong === 0 ? '' : acctToStr(item.totalDong)
+  
     history.push(`${location.pathname}/price`, { ...obj })
   }
 
@@ -38,9 +40,9 @@ const OrderSellingItem = ({
           <td>{item.product.styleCode}</td>
           <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
           <td className="text-right">{acctToStr(item.weight)}</td>
-          <td className="text-right">{acctToStr(item.shippingPrice)}</td>
-          <td className="text-right">{acctToStr(item.totalPrice)}</td>
-          <td className="text-right">{acctToStr(item.totalPriceDong).split('.')[0]}</td>
+          <td className="text-right">{acctToStr(item.shippingDong).split('.')[0]}</td>
+          <td className="text-right">{priceInUsdCalc(item.totalDong, item.exRate)}</td>
+          <td className="text-right">{acctToStr(item.totalDong).split('.')[0]}</td>
         </tr>
       )
     }       

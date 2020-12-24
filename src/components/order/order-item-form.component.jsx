@@ -22,6 +22,7 @@ const formSchema = Yup.object().shape({
   size: Yup.string(),
   qty: Yup.string().required(),
   unitCost: Yup.string().required(),
+  purTaxPct: Yup.string().required(),
   note: Yup.string()
 })
 const formState = {
@@ -31,6 +32,7 @@ const formState = {
   size: "",
   qty: "",
   unitCost: "",
+  purTaxPct: "",
   note: ""
 }
 
@@ -67,12 +69,10 @@ const OrderItemForm = ({
     const obj = { ...formData };
     delete obj.index
     obj.orderNumber = byId.orderNumber
-    const qty = integerStrToNum(obj.qty);
-    obj.qty = qty;
-    const unitCost = strToAcct(obj.unitCost);
-    obj.unitCost = unitCost;
-    const itemCost = qty * unitCost
-    obj.itemCost = itemCost
+    obj.qty = integerStrToNum(formData.qty);
+    obj.unitCost = strToAcct(formData.unitCost);
+    obj.purTaxPct = strToAcct(formData.purTaxPct);
+    obj.itemCost = integerStrToNum(formData.qty) * strToAcct(formData.unitCost);
     
     let items = null
 
@@ -155,17 +155,18 @@ const OrderItemForm = ({
                 </div>
               </Li>
               <Li>
+                <TextInput
+                  label="Size" 
+                  name="size"
+                  size="col-xl-4"
+                  errors={errors}
+                  smallText="Size of the product."
+                  value={formData.size}
+                  onChange={onInputChange}
+                />
+              </Li>
+              <Li>
                 <div className="row">
-                  <div className="col-xl-4">
-                    <TextInput
-                      label="Size" 
-                      name="size"
-                      errors={errors}
-                      smallText="Size of the product."
-                      value={formData.size}
-                      onChange={onInputChange}
-                    />
-                  </div>
                   <div className="col-xl-4">
                     <TextInput
                       label="Qty (*)" 
@@ -181,10 +182,21 @@ const OrderItemForm = ({
                     <TextInput
                       label="Unit Cost (*)" 
                       name="unitCost"
-                      id="currencyMask-order-item-form-cost"
+                      id="currencyMask-order-item-form-unitCost"
                       errors={errors}
                       smallText="Cost per unit."
                       value={formData.unitCost}
+                      onChange={onInputChange}
+                    />
+                  </div>
+                  <div className="col-xl-4">
+                    <TextInput
+                      label="Sales Tax (*)" 
+                      name="purTaxPct"
+                      id="currencyMask-order-item-form-purTaxPct"
+                      errors={errors}
+                      smallText="Sales tax applied to the item (%)."
+                      value={formData.purTaxPct}
                       onChange={onInputChange}
                     />
                   </div>

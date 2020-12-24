@@ -127,7 +127,7 @@ const OrderPurchasing = ({
                     items.map((item, index) => 
                       <tr 
                         key={index} 
-                        className="table-row-no-link-cs span-link-cs"
+                        className="table-row-no-link-cs"
                       >
                         <td>{item.product.styleCode}</td>
                         <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>

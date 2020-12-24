@@ -128,7 +128,7 @@ export const SelectInput = ({
             className="custom-select text-capitalize"
             {...otherProps}
           >
-            <option value={defaultValue}>{defaultText}</option>
+            <option value={defaultValue ? defaultValue : ""}>{defaultText ? defaultText : "Select..."}</option>
             {data && data.map(item => <option key={uuid()} value={item[valueKey]}>{item[textKey]}</option>)}
           </select>
           <small>{smallText}</small>

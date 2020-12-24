@@ -18,6 +18,7 @@ const OrderItem = ({
     obj.unitCost = acctToStr(item.unitCost)
     obj.itemCost = acctToStr(item.itemCost)
     obj.qty = integerMask(item.qty.toString())
+    obj.purTaxPct = acctToStr(item.purTaxPct)
     obj.index = index
 
     history.push(`${location.pathname}/item`, { ...obj })

@@ -47,17 +47,20 @@ const OrderSellingUpdate = ({
     address = selling.customer.shippingInfo.find(item => item._id === selling.customer.shippingAddress)
   }
 
+  const totalPriceAfterDiscountCalc = () => {
+    const total = items.reduce((a, c) => a + c.totalDong, 0) - selling.discount
+    return acctToStr(total).split('.')[0]
+  }
+
   const handleSubmit = () => {
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
-    const itemsPrice = items.reduce((a, c) => a + c.price, 0)
-    const shippingPrice = items.reduce((a, c) => a + c.shippingPrice, 0)
-    const totalPrice = itemsPrice + shippingPrice
+    const totalPrice = items.reduce((a, c) => a + c.totalDong, 0)
+    const shippingPrice = items.reduce((a, c) => a + c.shippingDong, 0)
     const obj = {
       selling: {
         ...selling, 
-        itemsPrice,
-        shippingPrice,
-        totalPrice
+        totalPrice,
+        shippingPrice
       },
       items: [ ...items ]
     }
@@ -196,17 +199,17 @@ const OrderSellingUpdate = ({
                         <tbody>
                           <tr className="table-row-no-link-cs">
                             <th scope="col" colSpan="5" className="text-right">Total Shipping</th>
-                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.shippingPrice, 0) * 24000).split('.')[0]}</th>
+                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.shippingDong, 0)).split('.')[0]}</th>
                           </tr>
                           <tr className="table-row-no-link-cs">
                             <td colSpan="5" className="text-right">Discount</td>
-                            <td colSpan="1" className="text-right">{selling && selling.discount ? acctToStr(selling.discount) : '0'}</td>
+                            <td colSpan="1" className="text-right">{selling && selling.discount ? acctToStr(selling.discount).split('.')[0] : '0'}</td>
                           </tr>
                         </tbody>
                         <tbody>
                           <tr className="table-row-no-link-cs">
                             <th scope="col" colSpan="5" className="text-right">Total (included Shipping)</th>
-                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.totalPriceDong, 0)).split('.')[0]}</th>
+                            <th scope="col" colSpan="1" className="text-right">{totalPriceAfterDiscountCalc()}</th>
                           </tr>
                           <tr className="table-row-no-link-cs">
                             <td colSpan="8">
@@ -218,7 +221,7 @@ const OrderSellingUpdate = ({
                                   setAction(!action)
                                 }}
                               >
-                                { action === false ? "Update Sales Tax and Discount" : "Close the update" }
+                                { action === false ? "Update Discount" : "Close Update Discount" }
                               </Link>
                             </td>
                           </tr>
