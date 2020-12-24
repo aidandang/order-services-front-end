@@ -4,7 +4,6 @@ import React from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 // components
 import { acctToStr } from '../utils/acctToStr'
-import { integerMask } from '../utils/helpers'
 
 const OrderSellingItem = ({
   items
@@ -13,14 +12,17 @@ const OrderSellingItem = ({
   const history = useHistory()
   const location = useLocation()
 
+  const priceInUsdCalc = (value, ex) => {
+    const price = value / ex
+    return acctToStr(Number(price.toFixed(0)))
+  }
+
   const handleItemEdit = (item, index) => {
     const obj = { ...item }
     obj.weight = item.weight === 0 ? '' : acctToStr(item.weight)
-    obj.qty = integerMask(item.qty.toString())
     obj.index = index
-    obj.price = item.price === 0 ? '' : item.price
-    obj.shippingPrice = item.shippingPrice === 0 ? '' : item.shippingPrice
-
+    obj.totalDong = item.totalDong === 0 ? '' : acctToStr(item.totalDong)
+  
     history.push(`${location.pathname}/price`, { ...obj })
   }
 
@@ -37,12 +39,10 @@ const OrderSellingItem = ({
         >
           <td>{item.product.styleCode}</td>
           <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-          <td className="text-right">{integerMask(item.qty.toString())}</td>
           <td className="text-right">{acctToStr(item.weight)}</td>
-          <td className="text-right">{acctToStr(item.itemCost)}</td>
-          <td className="text-right">{acctToStr(item.price)}</td>
-          <td className="text-right">{acctToStr(item.shippingPrice)}</td>
-          <td className="text-right">{acctToStr(item.price + item.shippingPrice)}</td>
+          <td className="text-right">{acctToStr(item.shippingDong).split('.')[0]}</td>
+          <td className="text-right">{priceInUsdCalc(item.totalDong, item.exRate)}</td>
+          <td className="text-right">{acctToStr(item.totalDong).split('.')[0]}</td>
         </tr>
       )
     }       

@@ -11,29 +11,22 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getReq } from '../../state/api/api.requests';
 import { InventoryActionTypes } from '../../state/inventory/inventory.types';
+import { INVENTORY_QUERY_STRING } from '../../state/inventory/inventory.data';
 import { selectInventoryData } from '../../state/inventory/inventory.selectors';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // initial data
 const items = [
   {
-    name: 'Received Trackings',
+    name: 'Scanned Trackings',
     badge: 0
   },
   {
-    name: 'Incoming Items',
+    name: 'Ordered List',
     badge: 0
   },
   {
-    name: 'In-Store Items',
-    badge: 0
-  },
-  {
-    name: 'Packed Items',
-    badge: 0
-  },
-  {
-    name: 'Shipped Trackings',
+    name: 'Received List',
     badge: 0
   }
 ]
@@ -46,12 +39,11 @@ const Inventory = ({
 
   const { orders, trackings } = data;
 
-  const [action, setAction] = useState('');
+  const [action, setAction] = useState('Scanned');
   const [success, setSuccess] = useState(false);
 
-  // display notifications in the tab
   if (trackings && trackings.length > 0) {
-    items[0].badge = trackings.reduce((a, c) => c.status === 'received' ? a + 1 : a, 0)
+    items[0].badge = trackings.reduce((a, c) => c.status === 'scanned' ? a + 1 : a, 0)
   }
 
   if (orders && orders.length > 0) {
@@ -62,10 +54,9 @@ const Inventory = ({
     items[2].badge = orders.reduce((a, c) => c.status === 'received' ? a + 1 : a, 0)
   }
 
+  const fetchSuccess = InventoryActionTypes.INVENTORY_FETCH_SUCCESS;
   useEffect(() => {
-    const fetchSuccess = InventoryActionTypes.INVENTORY_FETCH_SUCCESS;
-
-    getReq('/inventory', fetchSuccess, null, null, 'inventory');
+    getReq('/inventory', fetchSuccess, INVENTORY_QUERY_STRING, null, 'inventory');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success])
 
@@ -80,7 +71,7 @@ const Inventory = ({
           action === items[0].name && 
           <ReceivedTrackings 
             setSuccess={setSuccess} 
-            receivedTrackings={trackings ? trackings.filter(el => el.status === 'received') : []}
+            scanneds={trackings ? trackings.filter(el => el.status === 'scanned') : []}
           />
         }
         { 

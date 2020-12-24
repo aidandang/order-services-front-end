@@ -1,8 +1,9 @@
 import React from 'react'
 
 // components
-import { Card, Ul, Li, Button } from '../tag/tag.component'
+import { Card, Ul, Li } from '../tag/tag.component'
 import AlertMesg from '../alert-mesg/alert-mesg.component'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -59,16 +60,11 @@ const OrderInfo = ({
         </Li>
         {
           byId.status !== 'ordered' && byId.purchasing && byId.selling &&
-          <Li>
-            <Button 
-              onClick={e => {
-                e.preventDefault()
-                handlePlaceOrder()
-              }}
-            >
-              Place Order
-            </Button>
-          </Li>
+          <SubmitOrReset
+            buttonName="Place Order"
+            buttonDisabled={false}
+            formSubmit={handlePlaceOrder}
+          />
         }
       </Ul>
     </Card>  

@@ -52,8 +52,9 @@ const ReceivingListTable = ({
             <thead>
               <tr>
                 <th scope="col">Tracking#</th>
-                <th scope="col">Received Date</th>
                 <th scope="col">Status</th>
+                <th scope="col">Received Date</th>
+                <th scope="col">Processed Date</th>
               </tr>
             </thead>
             <tbody>

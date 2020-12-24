@@ -36,7 +36,7 @@ export const useForm = (initialValues, initialErrors, schema) => {
     // integer number mask
     if (id === 'integerMask') {
       if (value !== '' && value !== undefined) {
-        value = integerMask(e.target.value, 7);
+        value = integerMask(e.target.value, 12);
       }
     }
 

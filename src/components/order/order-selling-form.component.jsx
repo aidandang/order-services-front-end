@@ -17,10 +17,7 @@ import { updateItemInOrder } from '../../state/order/order.actions'
 
 // inital values
 const formSchema = Yup.object().shape({
-  price: Yup
-    .string()
-    .required(),
-  shippingPrice: Yup
+  totalDong: Yup
     .string()
     .required(),
   int: Yup
@@ -29,13 +26,15 @@ const formSchema = Yup.object().shape({
     .string()
     .required()
 })
-
 const formState = {
-  price: "",
-  shippingPrice: "",
+  totalDong: "",
   int: "",
-  weight: ""
+  weight: "",
+  qty: ''
 }
+
+const SHIPPING_PRICE_PER_KG = 10
+var exchangeRate = 24000
 
 // main component
 const OrderSellingForm = ({
@@ -51,6 +50,9 @@ const OrderSellingForm = ({
   const { byId } = data
   const { orderId } = params
 
+  var totalCost = 0
+  if (byId) totalCost = byId.costing.totalCost
+
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
   const parentRoute = location.pathname.split('/price')[0]
@@ -64,18 +66,26 @@ const OrderSellingForm = ({
   ] = useForm(formState, formState, formSchema)
 
   const shippingPriceCalc = (weight) => {
-    const price = 10
-
-    const shippingPrice = price * weight
-    return acctToStr(shippingPrice)
+    const shippingPrice = SHIPPING_PRICE_PER_KG * strToAcct(weight)
+    return shippingPrice * exchangeRate
   }
 
-  const salePriceCalc = (price, int) => {
-    const p = int/10000
-    const salePrice = price * (1 + p)
-    const s = salePrice.toFixed(0)
-    
-    return acctToStr(Number(s))
+  const costIncludedTaxCalc = () => {
+    const t = formData.purTaxPct/10000
+    const cost = totalCost * (1 + t) * exchangeRate
+    return acctToStr(Number(cost.toFixed(0))).split('.')[0]
+  }
+
+  const totalPriceCalc = (weight = 0) => {
+    // cost included tax
+    const t = formData.purTaxPct/10000
+    const cost = totalCost * (1 + t) * exchangeRate
+
+    // price based on % profit
+    const p = strToAcct(formData.int)/10000
+    const price = cost * (1 + p) + shippingPriceCalc(weight)
+
+    return acctToStr(Number(price.toFixed(0))).split('.')[0]
   }
   
   const formSubmit = () => {
@@ -83,12 +93,11 @@ const OrderSellingForm = ({
     delete obj.int
     delete obj.index
 
-    const price = strToAcct(obj.price)
-    obj.price = price
-    const shippingPrice = strToAcct(obj.shippingPrice)
-    obj.shippingPrice = shippingPrice
-    const weight = strToAcct(obj.weight)
-    obj.weight = weight
+    const totalDong = strToAcct(formData.totalDong)
+
+    obj.totalDong = totalDong
+    obj.shippingDong = shippingPriceCalc(formData.weight)
+    obj.weight = strToAcct(formData.weight)
 
     let items = null
     
@@ -106,7 +115,12 @@ const OrderSellingForm = ({
   }
 
   const formReset = () => {
-    setValues(formState)
+    setValues(prevState => ({
+      ...prevState,
+      weight: "",
+      int: "",
+      totalDong: ""
+    }))
   }
 
   useEffect(() => {
@@ -128,49 +142,81 @@ const OrderSellingForm = ({
             <div className="row">
               <div className="col-xl-4">
                 <TextInput
-                  label="% Interest" 
-                  name="int"
-                  id="currencyMask-order-sale-item-form-int"
+                  label="Weight (kg) (*)" 
+                  name="weight"
+                  id="currencyMask-order-selling-form-weight"
                   errors={errors}
-                  smallText={`Estimated Sale Price: $${salePriceCalc(formData.itemCost, strToAcct(formData.int))}`}
-                  value={formData.int}
+                  smallText={`Shipping per unit: đ${acctToStr(shippingPriceCalc(formData.weight)).split('.')[0]}`}
+                  value={formData.weight}
                   onChange={onInputChange}
                 />
               </div>
               <div className="col-xl-4">
-                <TextInput
-                  label="Price" 
-                  name="price"
-                  id="currencyMask-order-sale-item-form-price"
-                  errors={errors}
-                  smallText="Price if other than estimated."
-                  value={formData.price}
-                  onChange={onInputChange}
-                />
+                <div className="form-group">
+                  <label htmlFor="qty">Quantity</label>
+                  <input
+                    name="qty"
+                    type="text"
+                    className="form-control"
+                    value={formData.qty.toString()}
+                    readOnly
+                  />
+                  <small>Number of units per item</small>
+                </div>
+              </div>
+              <div className="col-xl-4">
+                <div className="form-group">
+                  <label htmlFor="shippingDong">Shipping Price (đ)</label>
+                  <input
+                    name="shippingDong"
+                    type="text"
+                    className="form-control"
+                    value={acctToStr(shippingPriceCalc(formData.weight) * formData.qty).split('.')[0]}
+                    readOnly
+                  />
+                  <small>Total shipping price of the item</small>
+                </div>
               </div>
             </div>
           </Li>
           <Li>
             <div className="row">
               <div className="col-xl-4">
+                <div className="form-group">
+                  <label htmlFor="costIncludedSalesTax">Cost (đ)</label>
+                  <input
+                    name="costIncludedSalesTax"
+                    type="text"
+                    className="form-control"
+                    value={costIncludedTaxCalc(byId.costing.totalCost)}
+                    readOnly
+                  />
+                  <small>{`Cost (incl. ${acctToStr(formData.purTaxPct)}% Tax).`}</small>
+                </div>
+              </div>
+              <div className="col-xl-4">
                 <TextInput
-                  label="Weight" 
-                  name="weight"
-                  id="currencyMask-order-sale-item-form-weight"
+                  label="% Interest" 
+                  name="int"
+                  id="currencyMask-order-selling-form-int"
                   errors={errors}
-                  smallText={`Estimated Shipping Price: $${shippingPriceCalc(strToAcct(formData.weight))}`}
-                  value={formData.weight}
+                  smallText={"Price not included shipping: " + 
+                    `đ${totalPriceCalc()}`
+                  }
+                  value={formData.int}
                   onChange={onInputChange}
                 />
               </div>
               <div className="col-xl-4">
                 <TextInput
-                  label="Shipping Price" 
-                  name="shippingPrice"
-                  id="currencyMask-order-sale-item-form-shipping-price"
+                  label="Total Price" 
+                  name="totalDong"
+                  id="currencyMask-order-selling-form-totalDong"
                   errors={errors}
-                  smallText="Sale price if other than estimated."
-                  value={formData.shippingPrice}
+                  smallText={"Estimated Total Price: " + 
+                    `đ${totalPriceCalc(formData.weight)}`
+                  }
+                  value={formData.totalDong}
                   onChange={onInputChange}
                 />
               </div>

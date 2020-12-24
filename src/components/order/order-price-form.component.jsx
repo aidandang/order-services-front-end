@@ -16,11 +16,9 @@ import { updateItemInOrder } from '../../state/order/order.actions'
 
 // initial form state
 const formSchema = Yup.object().shape({
-  salesTax: Yup.string(),
   discount: Yup.string()
 })
 const formState = {
-  salesTax: "",
   discount: ""
 }
 
@@ -44,7 +42,6 @@ const OrderPriceForm = ({
 
     const obj = { ...formData };
   
-    obj.salesTax = formData.salesTax === "" ? 0 : strToAcct(formData.salesTax);
     obj.discount = formData.discount === "" ? 0 : strToAcct(formData.discount);
 
     updateItemInOrder({ ...order, selling: { ...order.selling,  ...obj } })
@@ -59,7 +56,6 @@ const OrderPriceForm = ({
     if (selling) {
       setValues(prevState => ({
         ...prevState,
-        salesTax: selling.salesTax ? acctToStr(selling.salesTax) : '', 
         discount: selling.discount ? acctToStr(selling.discount) : ''
       }))
     }
@@ -70,30 +66,16 @@ const OrderPriceForm = ({
     <Card width="col" title="Update Sales Tax and Other">
       <Ul>
         <Li>
-          <div className="row">
-            <div className="col-xl-6">
-              <TextInput
-                label="Sales Tax" 
-                name="salesTax"
-                id="currencyMask-order-cost-form-salesTax"
-                errors={errors}
-                smallText="Sale tax applied to this order. Leave empty if there is no tax"
-                value={formData.salesTax}
-                onChange={onInputChange}
-              />
-            </div>
-            <div className="col-xl-6">
-              <TextInput
-                label="Discount" 
-                name="discount"
-                id="currencyMask-order-cost-form-discount"
-                errors={errors}
-                smallText="All other costs. Leave empty if there is no cost"
-                value={formData.discount}
-                onChange={onInputChange}
-              />
-            </div>
-          </div>
+          <TextInput
+            label="Discount (đ)" 
+            name="discount"
+            id="currencyMask-order-cost-form-discount"
+            size="col-xl-6"
+            errors={errors}
+            smallText="Applied discount to the total price (in VND)."
+            value={formData.discount}
+            onChange={onInputChange}
+          />
         </Li>
         <SubmitOrReset
           buttonName={'Save'}

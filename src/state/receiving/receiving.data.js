@@ -19,8 +19,8 @@ export const searchList = {
     placeholder: 'Status',
     items: [
       {
-        text: 'scanned',
-        value: 'scanned'
+        text: 'received',
+        value: 'received'
       },
       {
         text: 'processed',
@@ -31,6 +31,10 @@ export const searchList = {
   recvDate: {
     type: 'date-input',
     placeholder: 'Received Date'
+  },
+  procDate: {
+    type: 'date-input',
+    placeholder: 'Processed Date'
   }
 }
 

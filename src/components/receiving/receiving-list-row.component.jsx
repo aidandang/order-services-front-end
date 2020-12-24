@@ -23,8 +23,9 @@ const ReceivingListRow = ({
       onClick={e => handleOnClick(e, receiving)}
     >
       <th scope="row">{receiving.tracking}</th>
+      <td><span className={`${receiving.status === 'received' ? 'text-primary' : 'text-success'}`}>{receiving.status}</span></td>
       <td>{moment(receiving.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
-      <td><span className={`${receiving.status === 'scanned' ? 'text-danger' : 'text-success'}`}>{receiving.status}</span></td>
+      <td>{receiving.procDate ? moment(receiving.procDate).format('MMM Do YYYY, h:mm:ss a') : 'not processed'}</td>
     </tr>
   </>
 }
