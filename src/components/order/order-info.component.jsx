@@ -28,7 +28,11 @@ const OrderInfo = ({
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const obj = { 
       ...byId,
-      status: 'ordered' 
+      status: 'ordered',
+      items: byId.items.map(item => {
+        item.status = 'ordered'
+        return item
+      }) 
     }
   
     patchReq(`/orders/${byId._id}`, fetchSuccess, { ...obj }, null, 'order-info')
