@@ -1,43 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // dependencies
-import moment from 'moment';
+import moment from 'moment'
 // components
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-import OrderedList from './ordered-list.component';
+import ReceivedTrackingsForm from './received-trackings-form.component'
+import AlertMesg from '../alert-mesg/alert-mesg.component'
+import { integerMask } from '../utils/helpers'
 // redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/api.requests';
-import { ReceivingActionTypes } from '../../state/receiving/receiving.types';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { ReceivingActionTypes } from '../../state/receiving/receiving.types'
+import { patchReq } from '../../state/api/api.requests'
+import { selectCheckingItems } from '../../state/inventory/inventory.selectors'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
+// constants
+const pathname = '/items'
+const fetchSuccess = ReceivingActionTypes.RECEIVING_FETCH_SUCCESS
+const component = 'received-trackings'
 
 const ReceivedTrackings = ({
   receivedTrackings,
-  setSuccess,
+  checkingItems,
   patchReq,
-  alertMessage
+  alertMessage,
+  setChecked
 }) => {
 
-  const [processing, setProcessing] = useState(false)
+  const [checking, setChecking] = useState(null)
+  const [idx, setIdx] = useState(null)
+  const [success, setSuccess] = useState(false)
 
-  const fetchSuccess = ReceivingActionTypes.RECEIVING_FETCH_SUCCESS;
+  // const formSubmit = () => {
+  //   const id = receivedTrackings.find(el => el.tracking === checking.tracking)[0]._id
+  //   const obj = { ...checkingItems }
 
-  const handleProcessing = (id) => {
-    const obj = {
-      status: 'processed'
-    }
+  //   patchReq(pathname + `/${id}`, fetchSuccess, obj, setSuccess, component)
+  // }
 
-    patchReq(`/receiving/${id}`, fetchSuccess, obj, setSuccess, 'received-trackings');
-  }
+  useEffect(() => {
+    if (success) setChecked(true)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success])
 
   return <>
-  
-    { alertMessage && alertMessage.component === 'received-trackings' && <AlertMesg /> }
+
+    { alertMessage && alertMessage.component === component && <AlertMesg /> }
 
     {
-      processing 
+      checking
       ? <>
+        <div className="row mb-2">
+          <div className="col">
+            <div className="table-responsive-sm">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Tracking</th>
+                    <th scope="col">Item Description</th>
+                    <th scope="col">Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    checkingItems.length > 0 
+                    ? 
+                    checkingItems.map((item, index) => 
+                      <tr 
+                        key={index} 
+                        className="table-row-cs"
+                        onClick={e => {
+                          e.preventDefault()
+                          setIdx(index)
+                        }} 
+                      >
+                        <th scope="row">{checking.tracking}</th>
+                        <td>{item.desc}</td>
+                        <td>{integerMask(item.qty.toString())}</td>
+                      </tr>
+                    )
+                    : <>
+                      <tr className="table-row-cs">
+                        <td colSpan="3">No item checked.</td>
+                      </tr>
+                    </>
+                  }
+                  <tr className="table-row-cs">
+                    <td colSpan="3">
+                      <a
+                        href="/"
+                        className="a-link-cs"
+                        onClick={e => {
+                          e.preventDefault()
+                          setIdx('add')
+                        }}
+                      >
+                        Add Items
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {
+          idx && <ReceivedTrackingsForm index={idx} />
+        }
       </>
       : <>
         <div className="row mb-2">
@@ -62,7 +130,7 @@ const ReceivedTrackings = ({
                         className="table-row-cs"
                         onClick={e => {
                           e.preventDefault()
-                          setProcessing(true)
+                          setChecking(!checking)
                         }} 
                       >
                         <th scope="row">{receiving.tracking}</th>
@@ -88,9 +156,9 @@ const ReceivedTrackings = ({
 }
 
 const mapStateToProps = createStructuredSelector({
+  checkingItems: selectCheckingItems,
   alertMessage: selectAlertMessage
 })
-
 const mapDispatchToProps = dispatch => ({
   patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)

@@ -1,7 +1,8 @@
 import { InventoryActionTypes } from './inventory.types';
 
 const INITIAL_STATE = {
-  data: {}
+  data: {},
+  checkingItems: []
 }
 
 const inventoryReducer = (state = INITIAL_STATE, action) => {
@@ -10,6 +11,11 @@ const inventoryReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         data: { ...state.data, ...action.payload }
+      }
+    case InventoryActionTypes.INVENTORY_UPDATE_CHECKED_ITEMS:
+      return {
+        ...state,
+        checkingItems: action.payload
       }
     default:
       return state;
