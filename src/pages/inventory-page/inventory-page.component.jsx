@@ -1,14 +1,13 @@
-import React from 'react';
+import React from 'react'
 
 // dependencies
-import { Switch, Route } from 'react-router-dom';
-
+import { Switch, Route } from 'react-router-dom'
 // components
-import Title from '../../components/title/title.component';
-import Breadcrumb from '../../components/breadcrumb/breadcrumb.component';
-import routes from '../../routes/private/inventory.routes';
-
-// initial values
+import Title from '../../components/title/title.component'
+import Breadcrumb from '../../components/breadcrumb/breadcrumb.component'
+import routes from '../../routes/private/inventory.routes'
+import InventoryTab from '../../components/inventory/inventory-tab.component'
+// constants
 const title = {
   name: 'Inventory',
   message: 'Keep track orders. Process orders in the warehouse.'
@@ -29,6 +28,7 @@ const InventoryPage = () => {
             render={props => {
               return <>
                 <Breadcrumb routes={routes} message={title.message} {...props} />
+                <InventoryTab />
                 <Component {...props} />
               </>
             }}
@@ -39,4 +39,4 @@ const InventoryPage = () => {
   </>
 }
 
-export default InventoryPage;
+export default InventoryPage

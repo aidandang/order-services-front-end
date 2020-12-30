@@ -3,79 +3,41 @@ import React from 'react';
 import uuid from 'react-uuid';
 import './tag.styles.css';
 
-export const Container = ({
-  children,
-  goBack
+export const Card = ({ 
+  children, 
+  width, 
+  title, 
+  action 
 }) => {
-
-  return (
-    <div className="card mb-4">
-      <div className="card-body">
-        <div className="row my-0 py-0">
-          <div className="col mb-3 text-right">
-            <a
-              href="/"
-              className={'symbol-link-cs'}
-              onClick={e => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (goBack) goBack();
-              }}
-            >
-              <i className="fas fa-times-circle"></i>
-            </a>
-          </div>
-        </div>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-export const Section = ({
-  children,
-  goRoot
-}) => {
-
-  return (
-    <div className="card">
-      <div className="card-body">
-        <div className="row my-0 py-0">
-          <div className="col mb-3 text-right">
-            <a
-              href="/"
-              className="symbol-link-cs"
-              onClick={e => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (goRoot) goRoot();
-              }}
-            >
-              <i className="fas fa-times-circle"></i>
-            </a>
-          </div>
-        </div>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-export const Card = ({ children, width, title }) => {
-  return (
+  return <>
     <div className="row">
       <div className={width ? width : 'col'}>
         <div className="card mb-4">
           <div className="card-header bg-card-cs">
             <div className="row">
               <div className="col text-uppercase font-weight-bold">{title}</div>
+              {
+                action &&
+                <div className="col text-right">
+                  <a
+                    href="/"
+                    className="a-link-cs"
+                    onClick={e => {
+                      e.preventDefault()
+                      action.handleAction()
+                    }}
+                  >
+                    {action.name}
+                  </a>
+                </div>
+              }
             </div>
           </div>
           {children}
         </div>
       </div>
     </div>
-  )
+  </>
 }
 
 export const Li = ({ children }) => {

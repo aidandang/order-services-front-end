@@ -1,9 +1,11 @@
-import React from 'react';
+import React from 'react'
+
+// dependencies
+import { Link } from 'react-router-dom'
 
 const Tab = ({
   items,
-  active,
-  setActive
+  active
 }) => {
 
   return <>
@@ -13,20 +15,16 @@ const Tab = ({
           items.map((item, index) => 
             <span key={index}>
               {
-                active === item.name 
+                active.match(item.link)
                 ?
                 <span>{item.name}</span>
                 :
-                <a 
-                  href="/" 
-                  className="a-link-cs" 
-                  onClick={e => {
-                    e.preventDefault();
-                    setActive(item.name)
-                  }}
+                <Link 
+                  to={item.link} 
+                  className="a-link-cs"
                 >
                   {item.name}
-                </a>
+                </Link>
               }
               {
                 item.badge > 0 && <>
