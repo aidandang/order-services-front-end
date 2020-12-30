@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // dependencies
 import * as Yup from 'yup'
@@ -22,8 +22,9 @@ const formState = {
   desc: ""
 }
 
-const ReceivedTrackingsForm = ({
-  index,
+const ReceivedTrackingsItemForm = ({
+  idx,
+  setIdx,
   checkingItems,
   updateCheckedItems
 }) => {
@@ -34,7 +35,7 @@ const ReceivedTrackingsForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(index !== 'add' ? checkingItems[index] : formState, formState, formSchema)
+  ] = useForm(formState, formState, formSchema)
 
   const formSubmit = () => {
     const obj = { ...formData };
@@ -43,27 +44,46 @@ const ReceivedTrackingsForm = ({
     
     let items = null
 
-    if (formData.index === 'add') {
-      items = [ ...items, obj ]
-      console.log(items)
+    if (idx === 'add') {
+      items = [ ...checkingItems, obj ]
     } else {
       items = checkingItems.map((item, index) => {
-        if (index !== formData.index) {
+        if (index !== idx) {
           return item
         }
         return { ...item, ...obj }
       })
     }
 
-    // updateCheckedItems(items)
+    updateCheckedItems(items)
+    setIdx(null)
   }
 
   const formReset = () => {
     setValues(formState)
   }
 
+  // close the form
+  const handleClosingForm = () => {
+    setIdx(null)
+  }
+
+  useEffect(() => {
+    if (idx !== 'add') setValues(prevState => ({
+      ...prevState, ...checkingItems[idx]
+    }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return <>
-    <Card width="col" title="Item Checking">
+    <Card 
+      width="col" 
+      title={idx === 'add' ? 'Add Item' : 'Edit Item'}
+      action={{
+        name: 'Close',
+        handleAction: handleClosingForm
+      }}
+    >
       <Ul>
         <Li>
           <TextInput
@@ -105,4 +125,4 @@ const mapDispatchToProps = dispatch => ({
   updateCheckedItems: items => dispatch(updateCheckedItems(items))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReceivedTrackingsForm)
+export default connect(mapStateToProps, mapDispatchToProps)(ReceivedTrackingsItemForm)
