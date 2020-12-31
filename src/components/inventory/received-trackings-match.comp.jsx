@@ -27,7 +27,8 @@ const ReceivedTrackingsMatch = ({
 
   const formSubmit = () => {
     const obj = {
-      itemRef: pair.item._id
+      itemRef: pair.item._id,
+      orderRef: pair.orderNumber
     }
 
     const receiving = trackings.find(el => el.tracking === tracking)

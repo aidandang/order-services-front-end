@@ -21,15 +21,10 @@ const CustomerListRow = ({
       className="table-row-cs" 
       onClick={e => handleOnClick(e, customer)}
     >
-      <th scope="row">
-        <span className="mr-2">{customer.account}</span>
-        {customer.status === "na" && <a href="/" className="a-link-cs">A</a>}
-      </th>
+      <th scope="row">{customer.account}</th>
       <td>{customer.nickname}</td>
       <td>{customer.fullname}</td>
-      <td>
-        {`${customer.streetAddress1}, ${customer.city}, ${customer.state}`}{customer.streetAddress2 !== "" && `, (${customer.streetAddress2})`}
-      </td>
+      <td>{`${customer.streetAddress1}, ${customer.city}, ${customer.state}`}{customer.streetAddress2 !== "" && `, (${customer.streetAddress2})`}</td>
       <td>{customer.phone}</td>
     </tr>
   </>
