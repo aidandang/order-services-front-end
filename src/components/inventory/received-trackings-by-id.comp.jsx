@@ -1,7 +1,7 @@
 import React from 'react'
 
 // dependecies
-import { useParams, useLocation, useHistory } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 // components
 import ReceivedTrackingsCheck from './received-trackings-check.comp'
 import ReceivedTrackingsProcess from './received-trackings-process.comp'
@@ -15,8 +15,6 @@ const ReceivedTrackingsById = ({
 }) => {
 
   const params = useParams()
-  const location = useLocation()
-  const history = useHistory()
 
   const { trackings, orders } = data
   const { trackingId } = params
@@ -30,7 +28,7 @@ const ReceivedTrackingsById = ({
         }
         {
           trackings.find(el => el._id === trackingId).status === 'checked' &&
-          <ReceivedTrackingsProcess tracking={trackings.find(el => el._id === trackingId)} />
+          <ReceivedTrackingsProcess tracking={trackings.find(el => el._id === trackingId)} orders={orders} />
         }
       </>
     }
