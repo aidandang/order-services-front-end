@@ -4,3 +4,8 @@ export const updateCheckedItems = (items) => ({
   type: InventoryActionTypes.INVENTORY_UPDATE_CHECKED_ITEMS,
   payload: items
 })
+
+export const matchItems = (values) => ({
+  type: InventoryActionTypes.INVENTORY_MATCH_ITEMS,
+  payload: values
+})

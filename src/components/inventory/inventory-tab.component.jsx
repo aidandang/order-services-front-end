@@ -19,6 +19,11 @@ const items = [
     link: '/app/inventory/received-trackings',
     badge: 0
   },
+  {
+    name: 'Placed Orders',
+    link: '/app/inventory/placed-orders',
+    badge: 0
+  }
 ]
 
 const InventoryTab = ({
@@ -28,11 +33,16 @@ const InventoryTab = ({
 }) => {
 
   const location = useLocation()
-  const { trackings } = data
+  const { trackings, orders } = data
 
-  // display notifications in the tab
-  if (trackings && trackings.length > 0) {
-    items[0].badge = trackings.reduce((a, c) => c.status === 'received' ? a + 1 : a, 0)
+  // display notifications in the tab item 0
+  if (trackings) {
+    items[0].badge = trackings.length
+  }
+
+  // display notifications in the tab item 1
+  if (orders) {
+    items[1].badge = orders.length
   }
 
   useEffect(() => {
