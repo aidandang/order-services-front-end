@@ -63,7 +63,7 @@ const OrderInfo = ({
           </div>
         </Li>
         {
-          byId.status !== 'ordered' && byId.purchasing && byId.selling &&
+          byId.status !== 'ordered' && byId.purchasing &&
           <SubmitOrReset
             buttonName="Place Order"
             buttonDisabled={false}

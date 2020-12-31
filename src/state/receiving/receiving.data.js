@@ -6,7 +6,7 @@ export const queryState = {
 }
 
 export const addLink = {
-  title: '( + ) Scan Tracking Numbers'
+  title: '( + ) Scan New Trackings'
 }
 
 export const searchList = {

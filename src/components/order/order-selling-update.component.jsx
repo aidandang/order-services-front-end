@@ -48,7 +48,8 @@ const OrderSellingUpdate = ({
   }
 
   const totalPriceAfterDiscountCalc = () => {
-    const total = items.reduce((a, c) => a + c.totalDong, 0) - selling.discount
+    var total = items.reduce((a, c) => a + c.totalDong, 0)
+    if (selling && selling.discount) total = total - selling.discount
     return acctToStr(total).split('.')[0]
   }
 

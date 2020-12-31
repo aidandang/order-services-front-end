@@ -7,6 +7,7 @@ import { Card, Ul, Li, TextInput } from '../tag/tag.component'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import { integerStrToNum } from '../utils/helpers'
+import CloseTask from '../close-task/close-task.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -63,8 +64,7 @@ const ReceivedTrackingsItemForm = ({
     setValues(formState)
   }
 
-  // close the form
-  const handleClosingForm = () => {
+  const setClose = () => {
     setIdx(null)
   }
 
@@ -76,13 +76,10 @@ const ReceivedTrackingsItemForm = ({
   }, [])
 
   return <>
+    <CloseTask setClose={setClose} />
     <Card 
       width="col" 
       title={idx === 'add' ? 'Add Item' : 'Edit Item'}
-      action={{
-        name: 'Close',
-        handleAction: handleClosingForm
-      }}
     >
       <Ul>
         <Li>
