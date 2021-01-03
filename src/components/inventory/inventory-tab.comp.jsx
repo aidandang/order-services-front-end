@@ -20,8 +20,13 @@ const items = [
     badge: 0
   },
   {
-    name: 'Placed Orders',
-    link: '/app/inventory/placed-orders',
+    name: 'Incoming Items',
+    link: '/app/inventory/incoming-items',
+    badge: 0
+  },
+  {
+    name: 'In-Store Items',
+    link: '/app/inventory/in-store-items',
     badge: 0
   }
 ]
@@ -43,6 +48,11 @@ const InventoryTab = ({
   // display notifications in the tab item 1
   if (orders) {
     items[1].badge = orders.length
+  }
+
+  // display notifications in the tab item 1
+  if (orders) {
+    items[2].badge = orders.length
   }
 
   useEffect(() => {

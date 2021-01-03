@@ -48,7 +48,7 @@ const OrderSellingUpdate = ({
   }
 
   const totalPriceAfterDiscountCalc = () => {
-    var total = items.reduce((a, c) => a + c.totalDong, 0)
+    var total = items.reduce((a, c) => a + c.unitDong * c.qty + c.unitShippingDong * c.qty, 0)
     if (selling && selling.discount) total = total - selling.discount
     return acctToStr(total).split('.')[0]
   }
@@ -173,70 +173,70 @@ const OrderSellingUpdate = ({
                 }
               </Ul>
             </Card>
-            {/* Item Table */}
-            <div className="row mb-2">
-              <div className="col">
-                <div className="table-responsive">
-                  <table className="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Style#</th>
-                        <th scope="col">Item/Description</th>
-                        <th scope="col" className="text-right">Weight</th>
-                        <th scope="col" className="text-right">Shipping</th>
-                        <th scope="col" className="text-right">$price</th>
-                        <th scope="col" className="text-right">đprice</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+              {/* Item Table */}
+              <div className="row mb-2">
+                <div className="col">
+                  <div className="table-responsive">
+                    <table className="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Style#</th>
+                          <th scope="col">Item/Description</th>
+                          <th scope="col" className="text-right">Weight</th>
+                          <th scope="col" className="text-right">đshipping</th>
+                          <th scope="col" className="text-right">đprice</th>
+                          <th scope="col" className="text-right">đsubtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          items.length > 0 && <>
+                            <OrderSellingItem items={items} />
+                          </>
+                        }
+                      </tbody>
                       {
                         items.length > 0 && <>
-                          <OrderSellingItem items={items} />
+                          <tbody>
+                            <tr className="table-row-no-link-cs">
+                              <th scope="col" colSpan="5" className="text-right">Total Shipping</th>
+                              <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.unitShippingDong * c.qty, 0)).split('.')[0]}</th>
+                            </tr>
+                            <tr className="table-row-no-link-cs">
+                              <td colSpan="5" className="text-right">Discount</td>
+                              <td colSpan="1" className="text-right">{selling && selling.discount ? acctToStr(selling.discount).split('.')[0] : '0'}</td>
+                            </tr>
+                          </tbody>
+                          <tbody>
+                            <tr className="table-row-no-link-cs">
+                              <th scope="col" colSpan="5" className="text-right">Total (included Shipping)</th>
+                              <th scope="col" colSpan="1" className="text-right">{totalPriceAfterDiscountCalc()}</th>
+                            </tr>
+                            <tr className="table-row-no-link-cs">
+                              <td colSpan="8">
+                                <Link
+                                  to={`${location.pathname}/cost`}
+                                  className="a-link-cs"
+                                  onClick={e => {
+                                    e.preventDefault()
+                                    setAction(!action)
+                                  }}
+                                >
+                                  { action === false ? "Update Discount" : "Close Update Discount" }
+                                </Link>
+                              </td>
+                            </tr>
+                          </tbody>
                         </>
                       }
-                    </tbody>
-                    {
-                      items.length > 0 && <>
-                        <tbody>
-                          <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="5" className="text-right">Total Shipping</th>
-                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.shippingDong, 0)).split('.')[0]}</th>
-                          </tr>
-                          <tr className="table-row-no-link-cs">
-                            <td colSpan="5" className="text-right">Discount</td>
-                            <td colSpan="1" className="text-right">{selling && selling.discount ? acctToStr(selling.discount).split('.')[0] : '0'}</td>
-                          </tr>
-                        </tbody>
-                        <tbody>
-                          <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="5" className="text-right">Total (included Shipping)</th>
-                            <th scope="col" colSpan="1" className="text-right">{totalPriceAfterDiscountCalc()}</th>
-                          </tr>
-                          <tr className="table-row-no-link-cs">
-                            <td colSpan="8">
-                              <Link
-                                to={`${location.pathname}/cost`}
-                                className="a-link-cs"
-                                onClick={e => {
-                                  e.preventDefault()
-                                  setAction(!action)
-                                }}
-                              >
-                                { action === false ? "Update Discount" : "Close Update Discount" }
-                              </Link>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </>
-                    }
-                  </table>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* End of Item Table */} 
-            {
-              action === true && <OrderPriceForm setAction={setAction} />
-            } 
+              {/* End of Item Table */} 
+              {
+                action === true && <OrderPriceForm setAction={setAction} />
+              } 
           </div>
           <div className="col-12 col-xl-4">
             <Card width="col" title="Update">

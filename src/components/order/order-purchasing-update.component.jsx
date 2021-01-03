@@ -42,22 +42,19 @@ const OrderPurchasingUpdate = ({
   const { byId } = data
   const { purchasing, items, costing } = order
 
+  const salesTaxCalc = () => {
+    return Number(items.reduce((a, c) => a + c.itemCost * c.purTaxPct / 10000, 0).toFixed(0))
+  }
+
   const totalCalc = () => {
     var total = items.reduce((a, c) => a + c.itemCost, 0)
-    if (costing) {
-      total += costing.salesTax ? costing.salesTax : 0
-      total += costing.otherCost ? costing.otherCost : 0
-    }
-    return acctToStr(total)
+    total += salesTaxCalc()
+    total += costing.otherCost ? costing.otherCost : 0
+    
+    return total
   }
 
   const handleSubmit = () => {
-    // update the total cost
-    var total = items.reduce((a, c) => a + c.itemCost, 0)
-    total += costing.salesTax ? costing.salesTax : 0
-    total += costing.otherCost ? costing.otherCost : 0
-    costing.totalCost = total
-
     // set parameters and update
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const obj = {
@@ -176,8 +173,9 @@ const OrderPurchasingUpdate = ({
                         <th scope="col">Style#</th>
                         <th scope="col">Item/Description</th>
                         <th scope="col" className="text-right">Qty</th>
-                        <th scope="col" className="text-right">Unit Cost</th>
-                        <th scope="col" className="text-right">Amount</th>
+                        <th scope="col" className="text-right">$cost</th>
+                        <th scope="col" className="text-right">%tax</th>
+                        <th scope="col" className="text-right">$b4tax</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -187,7 +185,7 @@ const OrderPurchasingUpdate = ({
                         </>
                       }
                       <tr className="table-row-no-link-cs">
-                        <td colSpan="5">
+                        <td colSpan="6">
                           <Link
                             to={`${location.pathname}/item`}
                             className="a-link-cs"
@@ -201,25 +199,25 @@ const OrderPurchasingUpdate = ({
                       items.length > 0 && <>
                         <tbody>
                           <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="4" className="text-right">Subtotal</th>
-                            <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}</th>
+                            <th scope="col" colSpan="5" className="text-right">Subtotal (b4tax)</th>
+                            <th scope="col" colSpan="1" className="text-right">{`$${acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}`}</th>
                           </tr>
                           <tr className="table-row-no-link-cs">
-                            <td colSpan="4" className="text-right">Sales Tax</td>
-                            <td colSpan="1" className="text-right">{costing && costing.salesTax ? acctToStr(costing.salesTax) : '.00'}</td>
+                            <td colSpan="5" className="text-right">Sales Tax</td>
+                            <td colSpan="1" className="text-right">{`$${acctToStr(salesTaxCalc())}`}</td>
                           </tr>
                           <tr className="table-row-no-link-cs">
-                            <td colSpan="4" className="text-right">Other</td>
-                            <td colSpan="1" className="text-right">{costing && costing.otherCost ? acctToStr(costing.otherCost) : '.00'}</td>
+                            <td colSpan="5" className="text-right">Other Cost</td>
+                            <td colSpan="1" className="text-right">{costing && costing.otherCost ? `$${acctToStr(costing.otherCost)}` : '$0.00'}</td>
                           </tr>
                         </tbody>
                         <tbody>
                           <tr className="table-row-no-link-cs">
-                            <th scope="col" colSpan="4" className="text-right">Total</th>
-                            <th scope="col" colSpan="1" className="text-right">{totalCalc()}</th>
+                            <th scope="col" colSpan="5" className="text-right">Total</th>
+                            <th scope="col" colSpan="1" className="text-right">{`$${acctToStr(totalCalc())}`}</th>
                           </tr>
                           <tr className="table-row-no-link-cs">
-                            <td colSpan="5">
+                            <td colSpan="6">
                               <Link
                                 to={`${location.pathname}/cost`}
                                 className="a-link-cs"
@@ -228,7 +226,7 @@ const OrderPurchasingUpdate = ({
                                   setAction(!action)
                                 }}
                               >
-                                { action === false ? "Update Sales Tax and Other" : "Close the update" }
+                                { action === false ? "Update Sales Tax, Other and Total" : "Close the update" }
                               </Link>
                             </td>
                           </tr>

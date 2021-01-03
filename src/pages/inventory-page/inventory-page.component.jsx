@@ -6,7 +6,7 @@ import { Switch, Route } from 'react-router-dom'
 import Title from '../../components/title/title.component'
 import Breadcrumb from '../../components/breadcrumb/breadcrumb.component'
 import routes from '../../routes/private/inventory.routes'
-import InventoryTab from '../../components/inventory/inventory-tab.component'
+import InventoryTab from '../../components/inventory/inventory-tab.comp'
 // constants
 const title = {
   name: 'Inventory',

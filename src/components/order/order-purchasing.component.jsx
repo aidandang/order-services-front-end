@@ -21,6 +21,18 @@ const OrderPurchasing = ({
   const history = useHistory()
   const { purchasing, items, costing } = byId
 
+  const salesTaxCalc = () => {
+    return Number(items.reduce((a, c) => a + c.itemCost * c.purTaxPct / 10000, 0).toFixed(0))
+  }
+
+  const totalCalc = () => {
+    var total = items.reduce((a, c) => a + c.itemCost, 0)
+    total += salesTaxCalc()
+    total += costing.otherCost ? costing.otherCost : 0
+    
+    return total
+  }
+
   const handleUpdatePurchasingOrder = () => {
     copyOrderToEdit({ ...byId })
     history.push(`${location.pathname}/update-purchasing-order`)
@@ -118,7 +130,7 @@ const OrderPurchasing = ({
                     <th scope="col">Style#</th>
                     <th scope="col">Item/Description</th>
                     <th scope="col" className="text-right">Qty</th>
-                    <th scope="col" className="text-right">Item Cost</th>
+                    <th scope="col" className="text-right">Cost</th>
                     <th scope="col" className="text-right">Amount</th>
                   </tr>
                 </thead>
@@ -142,21 +154,21 @@ const OrderPurchasing = ({
                 <tbody>
                   <tr className="table-row-no-link-cs">
                     <td colSpan="4" className="text-right">Subtotal</td>
-                    <td colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}</td>
+                    <td colSpan="1" className="text-right">{`$${acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}`}</td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td colSpan="4" className="text-right">Sales Tax</td>
-                    <td colSpan="1" className="text-right">{costing.salesTax === 0 ? '.00' : acctToStr(costing.salesTax)}</td>
+                    <td colSpan="1" className="text-right">{`$${acctToStr(salesTaxCalc())}`}</td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td colSpan="4" className="text-right">Other</td>
-                    <td colSpan="1" className="text-right">{costing.otherCost === 0 ? '.00' : acctToStr(costing.otherCost)}</td>
+                    <td colSpan="1" className="text-right">{costing.otherCost === 0 ? '$.00' : `$${acctToStr(costing.otherCost)}`}</td>
                   </tr>      
                 </tbody>
                 <tbody>
                   <tr className="table-row-no-link-cs">
                     <th scope="col" colSpan="4" className="text-right">Total</th>
-                    <th scope="col" colSpan="1" className="text-right">{costing.totalCost === 0 ? '.00' : acctToStr(costing.totalCost)}</th>
+                    <th scope="col" colSpan="1" className="text-right">{`$${acctToStr(totalCalc())}`}</th>
                   </tr> 
                 </tbody>
               </table>

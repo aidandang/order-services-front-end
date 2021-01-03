@@ -16,11 +16,9 @@ import { updateItemInOrder } from '../../state/order/order.actions'
 
 // initial form state
 const formSchema = Yup.object().shape({
-  salesTax: Yup.string(),
   otherCost: Yup.string()
 })
 const formState = {
-  salesTax: "",
   otherCost: ""
 }
 
@@ -42,7 +40,6 @@ const OrderCostForm = ({
 
     const obj = { ...formData };
   
-    obj.salesTax = formData.salesTax === "" ? 0 : strToAcct(formData.salesTax);
     obj.otherCost = formData.otherCost === "" ? 0 : strToAcct(formData.otherCost);
 
     updateItemInOrder({ ...order, costing: { ...order.costing,  ...obj } })
@@ -57,7 +54,6 @@ const OrderCostForm = ({
     if (order.costing && Object.keys(order.costing).length > 0) {
       setValues(prevState => ({
         ...prevState,
-        salesTax: order.costing.salesTax === 0 ? '' : acctToStr(order.costing.salesTax), 
         otherCost: order.costing.otherCost === 0 ? '' : acctToStr(order.costing.otherCost)
       }))
     }
@@ -65,33 +61,18 @@ const OrderCostForm = ({
   }, [])
 
   return <>
-    <Card width="col" title="Update Sales Tax and Other">
+    <Card width="col" title="Update Sales Tax, Other and Total">
       <Ul>
         <Li>
-          <div className="row">
-            <div className="col-xl-6">
-              <TextInput
-                label="Sales Tax" 
-                name="salesTax"
-                id="currencyMask-order-cost-form-salesTax"
-                errors={errors}
-                smallText="Sale tax applied to this order. Leave empty if there is no tax"
-                value={formData.salesTax}
-                onChange={onInputChange}
-              />
-            </div>
-            <div className="col-xl-6">
-              <TextInput
-                label="Other Cost" 
-                name="otherCost"
-                id="currencyMask-order-cost-form-otherCost"
-                errors={errors}
-                smallText="All other costs. Leave empty if there is no cost"
-                value={formData.otherCost}
-                onChange={onInputChange}
-              />
-            </div>
-          </div>
+          <TextInput
+            label="Other Cost" 
+            name="otherCost"
+            id="currencyMask-order-cost-form-otherCost"
+            errors={errors}
+            smallText="All other costs. Leave empty if there is no cost."
+            value={formData.otherCost}
+            onChange={onInputChange}
+          />
         </Li>
         <SubmitOrReset
           buttonName={'Save'}
