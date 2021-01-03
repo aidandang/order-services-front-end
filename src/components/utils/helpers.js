@@ -92,5 +92,9 @@ export const integerMask = (value, limit = 10) => {
 
 export const integerStrToNum = (str) => {
   const s = str.split(',').join('');
-  return Number(s);
+  if (isNaN(s)) {
+    return 0
+  } else {
+    return Number(s);
+  }
 }

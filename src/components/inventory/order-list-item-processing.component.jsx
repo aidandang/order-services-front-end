@@ -41,8 +41,9 @@ const OrderListItemProcessing = ({
     let j = null;
     let isReceived = true
     for (j = 0; j < items.length; j++) {
-      items[j].tracking = formData[j]
-      if (formData[j].length === 0) isReceived = false
+      if (formData[j].length > 0) {
+        items[j].tracking = formData[j]
+      } else isReceived = false
     }
 
     const obj = {
@@ -51,8 +52,6 @@ const OrderListItemProcessing = ({
 
     if (isReceived) {
       obj.status = 'received'
-    } else {
-      obj.status = 'ordered'
     }
 
     patchReq(`/orders/${order._id}`, fetchSuccess, obj, setSuccess, 'ordered-list')
@@ -82,8 +81,8 @@ const OrderListItemProcessing = ({
         <td colSpan="8">
           {
             items.map((item, index) => 
-              <div className="row mx-0" key={item._id}>
-                <div className='col-xl-6'>
+              <div className="row mx-1" key={item._id}>
+                <div className='col'>
                   <div className="form-group">
                     <label htmlFor={index}>{`${item.product.name}/qty:${item.qty}`}</label>
                     <input
@@ -99,7 +98,7 @@ const OrderListItemProcessing = ({
               </div>
             )
           }
-          <div className="row mx-0 mb-2">
+          <div className="row mx-1 mb-2">
             <div className="col">
               <Button
                 onClick={e => {

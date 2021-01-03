@@ -39,6 +39,7 @@ const OrderItem = ({
           <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
           <td className="text-right">{integerMask(item.qty.toString())}</td>
           <td className="text-right">{acctToStr(item.unitCost)}</td>
+          <td className="text-right">{acctToStr(item.purTaxPct)}</td>
           <td className="text-right">{acctToStr(item.itemCost)}</td>
         </tr>
       )

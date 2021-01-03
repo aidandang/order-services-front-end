@@ -24,13 +24,9 @@ const OrderSelling = ({
     address = selling.customer.shippingInfo.find(item => item._id === selling.customer.shippingAddress)
   }
 
-  const priceInUsdCalc = (value, ex) => {
-    const price = value / ex
-    return acctToStr(Number(price.toFixed(0)))
-  }
-
   const totalPriceAfterDiscountCalc = () => {
-    const total = items.reduce((a, c) => a + c.totalDong, 0) - selling.discount
+    var total = items.reduce((a, c) => a + c.unitDong * c.qty + c.unitShippingDong * c.qty, 0)
+    if (selling && selling.discount) total = total - selling.discount
     return acctToStr(total).split('.')[0]
   }
 
@@ -133,9 +129,9 @@ const OrderSelling = ({
                   <th scope="col">Style#</th>
                   <th scope="col">Item/Description</th>
                   <th scope="col" className="text-right">Weight</th>
-                  <th scope="col" className="text-right">Shipping</th>
-                  <th scope="col" className="text-right">$price</th>
+                  <th scope="col" className="text-right">đShipping</th>
                   <th scope="col" className="text-right">đprice</th>
+                  <th scope="col" className="text-right">đsubtotal</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,9 +144,9 @@ const OrderSelling = ({
                       <td>{item.product.styleCode}</td>
                       <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
                       <td className="text-right">{acctToStr(item.weight)}</td>
-                      <td className="text-right">{acctToStr(item.shippingDong).split('.')[0]}</td>
-                      <td className="text-right">{priceInUsdCalc(item.totalDong, item.exRate)}</td>
-                      <td className="text-right">{acctToStr(item.totalDong).split('.')[0]}</td>
+                      <td className="text-right">{acctToStr(item.unitShippingDong * item.qty).split('.')[0]}</td>
+                      <td className="text-right">{acctToStr(item.unitDong * item.qty)}</td>
+                      <td className="text-right">{acctToStr(item.unitShippingDong * item.qty + item.unitDong * item.qty).split('.')[0]}</td>
                     </tr>
                   )
                 }       
@@ -160,7 +156,7 @@ const OrderSelling = ({
                   <tbody>
                     <tr className="table-row-no-link-cs">
                       <th scope="col" colSpan="5" className="text-right">Total Shipping</th>
-                      <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.shippingDong, 0)).split('.')[0]}</th>
+                      <th scope="col" colSpan="1" className="text-right">{acctToStr(items.reduce((a, c) => a + c.unitShippingDong * c.qty, 0)).split('.')[0]}</th>
                     </tr>
                     <tr className="table-row-no-link-cs">
                       <td colSpan="5" className="text-right">Discount</td>

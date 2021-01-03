@@ -1,29 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-// dependencies
-import { useLocation, useHistory } from 'react-router-dom'
 // components
+import OrderSellingForm from './order-selling-form.component'
 import { acctToStr } from '../utils/acctToStr'
 
 const OrderSellingItem = ({
   items
 }) => {
 
-  const history = useHistory()
-  const location = useLocation()
+  const [itemEdit, setItemEdit] = useState({
+    index: null
+  })
 
-  const priceInUsdCalc = (value, ex) => {
-    const price = value / ex
-    return acctToStr(Number(price.toFixed(0)))
+  const priceCalc = (price, qty) => {
+    return price * qty
+  }
+  const shippingCalc = (shipping, qty) => {
+    return shipping * qty
+  }
+  const totalCalc = (shipping, price, qty) => {
+    return (shipping + price) * qty
   }
 
   const handleItemEdit = (item, index) => {
     const obj = { ...item }
     obj.weight = item.weight === 0 ? '' : acctToStr(item.weight)
     obj.index = index
-    obj.totalDong = item.totalDong === 0 ? '' : acctToStr(item.totalDong)
+    obj.unitDong = item.unitDong === 0 ? '' : acctToStr(item.unitDong).split('.')[0]
+    obj.unitShippingDong = item.unitShippingDong === 0 ? '' : acctToStr(item.unitShippingDong).split('.')[0]
   
-    history.push(`${location.pathname}/price`, { ...obj })
+    setItemEdit(prevState => ({
+      ...prevState, ...obj
+    }))
   }
 
   return <>      
@@ -31,18 +39,44 @@ const OrderSellingItem = ({
       items.map((item, index) => 
         <tr 
           key={index} 
-          className="table-row-no-link-cs span-link-cs"
+          className={itemEdit.index === index ? "table-row-no-link-cs" : "table-row-cs"}
           onClick={e => {
             e.preventDefault()
-            handleItemEdit(item, index)
+            if (itemEdit.index !== index) handleItemEdit(item, index)
           }}
         >
-          <td>{item.product.styleCode}</td>
-          <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-          <td className="text-right">{acctToStr(item.weight)}</td>
-          <td className="text-right">{acctToStr(item.shippingDong).split('.')[0]}</td>
-          <td className="text-right">{priceInUsdCalc(item.totalDong, item.exRate)}</td>
-          <td className="text-right">{acctToStr(item.totalDong).split('.')[0]}</td>
+          {
+            itemEdit.index === index 
+            ? <>
+              <td colSpan="6">
+                <div className="row mb-2">
+                  <div className="col text-right">
+                    <a
+                      href="/"
+                      className="a-link-cs"
+                      onClick={e => {
+                        e.preventDefault();
+                        setItemEdit({
+                          index: null
+                        })
+                      }}
+                    >
+                      Cancel
+                    </a>
+                  </div>  
+                </div>
+                <OrderSellingForm itemEdit={itemEdit} setItemEdit={setItemEdit} />
+              </td>
+            </>
+            : <>
+              <td>{item.product.styleCode}</td>
+              <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+              <td className="text-right">{acctToStr(item.weight)}</td>
+              <td className="text-right">{acctToStr(shippingCalc(item.unitShippingDong, item.qty)).split('.')[0]}</td>
+              <td className="text-right">{acctToStr(priceCalc(item.unitDong, item.qty)).split('.')[0]}</td>
+              <td className="text-right">{acctToStr(totalCalc(item.unitShippingDong, item.unitDong, item.qty)).split('.')[0]}</td>
+            </>
+          }
         </tr>
       )
     }       

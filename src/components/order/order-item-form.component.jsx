@@ -49,6 +49,7 @@ const OrderItemForm = ({
 
   const { byId } = data;
   const { orderId } = params;
+  const { items } = order
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
@@ -74,12 +75,12 @@ const OrderItemForm = ({
     obj.purTaxPct = strToAcct(formData.purTaxPct);
     obj.itemCost = integerStrToNum(formData.qty) * strToAcct(formData.unitCost);
     
-    let items = null
+    let editItems = null
 
     if (formData.index === null) {
-      items = [ ...byId.items, obj ]
+      editItems = [ ...items, obj ]
     } else {
-      items = byId.items.map((item, index) => {
+      editItems = items.map((item, index) => {
         if (index !== formData.index) {
           return item
         }
@@ -87,7 +88,7 @@ const OrderItemForm = ({
       })
     }
 
-    updateItemInOrder({ ...order, items: items })
+    updateItemInOrder({ ...order, items: editItems })
     history.push(parentRoute)
   }
 
@@ -191,11 +192,11 @@ const OrderItemForm = ({
                   </div>
                   <div className="col-xl-4">
                     <TextInput
-                      label="Sales Tax (*)" 
+                      label="Tax Rate (%) (*)" 
                       name="purTaxPct"
                       id="currencyMask-order-item-form-purTaxPct"
                       errors={errors}
-                      smallText="Sales tax applied to the item (%)."
+                      smallText="Sales tax rate applied to the item in %."
                       value={formData.purTaxPct}
                       onChange={onInputChange}
                     />
