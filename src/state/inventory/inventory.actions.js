@@ -1,8 +1,11 @@
 import { InventoryActionTypes } from './inventory.types'
 
-export const updateCheckedItems = (items) => ({
-  type: InventoryActionTypes.INVENTORY_UPDATE_CHECKED_ITEMS,
-  payload: items
+export const updateRecvItems = (items, trackingId) => ({
+  type: InventoryActionTypes.INVENTORY_UPDATE_RECV_ITEMS,
+  payload: {
+    items,
+    trackingId
+  }
 })
 
 export const matchItems = (values) => ({

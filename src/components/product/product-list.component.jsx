@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 // components
 import ProductCards from './product-cards.component';
 import Search from '../search/search.component';
-import { queryState, searchList, defaultFilter, addLink } from '../../state/product/product.data';
+import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/product/product.data';
 
 // main component
 const ProductList = () => {
@@ -18,6 +18,7 @@ const ProductList = () => {
       searchList={searchList}
       defaultFilter={defaultFilter}
       addLink={addLink}
+      searchTitle={searchTitle}
     />
     <ProductCards
       queryStr={location.search}
