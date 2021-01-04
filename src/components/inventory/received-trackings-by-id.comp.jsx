@@ -3,7 +3,7 @@ import React from 'react'
 // dependecies
 import { useParams } from 'react-router-dom'
 // components
-import ReceivedTrackingsCheck from './received-trackings-check.comp'
+import ReceivedCheck from './received-check.comp'
 import ReceivedTrackingsProcess from './received-trackings-process.comp'
 // redux
 import { connect } from 'react-redux'
@@ -16,7 +16,7 @@ const ReceivedTrackingsById = ({
 
   const params = useParams()
 
-  const { trackings, orders } = data
+  const { trackings, items } = data
   const { trackingId } = params
 
   return <>
@@ -24,11 +24,11 @@ const ReceivedTrackingsById = ({
       trackings && trackings.find(el => el._id === trackingId) && <>
         {
           trackings.find(el => el._id === trackingId).status === 'received' && 
-          <ReceivedTrackingsCheck tracking={trackings.find(el => el._id === trackingId)} />
+          <ReceivedCheck />
         }
         {
           trackings.find(el => el._id === trackingId).status === 'checked' &&
-          <ReceivedTrackingsProcess tracking={trackings.find(el => el._id === trackingId)} orders={orders} />
+          <ReceivedTrackingsProcess tracking={trackings.find(el => el._id === trackingId)} items={items} />
         }
       </>
     }

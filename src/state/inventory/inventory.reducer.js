@@ -2,7 +2,6 @@ import { InventoryActionTypes } from './inventory.types';
 
 const INITIAL_STATE = {
   data: {},
-  checkingItems: [],
   matchingItems: []
 }
 
@@ -27,10 +26,22 @@ const inventoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: { ...state.data, ...action.payload }
       }
-    case InventoryActionTypes.INVENTORY_UPDATE_CHECKED_ITEMS:
+    case InventoryActionTypes.INVENTORY_UPDATE_RECV_ITEMS:
       return {
         ...state,
-        checkingItems: action.payload
+        data: {
+          ...state.data,
+          trackings: state.data.trackings.map(el => {
+            if (el._id === action.payload.trackingId) {
+              return { 
+                ...el, 
+                recvItems: action.payload.items
+              }
+            } else {
+              return el
+            }
+          })
+        } 
       }
     case InventoryActionTypes.INVENTORY_MATCH_ITEMS:
       return {

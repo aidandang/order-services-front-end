@@ -13,7 +13,7 @@ import { InventoryActionTypes } from '../../state/inventory/inventory.types'
 import { selectInventoryData } from '../../state/inventory/inventory.selectors'
 import { selectAlertMessage } from '../../state/alert/alert.selectors'
 // constants
-const items = [
+const tabItems = [
   {
     name: 'Received Trackings',
     link: '/app/inventory/received-trackings',
@@ -38,21 +38,21 @@ const InventoryTab = ({
 }) => {
 
   const location = useLocation()
-  const { trackings, orders } = data
+  const { trackings, items } = data
 
   // display notifications in the tab item 0
   if (trackings) {
-    items[0].badge = trackings.length
+    tabItems[0].badge = trackings.length
   }
 
   // display notifications in the tab item 1
-  if (orders) {
-    items[1].badge = orders.length
+  if (items) {
+    tabItems[1].badge = items.length
   }
 
   // display notifications in the tab item 1
-  if (orders) {
-    items[2].badge = orders.length
+  if (items) {
+    tabItems[2].badge = items.length
   }
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const InventoryTab = ({
   }, [])
 
   return <>
-    <Tab items={items} active={location.pathname} />
+    <Tab items={tabItems} active={location.pathname} />
 
     { alertMessage && alertMessage.component === 'inventory' && <AlertMesg /> }
   </>

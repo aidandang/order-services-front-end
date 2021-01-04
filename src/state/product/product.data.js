@@ -20,3 +20,5 @@ export const searchList = {
 }
 
 export const defaultFilter = 'name'
+
+export const searchTitle = 'Search for Products'
