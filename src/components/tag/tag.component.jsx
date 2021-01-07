@@ -40,6 +40,46 @@ export const Card = ({
   </>
 }
 
+export const WhiteCard = ({ 
+  children, 
+  width, 
+  title, 
+  action 
+}) => {
+  return <>
+    <div className="row">
+      <div className={width ? width : 'col'}>
+        <div className="card mb-4">
+          {
+            title &&
+            <div className="card-header bg-light">
+              <div className="row">
+                <div className="col text-uppercase font-weight-bold">{title}</div>
+                {
+                  action &&
+                  <div className="col text-right">
+                    <a
+                      href="/"
+                      className="a-link-cs"
+                      onClick={e => {
+                        e.preventDefault()
+                        action.handleAction()
+                      }}
+                    >
+                      {action.name}
+                    </a>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          {children}
+        </div>
+      </div>
+    </div>
+  </>
+}
+
 export const Li = ({ children }) => {
   return (
     <li className="list-group-item bg-item-list-cs list-group-item-action">
@@ -188,4 +228,27 @@ export const Badge = ({
   return <>
     <span class="badge badge-info badge-cs">{name}</span>
   </>
+}
+
+export const CloseTask = ({
+  setCloseTask
+}) => {
+  return (
+    <div className="row mb-2">
+      <div className="col text-right">
+        <div className="my-1">
+          <a
+            href="/"
+            className="a-link-cs"
+            onClick={e => {
+              e.preventDefault();
+              setCloseTask()
+            }}
+          >
+            Close
+          </a>
+        </div>
+      </div>  
+    </div>
+  )
 }

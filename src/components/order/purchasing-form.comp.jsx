@@ -1,0 +1,216 @@
+import React from 'react'
+
+// dependencies
+import * as Yup from "yup"
+import moment from 'moment'
+// components
+import { WhiteCard, Ul, Li, TextInput, SelectInput, DateInput, CloseTask } from '../tag/tag.component'
+import { useForm } from '../hook/use-form'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
+import Merchant from '../merchant/merchant.component'
+import Warehouse from '../warehouse/warehouse.component'
+// redux
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { selectMerchantData } from '../../state/merchant/merchant.selectors'
+import { selectOrderData } from '../../state/order/order.selectors'
+import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors'
+import { updatePurchasingInOrder } from '../../state/order/order.actions'
+
+// inital values
+const formSchema = Yup.object().shape({
+  merchant: Yup.string().required(),
+  orderNumber: Yup.string().required(),
+  orderDate: Yup.string().required(),
+  type: Yup.string().required(),
+  warehouse: Yup.string().required()
+})
+
+const formState = {
+  merchant: "",
+  orderNumber: "",
+  orderDate: "",
+  type: "",
+  warehouse: ""
+}
+
+const PurchasingForm = ({
+  data,
+  updatePurchasingInOrder,
+  merchantData,
+  warehouseData,
+  setIsInfoForm
+}) => {
+
+  const { byId } = data
+
+  let orderEditing = null
+
+  if (byId && byId.purchasing) {
+    orderEditing = {
+      merchant: byId.purchasing.merchant._id,
+      orderNumber: byId.purchasing.orderNumber,
+      orderDate: moment(byId.purchasing.orderDate).format('yyyy-MM-DD'),
+      type: byId.purchasing.type,
+      warehouse: byId.purchasing.warehouse._id,
+    }
+  }
+
+  let merchants = null
+  let warehouses = null
+
+  if (merchantData.allIds) merchants = merchantData.allIds
+  if (warehouseData.allIds) warehouses = warehouseData.allIds
+
+  const [
+    formData,
+    errors, 
+    onInputChange, 
+    buttonDisabled,
+    setValues
+  ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema)
+
+  const formSubmit = () => {  
+    const merchantObj = merchantData.allIds.find(item => item._id === formData.merchant)
+    const warehouseObj = warehouseData.allIds.find(item => item._id === formData.warehouse)
+
+    const obj = { 
+      ...formData,
+      merchant: merchantObj,
+      warehouse: warehouseObj
+    }
+
+    updatePurchasingInOrder({
+      purchasing: { ...obj }
+    })
+    setIsInfoForm(false)
+  }
+
+  const formReset = () => {
+    setValues(formState)
+  }
+
+  const setCloseTask = () => {
+    setIsInfoForm(false)
+  }
+
+  console.log(formData)
+
+  return <>
+    <div className="row mt-2 mx-1">
+      <div className="col">
+        <CloseTask setCloseTask={setCloseTask} />
+        <div className="row">
+          <div className="col-12 col-xl-8">
+            <WhiteCard width="col" title="Purchasing Order">
+              <Ul>
+                <Li>
+                  <SelectInput
+                    label="Merchant (*)" 
+                    name="merchant"
+                    errors={errors}
+                    size="col-xl-6"
+                    smallText="Select a merchant, add new if there is no merchant."
+                    defaultValue=""
+                    defaultText="..."
+                    value={formData.merchant ? formData.merchant : ""}
+                    onChange={onInputChange}
+                    data={merchants}
+                    valueKey="_id"
+                    textKey="name"
+                  />
+                </Li>
+                <Li>
+                  <div className="row">
+                    <div className="col-xl-6">
+                      <TextInput
+                        label="Order Number (*)" 
+                        name="orderNumber"
+                        errors={errors}
+                        smallText="Order number is required."
+                        value={formData.orderNumber}
+                        onChange={onInputChange}
+                      />
+                    </div>
+                    <div className="col-xl-6">
+                      <DateInput
+                        label="Order Date (*)" 
+                        name="orderDate"
+                        errors={errors}
+                        smallText="Order date is required."
+                        value={formData.orderDate}
+                        onChange={onInputChange}
+                      />
+                    </div>
+                  </div>
+                </Li>
+                <Li>
+                  <SelectInput
+                    label="Type (*)" 
+                    name="type"
+                    errors={errors}
+                    size="col-xl-6"
+                    smallText="Online or walk-in."
+                    defaultValue=""
+                    defaultText="Choose..."
+                    value={formData.type ? formData.type : ""}
+                    onChange={onInputChange}
+                    data={[{ type: 'online'}, { type: 'walk-in'}, { type: 'shipping'}]}
+                    valueKey="type"
+                    textKey="type" 
+                  />
+                </Li>
+                <Li>
+                  <SelectInput
+                    label="Warehouse (*)" 
+                    name="warehouse"
+                    errors={errors}
+                    size="col-xl-6"
+                    smallText="Select a warehouse, add new if there is no warehouse."
+                    defaultValue=""
+                    defaultText="..."
+                    value={formData.warehouse ? formData.warehouse : ""}
+                    onChange={onInputChange}
+                    data={warehouses}
+                    valueKey="_id"
+                    textKey="name"
+                  />
+                </Li>
+                <SubmitOrReset
+                  buttonName={'Submit'}
+                  buttonDisabled={buttonDisabled}
+                  formSubmit={formSubmit}
+                  formReset={formReset}
+                />
+              </Ul>
+            </WhiteCard>        
+          </div>
+          <div className="col-12 col-xl-4">
+            <WhiteCard title="Update Merchant" >
+              <Ul>
+                <Merchant />
+              </Ul>
+            </WhiteCard>
+            <WhiteCard title="Update Warehouse">
+              <Ul>
+                <Warehouse />
+              </Ul>
+            </WhiteCard>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
+}
+
+const mapStateToProps = createStructuredSelector({
+  data: selectOrderData,
+  merchantData: selectMerchantData,
+  warehouseData: selectWarehouseData
+})
+
+const mapDispatchToProps = dispatch => ({
+  updatePurchasingInOrder: purchasing => dispatch(updatePurchasingInOrder(purchasing))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PurchasingForm)

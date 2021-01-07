@@ -16,14 +16,13 @@ const withBrandData = (WrapperComponent) => {
     data, 
     getReq,
     alertMessage,
-    pathname,
     queryStr,
     ...props 
   }) => {
 
     const [success, setSuccess] = useState(false);
+    const pathname = '/brands'
     const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS
-
     const component = 'brand'
 
     useEffect(() => {

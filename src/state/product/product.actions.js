@@ -5,7 +5,7 @@ export const copyProductToById = product => ({
   payload: product
 })
 
-export const setProductComp = (currComp) => ({
+export const setProductComp = (comp) => ({
   type: ProductActionTypes.SET_PRODUCT_COMPONENT,
-  payload: currComp
+  payload: comp
 })

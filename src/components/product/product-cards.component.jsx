@@ -11,7 +11,8 @@ import PaginationBar from '../pagination-bar/pagination-bar.component';
 import ProductCard from './product-card.component';
 
 const ProductCards = ({ 
-  data
+  data,
+  setActive
 }) => {
 
   const location = useLocation();
@@ -53,7 +54,7 @@ const ProductCards = ({
           <div key={product._id} className="col-12">
             <Card width="col" title={product.name}>
               <Ul>  
-                <ProductCard product={product} />
+                <ProductCard product={product} setActive={setActive} />
               </Ul>
             </Card>
           </div>

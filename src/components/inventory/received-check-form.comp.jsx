@@ -67,6 +67,19 @@ const ReceivedCheckForm = ({
     setValues(formState)
   }
 
+  const handleRemoveItem = () => {
+
+    var items = [ ...tracking.recvItems ]
+
+    if (formData.index !== undefined && formData.index !== 'add') {
+      items.splice(formData.index, 1)
+      updateRecvItems(items, trackingId)
+      setItemEdit({
+        index: null
+      })
+    }
+  }
+
   useEffect(() => {
     if (itemEdit) {
       setValues(prevState => ({
@@ -75,8 +88,6 @@ const ReceivedCheckForm = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
-
-  console.log(formData)
 
   return <>
     <Li>
@@ -107,6 +118,18 @@ const ReceivedCheckForm = ({
       formSubmit={formSubmit}
       formReset={formReset}
     />
+    <Li>
+      <a 
+        href="/"
+        className="a-link-cs"
+        onClick={e => {
+          e.preventDefault()
+          handleRemoveItem()
+        }}
+      >
+        Remove Item
+      </a>
+    </Li>
   </>
 }
 
