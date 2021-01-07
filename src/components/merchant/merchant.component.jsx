@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 // components
 import withMerchantData from './withMerchantData';
-import { Card, Ul, Li, SelectInput } from '../tag/tag.component';
+import { Li, SelectInput } from '../tag/tag.component';
 import MerchantForm from './merchant-form.component';
 
 const Merchant = ({
@@ -33,79 +33,75 @@ const Merchant = ({
   }
 
   return <>
-    <Card width="col-12" title="Update Merchants">
-      <Ul>
+    {
+      action === 'add'
+      ? 
+      <MerchantForm
+        action={action}  
+        setAction={setAction} 
+      />           
+      :
+      <>
+        <Li>
+          <SelectInput
+            label="Merchant List"
+            name="merchant"
+            smallText="Select a merchant to edit."
+            defaultValue=""
+            defaultText="..."
+            value={mrchId}
+            onChange={onInputChange}
+            data={data.allIds ? data.allIds : []}
+            valueKey={'_id'}
+            textKey={'name'}
+          />
+        </Li>
         {
-          action === 'add'
-          ? 
-          <MerchantForm
-            action={action}  
-            setAction={setAction} 
-          />           
-          :
-          <>
-            <Li>
-              <SelectInput
-                label="Merchant List"
-                name="merchant"
-                smallText="Select a merchant to edit."
-                defaultValue=""
-                defaultText="..."
-                value={mrchId}
-                onChange={onInputChange}
-                data={data.allIds ? data.allIds : []}
-                valueKey={'_id'}
-                textKey={'name'}
-              />
-            </Li>
-            {
-              mrchId !== "" && mrchObj[mrchId] &&
-              <Li>
-                <div className="row">
-                  <div className="col">
-                    <a href="/" className="a-link-cs" onClick={e => {
-                      e.preventDefault();
-                      setAction('edit')
-                    }}>Edit</a>
-                    <span>{' | '}</span>
-                    <a href="/" className="a-link-cs" onClick={e => {
-                      e.preventDefault();
-                      setAction('remove')
-                    }}>Remove</a>
-                  </div>
-                </div>
-              </Li>
-            }
-            {
-              action === 'edit' &&
-              <MerchantForm 
-                merchant={mrchObj[mrchId]}
-                action={action} 
-                setAction={setAction} 
-              />
-            }
-            {
-              action === 'remove' &&
-              <MerchantForm
-                merchant={mrchObj[mrchId]}
-                action={action}
-                setAction={setAction} 
-              />
-            }
-            <Li>
-              <div className="row">
-                <div className="col">
-                  <a href="/" className="a-link-cs" onClick={e => {
-                    e.preventDefault();
-                    setAction('add')
-                  }}>( + ) Add a New Merchant</a>
-                </div>
+          mrchId !== "" && mrchObj[mrchId] &&
+          <Li>
+            <div className="row">
+              <div className="col">
+                <a href="/" className="a-link-cs" onClick={e => {
+                  e.preventDefault();
+                  setAction('edit')
+                }}>Edit</a>
+                <span>{' | '}</span>
+                <a href="/" className="a-link-cs" onClick={e => {
+                  e.preventDefault();
+                  setAction('remove')
+                }}>Remove</a>
               </div>
-            </Li>
-          </>
+            </div>
+          </Li>
         }
-      </Ul>
-    </Card>
+        {
+          action === 'edit' &&
+          <MerchantForm 
+            merchant={mrchObj[mrchId]}
+            action={action} 
+            setAction={setAction} 
+          />
+        }
+        {
+          action === 'remove' &&
+          <MerchantForm
+            merchant={mrchObj[mrchId]}
+            action={action}
+            setAction={setAction} 
+          />
+        }
+        <Li>
+          <div className="row">
+            <div className="col">
+              <a href="/" className="a-link-cs" onClick={e => {
+                e.preventDefault();
+                setAction('add')
+              }}>( + ) Add a New Merchant</a>
+            </div>
+          </div>
+        </Li>
+      </>
+    }
   </>
 }
 

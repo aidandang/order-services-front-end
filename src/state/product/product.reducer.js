@@ -1,7 +1,8 @@
 import { ProductActionTypes } from './product.types';
 
 const INITIAL_STATE = {
-  data: {}
+  data: {},
+  active: {}
 }
 
 const productReducer = (state = INITIAL_STATE, action) => {
@@ -23,8 +24,7 @@ const productReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         comp: { 
-          ...state.comp,
-          currComp: action.payload
+          ...state.comp, ...action.comp
         }
       }   
     default:

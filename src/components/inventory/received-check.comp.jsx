@@ -28,15 +28,22 @@ const ReceivedCheck = ({
   const location = useLocation()
   const history = useHistory()
 
+  // get trackingId from url then find the tracking obj
   const { trackingId } = params
   const { trackings } = data
-
   const tracking = trackings.find(el => el._id === trackingId)
 
+  // set state to add, edit or remove an item of the tracking
   const [itemEdit, setItemEdit ] = useState({
     index: null
   })
+
+  // set state if patch request to update the tracking is success
+  // redirect to ReceivedTrackings comp if yes
   const [success, setSuccess] = useState(false)
+
+  // get previous path for going back then go back if success
+  const prevPath = location.pathname.split(`/${trackingId}`)[0]
 
   const handleItemEdit = (item, index) => {
     const obj = { ...item }
@@ -53,7 +60,7 @@ const ReceivedCheck = ({
     const fetchSuccess = ReceivingActionTypes.RECEIVING_FETCH_SUCCESS
     const reqBody = {
       status: 'checked',
-      items: [ ...tracking.items ],
+      recvItems: [ ...tracking.recvItems ],
       chkdDate: Date.now()
     }
 
@@ -61,11 +68,10 @@ const ReceivedCheck = ({
   }
 
   const formReset = () => {
+    history.push(prevPath)
   }
 
   useEffect(() => {
-    // get previous path for going back then go back if success
-    const prevPath = location.pathname.split(`/${trackingId}`)[0]
     if (success) history.push(prevPath)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success])
@@ -84,13 +90,12 @@ const ReceivedCheck = ({
                   <tr>
                     <th scope="col">Tracking</th>
                     <th scope="col">Item Description</th>
-                    <th scope="col">Qty</th>
-                    <th scopt="col"></th>
+                    <th scope="col" className="text-right">Qty</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="col" colSpan="4">
+                    <th scope="col" colSpan="3">
                       {tracking.tracking}
                     </th>
                   </tr>
@@ -107,7 +112,7 @@ const ReceivedCheck = ({
                         {
                           itemEdit.index === index
                           ? <>
-                            <td colSpan="4">
+                            <td colSpan="3">
                               <div className="row mb-2">
                                 <div className="col text-right">
                                   <a
@@ -130,16 +135,7 @@ const ReceivedCheck = ({
                           : <>
                             <td></td>
                             <td>{item.desc}</td>
-                            <td>{integerMask(item.qty.toString())}</td>
-                            <td>
-                              <i 
-                                className="fas fa-minus-circle text-danger"
-                                onClick={e => {
-                                  e.stopPropagation()
-
-                                }}
-                              ></i>
-                            </td>
+                            <td className="text-right">{integerMask(item.qty.toString())}</td>
                           </>
                         }
                       </tr>
@@ -149,7 +145,7 @@ const ReceivedCheck = ({
                     {
                       itemEdit.index === 'add'
                       ? <>
-                        <td colSpan="4">
+                        <td colSpan="3">
                           <div className="row mb-2">
                             <div className="col text-right">
                               <a
@@ -170,7 +166,7 @@ const ReceivedCheck = ({
                         </td>
                       </>
                       : <>
-                        <td colSpan="4">
+                        <td colSpan="3">
                             <a
                             href="/"
                             className="a-link-cs"
@@ -198,9 +194,10 @@ const ReceivedCheck = ({
           <Ul>
             <SubmitOrReset
               buttonName={'Check'}
-              buttonDisabled={true}
+              buttonDisabled={tracking.recvItems.length > 0 ? false : true}
               formSubmit={formSubmit}
               formReset={formReset}
+              secondButtonName={'Cancel'}
             />
           </Ul>
         </Card>

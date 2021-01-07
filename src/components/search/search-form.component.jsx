@@ -133,19 +133,22 @@ const SearchForm = ({
           </div>
         </Li>
         
-        <Li>
-          <div className="row">
-            <div className="col">
-              <Link
-                to={`${location.pathname}/add`}
-                className="a-link-cs"
-              >
-                {addLink.title}
-              </Link>
+        {
+          addLink &&
+          <Li>
+            <div className="row">
+              <div className="col">
+                <Link
+                  to={`${location.pathname}/add`}
+                  className="a-link-cs"
+                >
+                  {addLink.title}
+                </Link>
+              </div>
             </div>
-          </div>
-        </Li>
-
+          </Li>
+        }
+      
       </Ul>
     </Card>
     

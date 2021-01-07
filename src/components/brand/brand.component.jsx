@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 // components
 import withBrandData from './withBrandData';
-import { Card, Ul, Li, SelectInput } from '../tag/tag.component';
+import { Li, SelectInput } from '../tag/tag.component';
 import BrandForm from './brand-form.component';
 
 const Brand = ({
@@ -32,79 +32,75 @@ const Brand = ({
   }
 
   return <>
-    <Card width="col" title='Update Brands'>
-      <Ul>
+    {
+      action === 'add'
+      ? 
+      <BrandForm
+        action={action}  
+        setAction={setAction} 
+      />           
+      :
+      <>
+        <Li>
+          <SelectInput
+            label="Brand List"
+            name="brndId"
+            smallText="Select a brand to edit."
+            defaultValue=""
+            defaultText="..."
+            value={brndId}
+            onChange={onInputChange}
+            data={data.allIds ? data.allIds : []}
+            valueKey="_id"
+            textKey="name"
+          />
+        </Li>
         {
-          action === 'add'
-          ? 
-          <BrandForm
-            action={action}  
-            setAction={setAction} 
-          />           
-          :
-          <>
-            <Li>
-              <SelectInput
-                label="Brand List"
-                name="brndId"
-                smallText="Select a brand to edit."
-                defaultValue=""
-                defaultText="..."
-                value={brndId}
-                onChange={onInputChange}
-                data={data.allIds ? data.allIds : []}
-                valueKey="_id"
-                textKey="name"
-              />
-            </Li>
-            {
-              brndId !== "" && brndObj[brndId] &&
-              <Li>
-                <div className="row">
-                  <div className="col">
-                    <a href="/" className="a-link-cs" onClick={e => {
-                      e.preventDefault();
-                      setAction('edit')
-                    }}>Edit</a>
-                    <span>{' | '}</span>
-                    <a href="/" className="a-link-cs" onClick={e => {
-                      e.preventDefault();
-                      setAction('remove')
-                    }}>Remove</a>
-                  </div>
-                </div>
-              </Li>
-            }
-            {
-              action === 'edit' &&
-              <BrandForm 
-                brand={brndObj[brndId]} 
-                action={action}
-                setAction={setAction} 
-              />
-            }
-            {
-              action === 'remove' &&
-              <BrandForm 
-                brand={brndObj[brndId]} 
-                action={action}
-                setAction={setAction} 
-              />
-            }
-            <Li>
-              <div className="row">
-                <div className="col">
-                  <a href="/" className="a-link-cs" onClick={e => {
-                    e.preventDefault();
-                    setAction('add')
-                  }}>( + ) Add a New Brand</a>
-                </div>
+          brndId !== "" && brndObj[brndId] &&
+          <Li>
+            <div className="row">
+              <div className="col">
+                <a href="/" className="a-link-cs" onClick={e => {
+                  e.preventDefault();
+                  setAction('edit')
+                }}>Edit</a>
+                <span>{' | '}</span>
+                <a href="/" className="a-link-cs" onClick={e => {
+                  e.preventDefault();
+                  setAction('remove')
+                }}>Remove</a>
               </div>
-            </Li>
-          </>
+            </div>
+          </Li>
         }
-      </Ul>
-    </Card>
+        {
+          action === 'edit' &&
+          <BrandForm 
+            brand={brndObj[brndId]} 
+            action={action}
+            setAction={setAction} 
+          />
+        }
+        {
+          action === 'remove' &&
+          <BrandForm 
+            brand={brndObj[brndId]} 
+            action={action}
+            setAction={setAction} 
+          />
+        }
+        <Li>
+          <div className="row">
+            <div className="col">
+              <a href="/" className="a-link-cs" onClick={e => {
+                e.preventDefault();
+                setAction('add')
+              }}>( + ) Add a New Brand</a>
+            </div>
+          </div>
+        </Li>
+      </>
+    } 
   </>
 }
 

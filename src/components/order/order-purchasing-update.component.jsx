@@ -180,7 +180,7 @@ const OrderPurchasingUpdate = ({
                     </thead>
                     <tbody>
                       {
-                        items.length > 0 && <>
+                        items.length > 0 && Object.keys(items[0]).length > 0 && <>
                           <OrderItem items={items} />
                         </>
                       }

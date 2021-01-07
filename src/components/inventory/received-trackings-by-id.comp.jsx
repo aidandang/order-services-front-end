@@ -4,7 +4,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 // components
 import ReceivedCheck from './received-check.comp'
-import ReceivedTrackingsProcess from './received-trackings-process.comp'
+import ReceivedProcess from './received-process.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -28,7 +28,7 @@ const ReceivedTrackingsById = ({
         }
         {
           trackings.find(el => el._id === trackingId).status === 'checked' &&
-          <ReceivedTrackingsProcess tracking={trackings.find(el => el._id === trackingId)} items={items} />
+          <ReceivedProcess tracking={trackings.find(el => el._id === trackingId)} items={items} />
         }
       </>
     }

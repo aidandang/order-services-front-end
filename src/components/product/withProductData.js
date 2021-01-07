@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-// dependencies
-import { useParams } from 'react-router-dom';
-
 // components
 import AlertMesg from '../alert-mesg/alert-mesg.component';
-
 // redux
 import { connect, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -22,14 +18,13 @@ const withProductData = (WrapperComponent) => {
     alertMessage,
     queryStr,
     clearAlertMessage,
+    id,
     ...props 
   }) => {
 
     let pathname = '/products';
-    const params = useParams();
-    const { productId } = params;
 
-    if (productId) pathname = pathname + '/' + productId;
+    if (id) pathname = pathname + '/' + id;
 
     const component = pathname;
 

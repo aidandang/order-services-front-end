@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 // components
 import withWarehouseData from './withWarehouseData'
-import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
+import { Li, SelectInput } from '../tag/tag.component'
 import WarehouseForm from './warehouse-form.component'
 
 const Warehouse = ({
@@ -32,86 +32,82 @@ const Warehouse = ({
   }
 
   return <>
-    <Card width="col-12" title="Update Warehouses">
-      <Ul>
+    {
+      action === 'add'
+      ? 
+      <WarehouseForm
+        action={action} 
+        setAction={setAction} 
+      />           
+      :
+      <>
+        <Li>
+          <SelectInput
+            label="Warehouse List"
+            name="whseId"
+            smallText="Select a warehouse to edit."
+            defaultValue=""
+            defaultText="..."
+            value={whseId}
+            onChange={onInputChange}
+            data={data.allIds ? data.allIds : []}
+            valueKey={'_id'}
+            textKey={'name'}
+          />
+        </Li>
         {
-          action === 'add'
-          ? 
-          <WarehouseForm
+          whseId !== "" && whseObj[whseId] &&
+          <Li>
+            <div className="row">
+              <div className="col">
+                {whseObj[whseId].name},
+                <span>{' '}</span> 
+                {whseObj[whseId].type}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <a href="/" className="a-link-cs" onClick={e => {
+                  e.preventDefault();
+                  setAction('edit')
+                }}>Edit</a>
+                <span>{' | '}</span>
+                <a href="/" className="a-link-cs" onClick={e => {
+                  e.preventDefault();
+                  setAction('remove')
+                }}>Remove</a>
+              </div>
+            </div>
+          </Li>
+        }
+        {
+          action === 'edit' &&
+          <WarehouseForm 
+            warehouse={whseObj[whseId]}
             action={action} 
             setAction={setAction} 
-          />           
-          :
-          <>
-            <Li>
-              <SelectInput
-                label="Warehouse List"
-                name="whseId"
-                smallText="Select a warehouse to edit."
-                defaultValue=""
-                defaultText="..."
-                value={whseId}
-                onChange={onInputChange}
-                data={data.allIds ? data.allIds : []}
-                valueKey={'_id'}
-                textKey={'name'}
-              />
-            </Li>
-            {
-              whseId !== "" && whseObj[whseId] &&
-              <Li>
-                <div className="row">
-                  <div className="col">
-                    {whseObj[whseId].name},
-                    <span>{' '}</span> 
-                    {whseObj[whseId].type}
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <a href="/" className="a-link-cs" onClick={e => {
-                      e.preventDefault();
-                      setAction('edit')
-                    }}>Edit</a>
-                    <span>{' | '}</span>
-                    <a href="/" className="a-link-cs" onClick={e => {
-                      e.preventDefault();
-                      setAction('remove')
-                    }}>Remove</a>
-                  </div>
-                </div>
-              </Li>
-            }
-            {
-              action === 'edit' &&
-              <WarehouseForm 
-                warehouse={whseObj[whseId]}
-                action={action} 
-                setAction={setAction} 
-              />
-            }
-            {
-              action === 'remove' &&
-              <WarehouseForm 
-                warehouse={whseObj[whseId]} 
-                action={action}
-                setAction={setAction} 
-              />
-            }
-            <Li>
-              <div className="row">
-                <div className="col">
-                  <a href="/" className="a-link-cs" onClick={e => {
-                    e.preventDefault();
-                    setAction('add')
-                  }}>( + ) Add a New Warehouse</a>
-                </div>
-              </div>
-            </Li>
-          </>
+          />
         }
-      </Ul>
-    </Card>
+        {
+          action === 'remove' &&
+          <WarehouseForm 
+            warehouse={whseObj[whseId]} 
+            action={action}
+            setAction={setAction} 
+          />
+        }
+        <Li>
+          <div className="row">
+            <div className="col">
+              <a href="/" className="a-link-cs" onClick={e => {
+                e.preventDefault();
+                setAction('add')
+              }}>( + ) Add a New Warehouse</a>
+            </div>
+          </div>
+        </Li>
+      </>
+    }
   </>
 }
 

@@ -4,10 +4,11 @@ import React from 'react'
 import { Li, Button } from '../tag/tag.component'
 
 const SubmitOrReset = ({
+  formSubmit,
   buttonName,
   buttonDisabled,
-  formSubmit,
   formReset,
+  secondButtonName,
   props
 }) => {
   return <>
@@ -32,7 +33,7 @@ const SubmitOrReset = ({
                   formReset()
                 }}
               >
-                Reset
+                {secondButtonName ? secondButtonName : 'Reset'}
               </Button>
             </>
           }

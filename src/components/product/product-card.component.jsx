@@ -1,16 +1,12 @@
-import React from 'react';
-
-// dependencies
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react'
 
 // components
-import { Li } from '../tag/tag.component';
+import { Li } from '../tag/tag.component'
 
 const ProductCard = ({
-  product
+  product,
+  setActive
 }) => {
-
-  const location = useLocation();
 
   return <>
     <Li>
@@ -56,15 +52,6 @@ const ProductCard = ({
               {product.desc}
             </div>
           </div>
-          <div className="row mb-2">
-            <div className="col-3 d-none d-lg-block">
-            </div>
-            <div className="col-lg-9">
-              <Link to={`${location.pathname}/${product._id}`} className="a-link-cs">
-                More Details
-              </Link>
-            </div>
-          </div>
         </div>
         <div className="col-2 text-center">
           <img 
@@ -75,11 +62,21 @@ const ProductCard = ({
       </div>
     </Li>
     <Li>
-      <Link to={`${location.pathname}/${product._id}/edit`} className="a-link-cs">
-        Update Information
-      </Link>
+      <a 
+        href={'/'} 
+        className="a-link-cs"
+        onClick={e => {
+          e.preventDefault()
+          setActive({
+            comp: 'product-info',
+            id: product._id
+          })
+        }}
+      >
+        Product Details
+      </a>
     </Li>
   </>
 }
 
-export default ProductCard;
+export default ProductCard

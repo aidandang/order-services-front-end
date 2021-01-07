@@ -19,3 +19,18 @@ export const updateCustomerInOrder = customer => ({
   type: OrderActionTypes.UPDATE_CUSTOMER_IN_ORDER,
   payload: customer
 })
+
+export const setItemTempToEdit = itemTemp => ({
+  type: OrderActionTypes.SET_ITEM_TEMP_TO_EDIT,
+  payload: itemTemp
+})
+
+export const selectProductToOrderItem = payload => ({
+  type: OrderActionTypes.SELECT_PRODUCT_TO_ORDER_ITEM,
+  payload
+})
+
+export const setPurcItemTabActive = payload => ({
+  type: OrderActionTypes.SET_PURC_ITEM_TAB_ACTIVE,
+  payload
+})
