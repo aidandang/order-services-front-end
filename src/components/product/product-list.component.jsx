@@ -6,9 +6,8 @@ import { useLocation } from 'react-router-dom'
 import Search from '../search/search.component'
 import ProductCards from './product-cards.component'
 import ProductInfo from './product-info.component'
-import ProductAdd from './product-add.component'
 import { CloseTask } from '../tag/tag.component'
-import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/product/product.data'
+import { queryState, searchList, defaultFilter, searchTitle } from '../../state/product/product.data'
 
 // main component
 const ProductList = () => {
@@ -26,7 +25,6 @@ const ProductList = () => {
       queryState={queryState}
       searchList={searchList}
       defaultFilter={defaultFilter}
-      addLink={addLink}
       searchTitle={searchTitle}
     />
     { active === null && 
@@ -39,12 +37,6 @@ const ProductList = () => {
       active && active.comp === 'product-info' && <>
         <CloseTask setCloseTask={setCloseTask} />
         <ProductInfo id={active.id}/>
-      </>
-    }
-    { 
-      active && active.comp === 'product-add' && <>
-        <CloseTask setCloseTask={setCloseTask} />
-        <ProductAdd />
       </>
     }
   </>

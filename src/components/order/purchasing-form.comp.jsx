@@ -46,7 +46,7 @@ const PurchasingForm = ({
 
   let orderEditing = null
 
-  if (byId && byId.purchasing) {
+  if (byId && byId.purchasing && byId.purchasing.orderNumber) {
     orderEditing = {
       merchant: byId.purchasing.merchant._id,
       orderNumber: byId.purchasing.orderNumber,
@@ -93,8 +93,6 @@ const PurchasingForm = ({
   const setCloseTask = () => {
     setIsInfoForm(false)
   }
-
-  console.log(formData)
 
   return <>
     <div className="row mt-2 mx-1">

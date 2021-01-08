@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
 // components
-import { Card, Ul, Li, Button } from '../tag/tag.component'
+import { WhiteCard, Ul, Li, Button } from '../tag/tag.component'
 
 const SearchForm = ({
   formSubmit,
@@ -34,7 +34,7 @@ const SearchForm = ({
   } 
 
   return <>
-    <Card width="col" title={searchTitle} >
+    <WhiteCard width="col">
       <Ul>
         <Li>
           <div className="row">
@@ -150,7 +150,7 @@ const SearchForm = ({
         }
       
       </Ul>
-    </Card>
+    </WhiteCard>
     
   </>
 }

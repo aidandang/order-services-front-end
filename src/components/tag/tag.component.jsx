@@ -1,7 +1,7 @@
 import React from 'react';
 
 import uuid from 'react-uuid';
-import './tag.styles.css';
+import './tag.style.css';
 
 export const Card = ({ 
   children, 
@@ -13,9 +13,9 @@ export const Card = ({
     <div className="row">
       <div className={width ? width : 'col'}>
         <div className="card mb-4">
-          <div className="card-header bg-card-cs">
+          <div className="card-header card-header-cs">
             <div className="row">
-              <div className="col text-uppercase font-weight-bold">{title}</div>
+              <div className="col text-uppercase h6 mb-0">{title}</div>
               {
                 action &&
                 <div className="col text-right">
@@ -54,7 +54,7 @@ export const WhiteCard = ({
             title &&
             <div className="card-header bg-light">
               <div className="row">
-                <div className="col text-uppercase font-weight-bold">{title}</div>
+                <div className="col text-uppercase">{title}</div>
                 {
                   action &&
                   <div className="col text-right">

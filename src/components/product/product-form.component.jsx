@@ -15,6 +15,7 @@ import { patchReq, postReq } from '../../state/api/api.requests'
 import { ProductActionTypes } from '../../state/product/product.types'
 import { selectAlertMessage } from '../../state/alert/alert.selectors'
 import { selectBrandData } from '../../state/brand/brand.selectors'
+import { setPurcItemTabActive } from '../../state/order/order.actions'
 // constants
 const formSchema = Yup.object().shape({
   name: Yup
@@ -47,13 +48,30 @@ const formState = {
   url: ""
 }
 
+// This component is a form of product fields (not included Color object).
+// The form if valid will be submitted as 2 cases:
+// - Add new product and update an existing product.
+
+// There are 2 state callback functions, either will be called when the submission is success:
+// - setIsProductForm, a local state function passed by ProductInfo 
+// which is set to go back to the product information.
+// - setPurcItemTabActive, a global state function is set to go the product list
+// in Order Purchasing components.
+
+// useEffect hook is called to decide where to go back when "adding" submission successed:
+// - if the case is in Product then go back to ProductList called by ProductPage,
+// - if the case is in Order Purchasing then go back to ProductList 
+// called by PurchasingItemsForm and checked by argument named isOrderCalled.
+
 const ProductForm = ({
   productTemp,
   setIsProductForm,
   brandData,
   alertMessage,
   patchReq,
-  postReq
+  postReq,
+  setPurcItemTabActive,
+  isOrderCalled
 }) => {
   
   const history = useHistory()
@@ -71,6 +89,7 @@ const ProductForm = ({
     setValues
   ] = useForm(productTemp ? { ...productTemp } : formState, formState, formSchema)
 
+  // go back to ProductInfo if the editing is successed
   const goBackIfSuccess = () => {
     setIsProductForm(false)
   }
@@ -79,6 +98,7 @@ const ProductForm = ({
 
     const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS
 
+    // check the method to submit, either add or update
     if (productTemp) {
       const updatedProduct = { 
         ...formData,
@@ -101,8 +121,15 @@ const ProductForm = ({
   }
 
   useEffect(() => {
-    const pathname = location.pathname.split('/add')[0]
-    if (success) history.push(pathname)
+    console.log(success)
+    console.log(isOrderCalled)
+    if (success) {
+      if (isOrderCalled) {
+        setPurcItemTabActive('select-product')
+      } else {
+        history.push(location.pathname.split('/add')[0])
+      }
+    } 
     // eslint-disable-next-line
   }, [success])
 
@@ -215,7 +242,8 @@ const mapDispatchToProps = dispatch => ({
   ),
   postReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
+  ),
+  setPurcItemTabActive: payload => dispatch(setPurcItemTabActive(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductForm)

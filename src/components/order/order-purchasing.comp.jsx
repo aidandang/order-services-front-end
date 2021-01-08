@@ -37,7 +37,7 @@ const OrderPurchasing = ({
         items.length > 0 && Object.keys(items[0]).length > 0 && 
         <div className="row mt-4 mx-1">
           <div className="col">
-            <PurchasingItem data={data} />
+            <PurchasingItem notOrderPurchasing={false} />
           </div>
         </div> 
       }

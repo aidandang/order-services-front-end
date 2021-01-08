@@ -7,14 +7,16 @@ import { WhiteCard, Ul, Li, TextInput, CloseTask } from '../tag/tag.component'
 import { useForm } from '../hook/use-form'
 import UpdateItemTab from './update-item-tab.comp'
 import ProductList from '../product/product-list.component'
+import ProductAdd from '../product/product-add.component'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
-import { integerStrToNum } from '../utils/helpers'
+import { integerMask, integerStrToNum } from '../utils/helpers'
 import { strToAcct } from '../utils/strToAcct'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectItemTemp, selectOrderData, selectPurcItemTabActive } from '../../state/order/order.selectors'
-import { setItemTempToEdit, updateItemInOrder } from '../../state/order/order.actions'
+import { setItemTempToEdit, setPurcItemTabActive, updateItemInOrder } from '../../state/order/order.actions'
+import { acctToStr } from '../utils/acctToStr'
 
 // initial form state
 const formSchema = Yup.object().shape({
@@ -35,10 +37,12 @@ const formState = {
 const PurchasingItemForm = ({
   setIsItemForm,
   itemTemp,
+  itemIndex,
   data,
   setItemTempToEdit,
   updateItemInOrder,
-  active
+  active,
+  setActive
 }) => {
 
   const { byId } = data
@@ -68,11 +72,11 @@ const PurchasingItemForm = ({
     
     let editItems = null
 
-    if (formData.index === undefined) {
+    if (itemIndex === undefined) {
       editItems = [ ...byId.items, obj ]
     } else {
       editItems = byId.items.map((item, index) => {
-        if (index !== formData.index) {
+        if (index !== itemIndex) {
           return item
         }
         return { ...item, ...obj }
@@ -89,10 +93,28 @@ const PurchasingItemForm = ({
     }))
   }
 
+  const handleRemoveButton = () => {
+    var arr = null
+    if (itemIndex >= 0) {
+      arr = byId.items.filter((el, index) => index !== itemIndex)
+    }
+    updateItemInOrder({ ...byId, items: arr })
+    setIsItemForm(null)
+  }
+
+  const handleCancelRemoveItemButton = () => {
+    setActive('item')
+  }
+
   useEffect(() => {
-    if (itemTemp) {
+    var obj = null
+    if (itemIndex >= 0) {
+      obj = { ...byId.items[itemIndex] }
+      obj.qty = integerMask(byId.items[itemIndex].qty.toString())
+      obj.unitCost = acctToStr(byId.items[itemIndex].unitCost)
+      obj.purTaxPct = acctToStr(byId.items[itemIndex].purTaxPct)
       setValues(prevState => ({
-        ...prevState, ...itemTemp
+        ...prevState, ...obj
       }))
     } 
     // clean up itemTemp in the state
@@ -111,13 +133,11 @@ const PurchasingItemForm = ({
         <UpdateItemTab
           isEdit={formData.index ? true : false}
           isReselectProduct={formData.product ? true : false}
+          itemIndex={itemIndex || undefined}
         />
 
-        {
-          active === 'select-product' &&
-          <ProductList />
-        }
-
+        { active === 'select-product' && <ProductList /> }
+        { active === 'add-product' && <ProductAdd isOrderCalled={true} /> }
         {
           active === 'item' && itemTemp.product && 
           <WhiteCard width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
@@ -219,6 +239,25 @@ const PurchasingItemForm = ({
             </Ul>
           </WhiteCard>
         }
+
+        { 
+          active === 'remove' && itemIndex >= 0 && 
+          <WhiteCard>
+            <Ul>
+              <Li>
+                <span>Remove this item from the order?</span>
+              </Li>
+              <SubmitOrReset
+                buttonName={'Remove'}
+                buttonDisabled={false}
+                formSubmit={handleRemoveButton}
+                formReset={handleCancelRemoveItemButton}
+                secondButtonName={'Cancel'}
+              />
+            </Ul>
+          </WhiteCard>
+        }
+
       </div>
     </div>
   </>
@@ -232,7 +271,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   setItemTempToEdit: itemTemp => dispatch(setItemTempToEdit(itemTemp)),
-  updateItemInOrder: order => dispatch(updateItemInOrder(order))
+  updateItemInOrder: order => dispatch(updateItemInOrder(order)),
+  setActive: payload => dispatch(setPurcItemTabActive(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PurchasingItemForm)

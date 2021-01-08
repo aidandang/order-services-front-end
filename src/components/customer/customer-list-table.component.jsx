@@ -55,7 +55,7 @@ const CustomerListTable = ({
                 <th scope="col">Nickname</th>
                 <th scope="col">Fullname</th>
                 <th scope="col">Address</th>
-                <th scope="col">Phone</th>
+                <th scope="col" className="text-right">Phone</th>
               </tr>
             </thead>
             <tbody>

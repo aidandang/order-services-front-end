@@ -25,7 +25,7 @@ const CustomerListRow = ({
       <td>{customer.nickname}</td>
       <td>{customer.fullname}</td>
       <td>{`${customer.streetAddress1}, ${customer.city}, ${customer.state}`}{customer.streetAddress2 !== "" && `, (${customer.streetAddress2})`}</td>
-      <td>{customer.phone}</td>
+      <td className="text-right">{customer.phone}</td>
     </tr>
   </>
 }

@@ -10,7 +10,7 @@
 /* end of color sample */
 
 body {
-  font-family: 'Roboto Condensed', sans-serif !important;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .a-link-cs {
@@ -28,10 +28,6 @@ body {
 
 .on-click:hover {
   color: #0069D9;
-}
-
-.bg-card-cs {
-  background-color: #ECEBF2;
 }
 
 .dropdown-item-cs:hover {
