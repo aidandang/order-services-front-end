@@ -7,7 +7,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 // components
 import withOrderData from './withOrderData';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
-import OrderListRow from './order-list-row.component'
+import OrderListRow from './order-list-row.comp'
 
 const OrderListTable = ({ 
   data

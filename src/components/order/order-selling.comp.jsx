@@ -4,37 +4,37 @@ import React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 // components
 import { Card, Ul, Li } from '../tag/tag.component'
-import Purchasing from './purchasing.comp'
-import PurchasingItem from './purchasing-item.comp'
+import Selling from './selling.comp'
+import SellingItem from './selling-item.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectOrderData } from '../../state/order/order.selectors'
 
-const OrderPurchasing = ({ 
+const OrderSelling = ({
   data
 }) => {
 
   // set constants
-  const { purchasing, items } = data.byId
+  const { selling, items } = data.byId
   const history = useHistory()
   const location = useLocation()
-  const purchasingUpdatePath = location.pathname + '/purchasing-update'
+  const sellingUpdatePath = location.pathname + '/selling-update'
 
-  const handlePurchasingUpdateLink = () => {
-    history.push(purchasingUpdatePath)
+  const handleSellingUpdateLink = () => {
+    history.push(sellingUpdatePath)
   }
 
   return <>
-    <Card width="col" title="Purchasing Information">
+    <Card title="Selling Information">
       <Ul>
-        { purchasing && <Purchasing purchasing={purchasing} /> }
+        { selling && <Selling selling={selling} /> }
       </Ul>
       { 
-        items.length > 0 && 
+        items.length > 0 &&  
         <div className="row mt-4 mx-1">
           <div className="col">
-            <PurchasingItem orderPurchasing={true} />
+            <SellingItem orderSelling={true} />
           </div>
         </div> 
       }
@@ -45,13 +45,13 @@ const OrderPurchasing = ({
             className="a-link-cs"
             onClick={e => {
               e.preventDefault()
-              handlePurchasingUpdateLink()
+              handleSellingUpdateLink()
             }}
           >
-            Purchasing Update
+            Selling Update
           </a>
         </Li>
-      </Ul>  
+      </Ul>
     </Card>
   </>
 }
@@ -60,4 +60,4 @@ const mapStateToProps = createStructuredSelector({
   data: selectOrderData
 })
 
-export default connect(mapStateToProps)(OrderPurchasing)
+export default connect(mapStateToProps)(OrderSelling)

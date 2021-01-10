@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
-
-// dependencies
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
 
 // components
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-
+import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
-import { connect, batch } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
-import { getReq } from '../../state/api/api.requests';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { clearAlertMessage } from '../../state/alert/alert.actions';
+import { connect, batch } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { CustomerActionTypes } from '../../state/customer/customer.types'
+import { getReq } from '../../state/api/api.requests'
+import { selectCustomerData } from '../../state/customer/customer.selectors'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
+import { clearAlertMessage } from '../../state/alert/alert.actions'
 
 const withCustomerData = (WrapperComponent) => {
   const WithCustomerData = ({ 
@@ -21,19 +17,18 @@ const withCustomerData = (WrapperComponent) => {
     getReq,
     alertMessage,
     queryStr,
-    clearAlertMessage, 
+    clearAlertMessage,
+    id, 
     ...props 
   }) => {
 
-    let pathname = '/customers';
-    const params = useParams();
-    const { customerId } = params;
+    let pathname = '/customers'
+   
+    if (id) pathname = pathname + '/' + id
 
-    if (customerId) pathname = pathname + '/' + customerId;
+    const component = pathname
 
-    const component = pathname;
-
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState(false)
     const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS
 
     useEffect(() => {
@@ -73,7 +68,7 @@ const withCustomerData = (WrapperComponent) => {
     clearAlertMessage: () => dispatch(clearAlertMessage())
   })
 
-  return connect(mapStateToProps, mapDispatchToProps)(WithCustomerData);
+  return connect(mapStateToProps, mapDispatchToProps)(WithCustomerData)
 }
 
-export default withCustomerData;
+export default withCustomerData

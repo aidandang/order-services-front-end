@@ -3,7 +3,7 @@ import React from 'react';
 // dependencies
 import { useLocation } from 'react-router-dom';
 // components
-import OrderListTable from './order-list-table.component';
+import OrderListTable from './order-list-table.comp';
 import Search from '../search/search.component';
 import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/order/order.data';
 

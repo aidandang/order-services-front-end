@@ -10,7 +10,8 @@ import PaginationBar from '../pagination-bar/pagination-bar.component';
 import CustomerListRow from './customer-list-row.component';
 
 const CustomerListTable = ({ 
-  data
+  data,
+  setActive
 }) => {
 
   const location = useLocation();
@@ -55,12 +56,12 @@ const CustomerListTable = ({
                 <th scope="col">Nickname</th>
                 <th scope="col">Fullname</th>
                 <th scope="col">Address</th>
-                <th scope="col">Phone</th>
+                <th scope="col" className="text-right">Phone</th>
               </tr>
             </thead>
             <tbody>
               {allIds.map(customer => 
-                <CustomerListRow key={customer._id} customer={customer} />
+                <CustomerListRow key={customer._id} customer={customer} setActive={setActive} />
               )}
             </tbody>
           </table>

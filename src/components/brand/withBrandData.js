@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 // components
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-
+import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { BrandActionTypes } from '../../state/brand/brand.types';
-import { getReq } from '../../state/api/api.requests';
-import { selectBrandData } from '../../state/brand/brand.selectors';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { BrandActionTypes } from '../../state/brand/brand.types'
+import { getReq } from '../../state/api/api.requests'
+import { selectBrandData } from '../../state/brand/brand.selectors'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
 
 const withBrandData = (WrapperComponent) => {
   const WithBrandData = ({ 
@@ -20,7 +19,7 @@ const withBrandData = (WrapperComponent) => {
     ...props 
   }) => {
 
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState(false)
     const pathname = '/brands'
     const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS
     const component = 'brand'
@@ -57,7 +56,7 @@ const withBrandData = (WrapperComponent) => {
     ))
   })
 
-  return connect(mapStateToProps, mapDispatchToProps)(WithBrandData);
+  return connect(mapStateToProps, mapDispatchToProps)(WithBrandData)
 }
 
-export default withBrandData;
+export default withBrandData

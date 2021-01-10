@@ -4,11 +4,10 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 // components
 import Search from '../search/search.component'
-import ProductCards from './product-cards.component'
+import ProductCards from './product-cards.comp'
 import ProductInfo from './product-info.component'
-import ProductAdd from './product-add.component'
-import { CloseTask } from '../tag/tag.component'
-import { queryState, searchList, defaultFilter, addLink, searchTitle } from '../../state/product/product.data'
+import { CloseTask } from '../tag/tag.comp'
+import { queryState, searchList, defaultFilter, searchTitle } from '../../state/product/product.data'
 
 // main component
 const ProductList = () => {
@@ -20,13 +19,16 @@ const ProductList = () => {
   const setCloseTask = () => {
     setActive(null)
   }
+
+  // this container has 2 main components
+  // search for product and add product
+  // search bar is shown in both components
   
   return <>
     <Search
       queryState={queryState}
       searchList={searchList}
       defaultFilter={defaultFilter}
-      addLink={addLink}
       searchTitle={searchTitle}
     />
     { active === null && 
@@ -39,12 +41,6 @@ const ProductList = () => {
       active && active.comp === 'product-info' && <>
         <CloseTask setCloseTask={setCloseTask} />
         <ProductInfo id={active.id}/>
-      </>
-    }
-    { 
-      active && active.comp === 'product-add' && <>
-        <CloseTask setCloseTask={setCloseTask} />
-        <ProductAdd />
       </>
     }
   </>

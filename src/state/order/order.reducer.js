@@ -3,7 +3,9 @@ import { OrderActionTypes } from './order.types';
 const INITIAL_STATE = {
   data: {},
   itemTemp: {},
-  purcItemTabActive: 'item'
+  purcItemTabActive: 'item',
+  customerTabActive: 'customer-list',
+  isSelectedCustomer: true
 }
 
 const orderReducer = (state = INITIAL_STATE, action) => {
@@ -55,6 +57,27 @@ const orderReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         purcItemTabActive: action.payload
+      }
+    case OrderActionTypes.SELECT_CUSTOMER_TO_ORDER:
+      return {
+        ...state,
+        data: {
+          ...state.data, 
+          byId: {
+            ...state.data.byId, ...action.payload
+          }
+        },
+        isSelectedCustomer: true
+      }
+    case OrderActionTypes.SET_CUSTOMER_TAB_ACTIVE:
+      return {
+        ...state,
+        customerTabActive: action.payload
+      }
+    case OrderActionTypes.SET_IS_SELECTED_CUSTOMER:
+      return {
+        ...state,
+        isSelectedCustomer: action.payload
       }
     default:
       return state;

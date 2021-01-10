@@ -14,7 +14,7 @@ const PaginationBar = ({
   page
 }) => {
     
-  let activeItem = page || 1;
+  let activeItem = Number(page) || 1;
   const itemLimit = limit || 5;
 
   // set an array of total indexed items in the pagination bar, from 1 to the total pages in the query.

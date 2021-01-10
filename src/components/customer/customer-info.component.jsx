@@ -1,146 +1,164 @@
-import React from 'react';
+import React, { useState } from 'react'
 
 // dependencies
-import { useLocation, Link, useHistory } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom'
 // components
-import withCustomerData from './withCustomerData';
-import { Card, Ul, Li } from '../tag/tag.component';
+import { WhiteCard, Card, Ul, Li, CloseTask } from '../tag/tag.component'
+import CustomerForm from './customer-form.component'
+import CustomerAddress from './customer-address.component'
+// redux
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { selectCustomerToOrder } from '../../state/order/order.actions'
+import { selectOrderData } from '../../state/order/order.selectors'
 
 const CustomerInfo = ({
-  data
+  byId,
+  selectCustomerToOrder,
+  orderData
 }) => {
 
-  const location = useLocation();
-  const history = useHistory();
-  const { byId } = data;
+  const params = useParams()
+  const { orderId } = params
 
-  const handleSelectCustomerToOrder = () => {
-    const pathname = location.pathname.split('/select-customer')[0]
-    history.push(pathname, { customer: byId })
+  var address = null
+  if (byId.shippingAddress && byId.shippingAddress.length > 0) {
+    address = byId.shippingInfo.find(el => el._id === byId.shippingAddress)
+  }
+
+  const [active, setActive]  = useState(null)
+
+  const setCloseTask = () => {
+    setActive(null)
   }
 
   return <>
-    <Card width="col" title="Customer Information">
-      <Ul>
-        <Li>
-          <div className="row">
-            <div className="col">
-              <div className="row">
-                <div className="col-4">
-                  <span>Nickname:</span>
-                </div>
-                <div className="col-8">
-                  <span>{byId.nickname}</span>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <span>Account Number:</span>
-                </div>
-                <div className="col-8">
-                  <span>{byId.account}</span>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <span>Billing Address:</span>
-                </div>
-                <div className="col-8">
-                  <span>{byId.fullname}</span><br />
-                  <span>{byId.streetAddress1}, {byId.city}, {byId.state}</span><br />
-                  <span>Phone# {byId.phone}</span>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <Link
-                    to={`${location.pathname}/edit`}
-                    className="a-link-cs"
-                  >
-                    Edit Customer Information
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Li>
-        <Li>
-          <div className="row">
-            <div className="col">
+    <div className="row">
+      <div className="col-xl-8">
+        <Card width="col" title="Customer Information">
+          <Ul>
+            <Li>
+              {
+                active === 'customer-form'
+                ? <>
+                  <div className="row">
+                    <div className="col">
+                      <CloseTask setCloseTask={setCloseTask} />
+                      <WhiteCard width="col" title={'Edit'}>
+                        <Ul>
+                          <CustomerForm 
+                            customerTemp={byId}
+                            setActive={setActive}
+                          />
+                        </Ul>
+                      </WhiteCard>
+                    </div>
+                  </div>
+                </>
+                : <>
+                  <div className="row">
+                    <div className="col">
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Nickname:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{byId.nickname}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Account Number:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{byId.account}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Billing Address:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{byId.fullname}</span><br />
+                          <span>{byId.streetAddress1}, {byId.city}, {byId.state}</span><br />
+                          <span>Phone# {byId.phone}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <a
+                            href="/"
+                            className="a-link-cs"
+                            onClick={e => {
+                              e.preventDefault()
+                              setActive('customer-form')
+                            }}
+                          >
+                            Edit Customer Information
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              }
+            </Li>
+            <Li>
               <div className="row">
                 <div className="col-4">
                   <span>Shipping Address:</span>
                 </div>
                 <div className="col-8 align-self-center">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor='billing'>
-                      <input 
-                        className="form-check-input" 
-                        type="radio" 
-                        name="shippingAddress" 
-                        value='' 
-                        defaultChecked={(byId.shippingAddress === undefined || byId.shippingAddress === '')}
-                        disabled={!(byId.shippingAddress === undefined || byId.shippingAddress === '')}
-                      />
-                        Same as Billing Address
-                      </label>
-                  </div>
                   {
-                    byId.shippingInfo && byId.shippingInfo.map((address, index) => 
-                      <div key={index} className="form-check">
-                        <label className="form-check-label" htmlFor={address._id}>
-                          <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="shippingAddress" 
-                            id={address._id}
-                            value={address._id}
-                            defaultChecked={(byId.shippingAddress === address._id)}
-                            disabled={!(byId.shippingAddress === address._id)}
-                          />
-                            <span>{address.fullname}</span><br />
-                            <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
-                            <span>Phone# {address.phone}</span>
-                        </label>
-                      </div>
-                    )
+                    !address
+                    ? <span>Same as Billing Address</span>
+                    : <>
+                      <span>{address.fullname}</span><br />
+                      <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
+                      <span>Phone# {address.phone}</span>
+                    </> 
                   }
                 </div>
               </div>
-              <div className="row">
-                <div className="col-4">
-                  <Link
-                    to={`${location.pathname}/shipping-info`}
-                    className="a-link-cs"
-                  >
-                    Edit Shipping Information
-                  </Link>
+            </Li>
+            {
+              orderId && orderData.byId && orderId === orderData.byId._id && 
+              <Li>
+                <div className="row">
+                  <div className="col">
+                    <a
+                      href="/"
+                      className="a-link-cs"
+                      onClick={e => {
+                        e.preventDefault()
+                        selectCustomerToOrder({
+                          selling: {
+                            customer: byId
+                          }
+                        })
+                      }}
+                    >
+                      Select Customer to Order
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </Li>
-        
-        <Li>
-          <div className="row">
-            <div className="col">
-              <Link
-                to="/"
-                className="a-link-cs"
-                onClick={e => {
-                  e.preventDefault();
-                  handleSelectCustomerToOrder();
-                }}
-              >
-                Select Customer to Order
-              </Link>
-            </div>
-          </div>
-        </Li>
-      </Ul>
-    </Card>
+              </Li>
+            }
+          </Ul>
+        </Card>
+      </div>
+      <div className="col-xl-4">
+        <CustomerAddress customerTemp={byId} />
+      </div>
+    </div>
   </>
 }
 
-export default withCustomerData(CustomerInfo);
+const mapStateToProps = createStructuredSelector({
+  orderData: selectOrderData
+})
+const mapDispatchToProps = dispatch => ({
+  selectCustomerToOrder: payload => dispatch(selectCustomerToOrder(payload))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerInfo)

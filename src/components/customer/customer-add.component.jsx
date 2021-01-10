@@ -4,9 +4,11 @@ import React from 'react';
 import CustomerForm from './customer-form.component';
 
 // main component
-const CustomerAdd = () => {
+const CustomerAdd = ({
+  setActive
+}) => {
   return <>
-    <CustomerForm />
+    <CustomerForm setActive={setActive} />
   </>
 }
 

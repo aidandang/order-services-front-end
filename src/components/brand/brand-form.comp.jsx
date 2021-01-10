@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 // dependencies
-import * as Yup from "yup";
+import * as Yup from "yup"
 // components
-import { Li, TextInput } from '../tag/tag.component';
-import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
+import { Li, TextInput } from '../tag/tag.component'
+import { useForm } from '../hook/use-form'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 // redux
-import { connect } from 'react-redux';
-import { postReq, patchReq, deleteReq } from '../../state/api/api.requests';
-import { BrandActionTypes } from '../../state/brand/brand.types'; 
-
-// initial values
+import { connect } from 'react-redux'
+import { postReq, patchReq, deleteReq } from '../../state/api/api.requests'
+import { BrandActionTypes } from '../../state/brand/brand.types' 
+// constants
 const formSchema = Yup.object().shape({
   name: Yup
     .string()
@@ -19,12 +18,11 @@ const formSchema = Yup.object().shape({
   preferredName: Yup
     .string()
     .required()
-});
-
+})
 const formState = {
   name: "",
   preferredName: ""
-};
+}
 
 const BrandForm = ({ 
   brand,
@@ -35,7 +33,7 @@ const BrandForm = ({
   deleteReq 
 }) => {
 
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false)
 
   const [
     formData,
@@ -43,20 +41,20 @@ const BrandForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(brand ? brand : formState, formState, formSchema);
+  ] = useForm(brand ? brand : formState, formState, formSchema)
 
-  const formSubmit = (e) => {
-    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
+  const formSubmit = () => {
+    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS
     const obj = { ...formData }
 
     if (action === 'add') {
-      postReq('/brands', fetchSuccess, obj, setSuccess, 'brand');
+      postReq('/brands', fetchSuccess, obj, setSuccess, 'brand')
     }
     if (action === 'edit') {
-      patchReq('/brands/' + brand._id, fetchSuccess, obj, setSuccess, 'brand');
+      patchReq('/brands/' + brand._id, fetchSuccess, obj, setSuccess, 'brand')
     }
     if (action === 'remove') {
-      deleteReq('/brands/' + brand._id, fetchSuccess, setSuccess, 'brand');
+      deleteReq('/brands/' + brand._id, fetchSuccess, setSuccess, 'brand')
     }
   }
 
@@ -82,7 +80,7 @@ const BrandForm = ({
               href="/"
               className="a-link-cs"
               onClick={e => {
-                e.preventDefault();
+                e.preventDefault()
                 setAction('')
               }}
             >
@@ -122,7 +120,7 @@ const BrandForm = ({
       {
         action === 'remove' &&
         <Li>
-          <span>Do you want to remove?</span>
+          <span>Do you want to remove {`${brand ? brand.preferredName : null}`}?</span>
         </Li>
       }   
     </form>

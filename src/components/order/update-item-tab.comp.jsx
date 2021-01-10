@@ -11,7 +11,8 @@ import { setPurcItemTabActive } from '../../state/order/order.actions'
 const UpdateItemTab = ({
   isReselectProduct,
   active,
-  setActive
+  setActive,
+  itemIndex
 }) => {
   return <>
     <WhiteCard>
@@ -51,10 +52,10 @@ const UpdateItemTab = ({
               <span>{' | '}</span>
               {
                 active === 'add-product'
-                ? <span className="ml-1">Add Product</span>
+                ? <span className="mx-1">Add Product</span>
                 : <a
                     href={'/'} 
-                    className="a-link-cs ml-1"
+                    className="a-link-cs mx-1"
                     onClick={e => {
                       e.preventDefault()
                       setActive('add-product')
@@ -62,6 +63,25 @@ const UpdateItemTab = ({
                   >
                     Add Product
                   </a>
+              }
+              {
+                itemIndex && <>
+                  <span>{' | '}</span>
+                  {
+                    active === 'remove'
+                    ? <span className="ml-1">Remove</span>
+                    : <a
+                        href={'/'} 
+                        className="a-link-cs ml-1"
+                        onClick={e => {
+                          e.preventDefault()
+                          setActive('remove')
+                        }}
+                      >
+                        Remove Item
+                      </a>
+                  }
+                </>
               }
             </div>
           </div>

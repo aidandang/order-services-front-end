@@ -1,5 +1,5 @@
-import ProductList from '../../components/product/product-list.component'
-import ProductAdd from '../../components/product/product-add.component'
+import ProductList from '../../components/product/product-list.comp'
+import ProductAdd from '../../components/product/product-add.comp'
 
 const routes = [
   { path: "/app/product", name: "Search for Product", Component: ProductList },

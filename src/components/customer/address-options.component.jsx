@@ -14,7 +14,7 @@ const AddressOptions = ({
     <div onChange={handleRadioOnChange}>
       <Li>
         <div className="row">
-          <div className="col-9 align-self-center">
+          <div className="col align-self-center">
             <div className="form-check">
               <label className="form-check-label" htmlFor='billing'>
                 <input 
@@ -35,7 +35,7 @@ const AddressOptions = ({
         byId.shippingInfo.length > 0 && byId.shippingInfo.map((address, index) =>
           <Li key={index}>
             <div className="row">
-              <div className="col-9 align-self-center">
+              <div className="col align-self-center">
                 <div key={index} className="form-check">
                   <label className="form-check-label" htmlFor={address._id}>
                     <input 
@@ -46,36 +46,39 @@ const AddressOptions = ({
                       defaultChecked={byId.shippingAddress === address._id}
                     />
                       <span className="font-weight-bold">{address.fullname}</span>
-                      <span>{`, ${address.streetAddress1}, ${address.city}, ${address.state}, ${address.phone}`}</span>
+                      <span>{`, ${address.streetAddress1}, ${address.city}, ${address.state}, ${address.phone}`}</span><br />
+                      <a 
+                        href="/" 
+                        className="a-link-cs"
+                        onClick={e => {
+                          e.preventDefault();
+                          setAction(`edit/${address._id}`)
+                        }}
+                      >
+                        Edit
+                      </a>
+                      {
+                        byId.shippingAddress !== address._id && <>
+                          <span>{' | '}</span>
+                          <a 
+                            href="/" 
+                            className="a-link-cs"
+                            onClick={e => {
+                              e.preventDefault();
+                              setAction(`remove/${address._id}`)
+                            }}
+                          >
+                            Remove
+                          </a>
+                        </>
+                      }
                   </label>
                 </div>
               </div>
-              <div className="col-3 text-right">
-                <a 
-                  href="/" 
-                  className="a-link-cs"
-                  onClick={e => {
-                    e.preventDefault();
-                    setAction(`edit/${address._id}`)
-                  }}
-                >
-                  Edit
-                </a>
-                {
-                  byId.shippingAddress !== address._id && <>
-                    <span>{' | '}</span>
-                    <a 
-                      href="/" 
-                      className="a-link-cs"
-                      onClick={e => {
-                        e.preventDefault();
-                        setAction(`remove/${address._id}`)
-                      }}
-                    >
-                      Remove
-                    </a>
-                  </>
-                }
+            </div>
+            <div className="row">
+              <div className="col">
+                
               </div>
             </div>
           </Li>
@@ -83,7 +86,7 @@ const AddressOptions = ({
       }
 
       <Li>
-        <div className="row my-3">
+        <div className="row my-1">
           <div className="col">
             <Button 
               onClick={e => {
