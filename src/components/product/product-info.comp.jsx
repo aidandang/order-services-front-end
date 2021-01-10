@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 // components
 import withProductData from './withProductData'
-import { WhiteCard, Card, Ul, Li, CloseTask } from '../tag/tag.component'
-import ProductColor from './product-color.component'
+import { Card, Ul, Li, CloseTask } from '../tag/tag.comp'
+import ProductColor from './product-color.comp'
 import ProductForm from './product-form.comp'
 import Brand from '../brand/brand.comp'
 
@@ -29,16 +29,12 @@ const ProductInfo = ({
             <div className="row mt-2 mx-1">
               <div className="col">
                 <CloseTask setCloseTask={setCloseTask} />
-                <WhiteCard width="col" title={'Edit'}>
-                  <Ul>
-                    <ProductForm 
-                      productTemp={{ ...byId,
-                        brandId: byId.brand._id
-                      }} 
-                      setIsProductForm={setIsProductForm}
-                    />
-                  </Ul>
-                </WhiteCard>
+                <ProductForm 
+                  productTemp={{ ...byId,
+                    brandId: byId.brand._id
+                  }} 
+                  setIsProductForm={setIsProductForm}
+                />
               </div>
             </div>
             :

@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 // components
 import Search from '../search/search.component'
 import ProductCards from './product-cards.comp'
-import ProductInfo from './product-info.component'
+import ProductInfo from './product-info.comp'
 import { CloseTask } from '../tag/tag.comp'
 import { queryState, searchList, defaultFilter, searchTitle } from '../../state/product/product.data'
 

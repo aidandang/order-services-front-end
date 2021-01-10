@@ -14,7 +14,7 @@ const ProductCard = ({
         <div className="col-10">
           <div className="row mt-2">
             <div className="col-3 d-none d-lg-block">
-              Product Name:
+              <span className="font-weight-bold">Product Name:</span>
             </div>
             <div className="col-lg-9">
               {product.name}
@@ -22,7 +22,7 @@ const ProductCard = ({
           </div>
           <div className="row">
             <div className="col-3 d-none d-lg-block">
-              Brand:
+              <span className="font-weight-bold">Brand:</span>
             </div>
             <div className="col-lg-9">
               {product.brand.preferredName}
@@ -30,7 +30,7 @@ const ProductCard = ({
           </div>
           <div className="row">
             <div className="col-3 d-none d-lg-block">
-              Style Code:
+              <span className="font-weight-bold">Style Code:</span>
             </div>
             <div className="col-lg-9">
               {product.styleCode}
@@ -38,7 +38,7 @@ const ProductCard = ({
           </div>
           <div className="row">
             <div className="col-3 d-none d-lg-block">
-              Colors:
+              <span className="font-weight-bold">Colors:</span>
             </div>
             <div className="col-lg-9">
               {product.colors.map((color, index) => <span key={index}>{index > 0 ? ` | ${color.color}` : color.color}</span>)}
@@ -46,7 +46,7 @@ const ProductCard = ({
           </div>
           <div className="row mb-2">
             <div className="col-3 d-none d-lg-block">
-              Description:
+              <span className="font-weight-bold">Description:</span>
             </div>
             <div className="col-lg-9">
               {product.desc}

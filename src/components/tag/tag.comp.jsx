@@ -15,9 +15,9 @@ export const Card = ({
         <div className="card mb-4">
           {
             title &&
-            <div className="card-header bg-light">
+            <div className="card-header">
               <div className="row">
-                <div className="col text-uppercase">{title}</div>
+                <div className="col text-uppercase h6 mb-0">{title}</div>
                 {
                   action &&
                   <div className="col text-right">
@@ -57,7 +57,7 @@ export const WhiteCard = ({
             title &&
             <div className="card-header bg-light">
               <div className="row">
-                <div className="col text-uppercase">{title}</div>
+                <div className="col text-uppercase h6 mb-0">{title}</div>
                 {
                   action &&
                   <div className="col text-right">
@@ -246,7 +246,7 @@ export const CloseTask = ({
             setCloseTask()
           }}
         ></i>
-        <hr className="mt-1 mb-4" />
+        <hr className="mt-1 mb-3" />
       </div>  
     </div>
   )
