@@ -6,17 +6,17 @@ import * as Yup from "yup"
 import { WhiteCard, Ul, Li, TextInput, CloseTask } from '../tag/tag.component'
 import { useForm } from '../hook/use-form'
 import UpdateItemTab from './update-item-tab.comp'
-import ProductList from '../product/product-list.component'
-import ProductAdd from '../product/product-add.component'
+import ProductList from '../product/product-list.comp'
+import ProductAdd from '../product/product-add.comp'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import { integerMask, integerStrToNum } from '../utils/helpers'
 import { strToAcct } from '../utils/strToAcct'
+import { acctToStr } from '../utils/acctToStr'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectItemTemp, selectOrderData, selectPurcItemTabActive } from '../../state/order/order.selectors'
 import { setItemTempToEdit, setPurcItemTabActive, updateItemInOrder } from '../../state/order/order.actions'
-import { acctToStr } from '../utils/acctToStr'
 
 // initial form state
 const formSchema = Yup.object().shape({

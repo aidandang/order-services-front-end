@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import * as Yup from "yup"
 import { useHistory, useLocation } from 'react-router-dom'
 // components
-import { Li, TextInput, TextareaInput, SelectInput } from '../tag/tag.component'
+import { Card, Ul, Li, TextInput, TextareaInput, SelectInput } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import AlertMesg from '../alert-mesg/alert-mesg.component'
@@ -21,7 +21,7 @@ const formSchema = Yup.object().shape({
   name: Yup
     .string()
     .required(),
-  brandId: Yup
+  brand: Yup
     .string()
     .required(),
   styleCode: Yup
@@ -40,7 +40,7 @@ const formSchema = Yup.object().shape({
 })
 const formState = {
   name: "",
-  brandId: "",
+  brand: "",
   styleCode: "",
   styleImage: "",
   sku: "",
@@ -64,14 +64,14 @@ const formState = {
 // called by PurchasingItemsForm and checked by argument named isOrderCalled.
 
 const ProductForm = ({
+  isOrderCalled,
   productTemp,
   setIsProductForm,
   brandData,
   alertMessage,
   patchReq,
   postReq,
-  setPurcItemTabActive,
-  isOrderCalled
+  setPurcItemTabActive
 }) => {
   
   const history = useHistory()
@@ -102,14 +102,14 @@ const ProductForm = ({
     if (productTemp) {
       const updatedProduct = { 
         ...formData,
-        brand: allIds.find(element => element._id === formData.brandId)
+        brand: allIds.find(element => element._id === formData.brand)
       }
       delete updatedProduct.brandId
       patchReq('/products/' + updatedProduct._id, fetchSuccess, updatedProduct, goBackIfSuccess, 'product-edit') 
     } else {
       const newProduct = { 
         ...formData,
-        brand: allIds.find(element => element._id === formData.brandId)
+        brand: allIds.find(element => element._id === formData.brand)
       }
       delete newProduct.brandId
       postReq('/products', fetchSuccess, newProduct, setSuccess, 'product-add')
@@ -121,8 +121,6 @@ const ProductForm = ({
   }
 
   useEffect(() => {
-    console.log(success)
-    console.log(isOrderCalled)
     if (success) {
       if (isOrderCalled) {
         setPurcItemTabActive('select-product')
@@ -134,100 +132,103 @@ const ProductForm = ({
   }, [success])
 
   return <>
-    
     { alertMessage && (alertMessage.component === 'product-edit' || alertMessage.component === 'product-add') && <AlertMesg/> }
     
-    <Li>
-      <TextInput
-        label="Name (*)" 
-        name="name"
-        errors={errors}
-        size="col"
-        smallText="Name is required and should be unique."
-        value={formData.name}
-        onChange={onInputChange}
-      />
-    </Li>
-    <Li>
-      {
-        allIds &&
-        <SelectInput
-          label="Brand (*)" 
-          name="brandId"
-          errors={errors}
-          size="col"
-          smallText="Select a brand, add new if there is no brand."
-          defaultValue=""
-          defaultText="..."
-          value={formData.brandId ? formData.brandId : ""}
-          onChange={onInputChange}
-          data={allIds}
-          valueKey="_id"
-          textKey="name"
-        />
-      }
-    </Li>
-    <Li>
-      <TextInput
-        label="Style Code (*)" 
-        name="styleCode"
-        errors={errors}
-        size="col"
-        smallText="Style code is required."
-        value={formData.styleCode}
-        onChange={onInputChange}
-      />
-    </Li>
-    <Li>
-      <TextInput
-        label="SKU" 
-        name="sku"
-        errors={errors}
-        size="col"
-        smallText="SKU can be scanned from the product label."
-        value={formData.sku}
-        onChange={onInputChange}
-      />
-    </Li>
-    <Li>
-      <TextareaInput
-        label="Description (*)" 
-        name="desc"
-        errors={errors}
-        size="col"
-        smallText="Copy a short description of the product in here."
-        value={formData.desc}
-        onChange={onInputChange} 
-      />
-    </Li>
-    <Li>
-      <TextInput
-        label="Image URL (*)" 
-        name="styleImage"
-        errors={errors}
-        size="col"
-        smallText="Copy image hyperlink in here."
-        value={formData.styleImage}
-        onChange={onInputChange}
-      />
-    </Li>
-    <Li>
-      <TextInput
-        label="Reference URL" 
-        name="url"
-        errors={errors}
-        size="col"
-        smallText="Copy product hyperlink of the website in here."
-        value={formData.url}
-        onChange={onInputChange} 
-      />
-    </Li>
-    <SubmitOrReset 
-      buttonName={'Update'}
-      buttonDisabled={buttonDisabled}
-      formSubmit={formSubmit}
-      formReset={formReset}
-    /> 
+    <Card width="col" title="Add Product">
+      <Ul>
+        <Li>
+          <TextInput
+            label="Name (*)" 
+            name="name"
+            errors={errors}
+            size="col"
+            smallText="Name is required and should be unique."
+            value={formData.name}
+            onChange={onInputChange}
+          />
+        </Li>
+        <Li>
+          {
+            allIds &&
+            <SelectInput
+              label="Brand (*)" 
+              name="brand"
+              errors={errors}
+              size="col"
+              smallText="Select a brand, add new if there is no brand."
+              defaultValue=""
+              defaultText="..."
+              value={formData.brand ? formData.brand : ""}
+              onChange={onInputChange}
+              data={allIds}
+              valueKey="_id"
+              textKey="preferredName"
+            />
+          }
+        </Li>
+        <Li>
+          <TextInput
+            label="Style Code (*)" 
+            name="styleCode"
+            errors={errors}
+            size="col"
+            smallText="Style code is required."
+            value={formData.styleCode}
+            onChange={onInputChange}
+          />
+        </Li>
+        <Li>
+          <TextInput
+            label="SKU" 
+            name="sku"
+            errors={errors}
+            size="col"
+            smallText="SKU can be scanned from the product label."
+            value={formData.sku}
+            onChange={onInputChange}
+          />
+        </Li>
+        <Li>
+          <TextareaInput
+            label="Description (*)" 
+            name="desc"
+            errors={errors}
+            size="col"
+            smallText="Copy a short description of the product in here."
+            value={formData.desc}
+            onChange={onInputChange} 
+          />
+        </Li>
+        <Li>
+          <TextInput
+            label="Image URL (*)" 
+            name="styleImage"
+            errors={errors}
+            size="col"
+            smallText="Copy image hyperlink in here."
+            value={formData.styleImage}
+            onChange={onInputChange}
+          />
+        </Li>
+        <Li>
+          <TextInput
+            label="Reference URL" 
+            name="url"
+            errors={errors}
+            size="col"
+            smallText="Copy product hyperlink of the website in here."
+            value={formData.url}
+            onChange={onInputChange} 
+          />
+        </Li>
+        <SubmitOrReset 
+          buttonName={'Update'}
+          buttonDisabled={buttonDisabled}
+          formSubmit={formSubmit}
+          formReset={formReset}
+        /> 
+      </Ul>
+    </Card>
   </>
 }
 

@@ -8,7 +8,6 @@ import { acctToStr } from '../utils/acctToStr'
 // initial values
 const statusColor = {
   'created': 'text-danger',
-  'editing': 'text-warning',
   'ordered': 'text-success'
 }
 
@@ -20,8 +19,7 @@ const OrderListRow = ({
     orderNumber, 
     status,
     purchasing,
-    selling,
-    costing
+    selling
   } = order;
 
   const location = useLocation();
@@ -35,17 +33,17 @@ const OrderListRow = ({
 
   return <>
     <tr
-      className="table-row-cs" 
+      className="table-row-cs"
       onClick={(e) => handleOnClick(e, order)}
     >
       <th scope="row">{orderNumber} </th>
-      <td><span className={statusColor[status]}>{status}</span></td>
+      <td><span className={statusColor[status] ? statusColor[status] : null}>{status}</span></td>
       <td>{selling && selling.customer ? `${selling.customer.account} - ${selling.customer.nickname}` : 'n/a'}</td>
       <td>{purchasing && purchasing.merchant ? purchasing.merchant.name : 'n/a'}</td>
       <td>{purchasing && purchasing.orderNumber ? purchasing.orderNumber : 'n/a'}</td>
       <td>{purchasing && purchasing.orderDate ? moment(purchasing.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'n/a'}</td>
       <td>{purchasing && purchasing.type ? purchasing.type : 'n/a'}</td>
-      <td className="text-right">{costing.totalCost === 0 ? '.00' : acctToStr(costing.totalCost)}</td>
+      <td className="text-right">{purchasing && purchasing.totalCost ? acctToStr(purchasing.totalCost) : '.00'}</td>
     </tr>
   </>
 }

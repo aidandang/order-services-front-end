@@ -1,46 +1,58 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { Link, useLocation, useHistory, useParams, Redirect } from 'react-router-dom'
+import { Link, useLocation, useHistory, useParams, Redirect } from 'react-router-dom';
+
 // components
-import { Card, Ul, Li, TextInput } from '../tag/tag.component'
-import { useForm } from '../hook/use-form'
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
-import { integerStrToNum } from '../utils/helpers'
-import { strToAcct } from '../utils/strToAcct'
+import { Card, Ul, Li, TextInput } from '../tag/tag.component';
+import { useForm } from '../hook/use-form';
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
+import { integerStrToNum } from '../utils/helpers';
+import { strToAcct } from '../utils/strToAcct';
+
 // redux
-import { connect } from 'react-redux'
-import { createStructuredSelector } from 'reselect'
-import { selectOrderData, selectOrderOrder } from '../../state/order/order.selectors'
-import { updateItemInOrder } from '../../state/order/order.actions'
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectOrderData, selectOrderItem } from '../../state/order/order.selectors';
+import { patchReq } from '../../state/api/api.requests';
+import { OrderActionTypes } from '../../state/order/order.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // initial form state
 const formSchema = Yup.object().shape({
-  product: Yup.object(),
-  color: Yup.object(),
-  size: Yup.string(),
-  qty: Yup.string().required(),
-  unitCost: Yup.string().required(),
-  purTaxPct: Yup.string().required(),
-  note: Yup.string()
+  product: Yup
+    .object(),
+  color: Yup
+    .object(),
+  size: Yup
+    .string(),
+  qty: Yup
+    .string()
+    .required(),
+  price: Yup
+    .string()
+    .required(),
+  note: Yup
+    .string()
 })
+
 const formState = {
-  index: null,
   product: null,
   color: null,
   size: "",
   qty: "",
-  unitCost: "",
-  purTaxPct: "",
+  price: "",
   note: ""
 }
 
 // main component
 const OrderItemForm = ({
   data,
-  order,
-  updateItemInOrder
+  item,
+  patchReq,
+  alertMessage
 }) => {
 
   const params = useParams();
@@ -49,11 +61,12 @@ const OrderItemForm = ({
 
   const { byId } = data;
   const { orderId } = params;
-  const { items } = order
 
   // back to parent's route when update was success 
   // or history's action was POP leaded to no byId
-  const parentRoute = location.pathname.split('/item')[0];
+  const parentRoute = location.pathname.split('/update-order-item')[0];
+
+  const [success, setSuccess] = useState(false)
 
   const [
     formData,
@@ -61,35 +74,38 @@ const OrderItemForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(formState, formState, formSchema);
+  ] = useForm(Object.keys(item).length > 0 ? item : formState, formState, formSchema);
 
   const { product, color } = formData;
 
   const formSubmit = () => {
 
-    const obj = { ...formData };
-    delete obj.index
-    obj.orderNumber = byId.orderNumber
-    obj.qty = integerStrToNum(formData.qty);
-    obj.unitCost = strToAcct(formData.unitCost);
-    obj.purTaxPct = strToAcct(formData.purTaxPct);
-    obj.itemCost = integerStrToNum(formData.qty) * strToAcct(formData.unitCost);
-    
-    let editItems = null
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
 
-    if (formData.index === null) {
-      editItems = [ ...items, obj ]
-    } else {
-      editItems = items.map((item, index) => {
-        if (index !== formData.index) {
+    const obj = { ...formData };
+
+    const qty = integerStrToNum(obj.qty);
+    obj.qty = qty;
+    const price = strToAcct(obj.price);
+    obj.price = price;
+
+    let updateItems = null
+
+    if (obj._id) {
+      updateItems = byId.items.map(item => {
+        if (item._id !== obj._id) {
           return item
         }
-        return { ...item, ...obj }
+        return {
+          ...item,
+          ...obj
+        }
       })
+    } else {
+      updateItems = [ ...byId.items, obj ]
     }
 
-    updateItemInOrder({ ...order, items: editItems })
-    history.push(parentRoute)
+    patchReq(`/orders/${orderId}`, fetchSuccess, { items: updateItems }, setSuccess, 'order-item-form')
   }
 
   const formReset = () => {
@@ -97,13 +113,20 @@ const OrderItemForm = ({
   }
 
   useEffect(() => {
-    if (location.state) setValues(prevState => ({
-      ...prevState, ...location.state
-    }))
+    if (success) {
+      history.push(parentRoute)
+    } else {
+      if (location.state) setValues(prevState => ({
+        ...prevState, ...location.state
+      }))
+    }
     // eslint-disable-next-line
-  }, [location.state])
+  }, [success])
 
   return <>
+
+    { alertMessage && alertMessage.component === 'order-item-form' && <AlertMesg /> }
+
     { 
       orderId && !byId 
       ? 
@@ -156,18 +179,17 @@ const OrderItemForm = ({
                 </div>
               </Li>
               <Li>
-                <TextInput
-                  label="Size" 
-                  name="size"
-                  size="col-xl-4"
-                  errors={errors}
-                  smallText="Size of the product."
-                  value={formData.size}
-                  onChange={onInputChange}
-                />
-              </Li>
-              <Li>
                 <div className="row">
+                  <div className="col-xl-4">
+                    <TextInput
+                      label="Size (*)" 
+                      name="size"
+                      errors={errors}
+                      smallText="Size of the product."
+                      value={formData.size}
+                      onChange={onInputChange}
+                    />
+                  </div>
                   <div className="col-xl-4">
                     <TextInput
                       label="Qty (*)" 
@@ -181,23 +203,12 @@ const OrderItemForm = ({
                   </div>
                   <div className="col-xl-4">
                     <TextInput
-                      label="Unit Cost (*)" 
-                      name="unitCost"
-                      id="currencyMask-order-item-form-unitCost"
+                      label="Price (*)" 
+                      name="price"
+                      id="currencyMask-order-item-form-price"
                       errors={errors}
-                      smallText="Cost per unit."
-                      value={formData.unitCost}
-                      onChange={onInputChange}
-                    />
-                  </div>
-                  <div className="col-xl-4">
-                    <TextInput
-                      label="Tax Rate (%) (*)" 
-                      name="purTaxPct"
-                      id="currencyMask-order-item-form-purTaxPct"
-                      errors={errors}
-                      smallText="Sales tax rate applied to the item in %."
-                      value={formData.purTaxPct}
+                      smallText="Price per unit."
+                      value={formData.price}
                       onChange={onInputChange}
                     />
                   </div>
@@ -229,11 +240,14 @@ const OrderItemForm = ({
 
 const mapStateToProps = createStructuredSelector({
   data: selectOrderData,
-  order: selectOrderOrder
+  item: selectOrderItem,
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateItemInOrder: order => dispatch(updateItemInOrder(order))
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  )
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderItemForm);

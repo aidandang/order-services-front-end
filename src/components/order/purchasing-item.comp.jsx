@@ -12,7 +12,7 @@ import { selectOrderData } from '../../state/order/order.selectors'
 import { selectProductToOrderItem } from '../../state/order/order.actions'
 
 const PurchasingItem = ({
-  notOrderPurchasing,
+  orderPurchasing,
   data,
   selectProductToOrderItem
 }) => {
@@ -53,10 +53,10 @@ const PurchasingItem = ({
             items.length > 0 && Object.keys(items[0]).length > 0 && items.map((item, index) => 
               <tr 
                 key={index} 
-                className={isItemForm === index ? "table-row-no-link-cs" : "table-row-cs"}
+                className={(isItemForm === index || orderPurchasing) ? "table-row-no-link-cs" : "table-row-cs"}
                 onClick={e => {
                   e.preventDefault()
-                  if (isItemForm !== index) {
+                  if (isItemForm !== index && !orderPurchasing) {
                     selectProductToOrderItem({
                       product: { ...item.product },
                       color: { ...item.color }
@@ -81,7 +81,7 @@ const PurchasingItem = ({
             )
           }
           {
-            notOrderPurchasing &&
+            !orderPurchasing &&
             <tr className="table-row-no-link-cs">
               <td colSpan="6">
                 {
@@ -125,7 +125,7 @@ const PurchasingItem = ({
                 <th scope="col" colSpan="1" className="text-right">{`$${acctToStr(totalCalc())}`}</th>
               </tr>
               {
-                notOrderPurchasing &&
+                !orderPurchasing &&
                 <tr className="table-row-no-link-cs">
                   <td colSpan="6">
                     { 

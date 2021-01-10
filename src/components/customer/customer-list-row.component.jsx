@@ -1,19 +1,17 @@
 import React from 'react';
 
-// dependencies
-import { useLocation, useHistory } from 'react-router-dom';
-
 const CustomerListRow = ({
-  customer
+  customer,
+  setActive
 }) => {
-
-  const location = useLocation();
-  const history = useHistory();
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
     
-    history.push(`${location.pathname}/${customer._id}`)
+    setActive({
+      comp: 'customer-info',
+      id: customer._id
+    })
   }
 
   return <>

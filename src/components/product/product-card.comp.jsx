@@ -1,7 +1,7 @@
 import React from 'react'
 
 // components
-import { Li } from '../tag/tag.component'
+import { Li } from '../tag/tag.comp'
 
 const ProductCard = ({
   product,

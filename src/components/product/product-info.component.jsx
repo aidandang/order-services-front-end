@@ -4,8 +4,8 @@ import React, { useState } from 'react'
 import withProductData from './withProductData'
 import { WhiteCard, Card, Ul, Li, CloseTask } from '../tag/tag.component'
 import ProductColor from './product-color.component'
-import ProductForm from './product-form.component'
-import Brand from '../brand/brand.component'
+import ProductForm from './product-form.comp'
+import Brand from '../brand/brand.comp'
 
 const ProductInfo = ({ 
   data
@@ -100,11 +100,7 @@ const ProductInfo = ({
       </div>
       <div className="col-xl-4">
         <ProductColor />
-        <Card width="col" title="Update Brands">
-          <Ul>
-            <Brand />
-          </Ul>
-        </Card>
+        <Brand />
       </div>
     </div>
   </>
