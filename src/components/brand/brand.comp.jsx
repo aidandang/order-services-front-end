@@ -34,7 +34,7 @@ const Brand = ({ data }) => {
 
   // 1 select input and 3 actions in a card
   return <>
-    <Card title={'Update Brand'}>
+    <Card title={'Brands'}>
       <Ul>
         {
           action === '' && <>

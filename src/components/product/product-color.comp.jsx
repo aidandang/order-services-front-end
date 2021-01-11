@@ -3,27 +3,32 @@ import React, { useState } from 'react'
 // dependencies
 import { useParams } from 'react-router-dom'
 // components
-import { Card, Ul, Li, SelectInput } from '../tag/tag.component'
-import ProductColorAdd from './product-color-add.component'
-import ProductColorEdit from './product-color-edit.component'
-import ProductColorRemove from './product-color-remove.component'
+import { Card, Ul, Li, SelectInput } from '../tag/tag.comp'
+import ProductColorForm from './product-color-form.comp'
+import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectProductData } from '../../state/product/product.selectors'
 import { selectOrderData } from '../../state/order/order.selectors'
 import { selectProductToOrderItem } from '../../state/order/order.actions'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
+// constants
+const component = 'product-color'
 
 const ProductColor = ({
   data,
   orderData,
-  selectProductToOrderItem
+  selectProductToOrderItem,
+  alertMessage
 }) => {
 
   const params = useParams()
 
   const colors = data.byId.colors
   const { byId } = data
+
+  // these constants are for selectProductToOrderItem component
   const { orderId } = params
 
   const initialState = {
@@ -63,31 +68,31 @@ const ProductColor = ({
   }
 
   return <>
+
+    { alertMessage && alertMessage.component === component && <AlertMesg /> }
+
     <Card width="col" title="Product Colors">
       <Ul>
-      {
-        action === 'add'
-        ?
-        <ProductColorAdd data={data} setAction={setAction} />
-        :
-        <>
-          <Li>
-            <SelectInput
-              label="Color List"
-              name="color"
-              size="col-12"
-              smallText="Select a color to edit."
-              defaultValue=""
-              defaultText="..."
-              value={color._id}
-              onChange={onInputChange}
-              data={colors ? colors : []}
-              valueKey={'_id'}
-              textKey={'color'}
-            />
-          </Li>
-          {
-            colorTemp &&  
+        {
+          action === '' 
+          ? <>
+            <Li>
+              <SelectInput
+                label="Color List"
+                name="color"
+                size="col-12"
+                smallText="Select a color to edit."
+                defaultValue=""
+                defaultText="..."
+                value={color._id}
+                onChange={onInputChange}
+                data={colors ? colors : []}
+                valueKey={'_id'}
+                textKey={'color'}
+              />
+            </Li>
+            {
+              colorTemp &&  
               <Li>
                 <div className="row">
                   <div className="col">
@@ -124,14 +129,6 @@ const ProductColor = ({
                 </div>
               </Li>
             }
-            {
-              action === 'edit' &&
-              <ProductColorEdit data={data} colorTemp={colorTemp} setAction={setAction} />
-            }
-            {
-              action === 'remove' &&
-              <ProductColorRemove data={data} colorTemp={colorTemp} setAction={setAction} />
-            }
             <Li>
               <div className="row">
                 <div className="col">
@@ -148,8 +145,17 @@ const ProductColor = ({
                 </div>  
               </div>
             </Li>  
-        </>
-      }
+          </>
+          : <>
+            <ProductColorForm 
+              byId={byId} 
+              action={action}
+              setAction={setAction} 
+              component={component}
+              colorTemp={action === 'add' ? undefined : colorTemp} 
+            /> 
+          </>
+        }
       </Ul>
     </Card>
   </>
@@ -157,7 +163,8 @@ const ProductColor = ({
 
 const mapStateToProps = createStructuredSelector({
   data: selectProductData,
-  orderData: selectOrderData
+  orderData: selectOrderData,
+  alertMessage: selectAlertMessage
 })
 const mapDispatchToProps = dispatch => ({
   selectProductToOrderItem: payload => dispatch(selectProductToOrderItem(payload))

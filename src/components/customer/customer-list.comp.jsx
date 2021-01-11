@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 // components
 import Search from '../search/search.component'
-import CustomerListTable from './customer-list-table.component'
+import CustomerListTable from './customer-list-table.comp'
 import GetDataById from './get-data-by-id.comp'
-import { CloseTask } from '../tag/tag.component'
+import { CloseTask } from '../tag/tag.comp'
 import { queryState, searchList, defaultFilter, searchTitle } from '../../state/customer/customer.data'
 
 // main component
@@ -19,6 +19,10 @@ const CustomerList = () => {
   const setCloseTask = () => {
     setActive(null)
   }
+
+  // this container has 2 main components
+  // search for customer and customer details by Id
+  // search bar is shown in both components
 
   return <>
     <Search

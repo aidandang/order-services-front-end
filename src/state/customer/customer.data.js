@@ -1,6 +1,6 @@
 // search values
 export const queryState = {
-  account: "",
+  customerNumber: "",
   phone: "",
   nickname: "",
   fullname: "",
@@ -12,7 +12,7 @@ export const addLink = {
 }
 
 export const searchList = {
-  account: {
+  customerNumber: {
     type: 'text-input',
     placeholder: 'Account'
   },
@@ -34,6 +34,6 @@ export const searchList = {
   }
 }
 
-export const defaultFilter = 'account';
+export const defaultFilter = 'customerNumber';
 
 export const searchTitle = 'Search for Customers'
