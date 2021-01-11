@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 // components
 import { CloseTask } from '../tag/tag.component'
-import CustomerList from '../customer/customer-list.component'
-import CustomerAdd from '../customer/customer-add.component'
+import CustomerList from '../customer/customer-list.comp'
+import CustomerAdd from '../customer/customer-add.comp'
 import UpdateCustomerTab from './update-customer-tab.comp'
 // redux
 import { connect } from 'react-redux'

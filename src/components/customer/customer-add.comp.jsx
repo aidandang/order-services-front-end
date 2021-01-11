@@ -1,14 +1,14 @@
 import React from 'react';
 
 // components
-import CustomerForm from './customer-form.component';
+import CustomerForm from './customer-form.comp';
 
 // main component
 const CustomerAdd = ({
-  setActive
+  isOrderCalled
 }) => {
   return <>
-    <CustomerForm setActive={setActive} />
+    <CustomerForm isOrderCalled={isOrderCalled ? true : false} />
   </>
 }
 

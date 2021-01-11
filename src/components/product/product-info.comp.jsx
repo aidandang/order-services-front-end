@@ -31,7 +31,7 @@ const ProductInfo = ({
                 <CloseTask setCloseTask={setCloseTask} />
                 <ProductForm 
                   productTemp={{ ...byId,
-                    brandId: byId.brand._id
+                    brand: byId.brand._id
                   }} 
                   setIsProductForm={setIsProductForm}
                 />

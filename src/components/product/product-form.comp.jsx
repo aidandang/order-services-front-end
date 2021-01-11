@@ -64,14 +64,14 @@ const formState = {
 // called by PurchasingItemsForm and checked by argument named isOrderCalled.
 
 const ProductForm = ({
-  isOrderCalled,
-  productTemp,
-  setIsProductForm,
+  isOrderCalled, // ownProps
+  productTemp, // ownProps
+  setIsProductForm, // ownProps
   brandData,
-  alertMessage,
   patchReq,
   postReq,
-  setPurcItemTabActive
+  setPurcItemTabActive,
+  alertMessage,
 }) => {
   
   const history = useHistory()
@@ -104,15 +104,14 @@ const ProductForm = ({
         ...formData,
         brand: allIds.find(element => element._id === formData.brand)
       }
-      delete updatedProduct.brandId
-      patchReq('/products/' + updatedProduct._id, fetchSuccess, updatedProduct, goBackIfSuccess, 'product-edit') 
+      patchReq('/products/' + updatedProduct._id, fetchSuccess, updatedProduct, goBackIfSuccess, 'product-form') 
     } else {
       const newProduct = { 
         ...formData,
         brand: allIds.find(element => element._id === formData.brand)
       }
       delete newProduct.brandId
-      postReq('/products', fetchSuccess, newProduct, setSuccess, 'product-add')
+      postReq('/products', fetchSuccess, newProduct, setSuccess, 'product-form')
     }
   }
 
@@ -132,9 +131,9 @@ const ProductForm = ({
   }, [success])
 
   return <>
-    { alertMessage && (alertMessage.component === 'product-edit' || alertMessage.component === 'product-add') && <AlertMesg/> }
+    { alertMessage && alertMessage.component === 'product-form' && <AlertMesg/> }
     
-    <Card width="col" title="Add Product">
+    <Card width="col" title={productTemp ? 'Edit' : 'Add Product'}>
       <Ul>
         <Li>
           <TextInput

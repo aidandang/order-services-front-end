@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -6,66 +6,39 @@ import * as Yup from "yup";
 // components
 import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import CustomerAddressForm from './customer-address-form.component';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
+import ProductColorForm from './product-color-form.compoent';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/api.requests';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
+import { patchReq } from '../../state/api/api.requests';
+import { ProductActionTypes } from '../../state/product/product.types'; 
 
 // initial values
 const formSchema = Yup.object().shape({
-  fullname: Yup
+  color: Yup
     .string()
     .required(),
-  othername: Yup
+  image: Yup
+    .string(),
+  url: Yup
     .string()
-    .ensure(),
-  country: Yup
-    .string()
-    .required(),
-  streetAddress1: Yup
-    .string()
-    .required(),
-  streetAddress2: Yup
-    .string()
-    .ensure(),
-  city: Yup
-    .string()
-    .required(),
-  state: Yup
-    .string()
-    .required(),
-  zipcode: Yup
-    .string()
-    .required(),
-  phone: Yup
-    .string()
-    .required()
 });
 
 const formState = {
-  fullname: "",
-  othername: "",
-  country: "",
-  streetAddress1: "",
-  streetAddress2: "",
-  city: "",
-  state: "",
-  zipcode: "",
-  phone: ""
+  color: "",
+  image: "",
+  url: ""
 };
 
-const CustomerAddressAdd = ({
-  data,
+const ProductColorAdd = ({
   patchReq,
-  alertMessage,
-  setAction
+  data,
+  setAction,
+  alertMessage
 }) => {
 
   const { byId } = data;
@@ -81,13 +54,13 @@ const CustomerAddressAdd = ({
   ] = useForm(formState, formState, formSchema);
 
   const formSubmit = () => {
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
 
-    const customerTemp = { 
+    const productTemp = { 
       ...byId,
-      shippingInfo: [ ...byId.shippingInfo, formData]
+      colors: [ ...byId.colors, formData]
     }
-    patchReq('/customers/' + byId._id, fetchSuccess, customerTemp, setSuccess, 'customer-address-add');
+    patchReq('/products/' + byId._id, fetchSuccess, productTemp, setSuccess, 'product-color-add');
   }
 
   const formReset = () => {
@@ -104,8 +77,9 @@ const CustomerAddressAdd = ({
   }, [success])
 
   return <>
-    { alertMessage && alertMessage.component === 'customer-address-add' && <AlertMesg/> }
 
+    { alertMessage && alertMessage.component === 'product-color-add' && <AlertMesg/> }
+      
     <form>
       <Li>
         <div className="row">
@@ -124,16 +98,15 @@ const CustomerAddressAdd = ({
         </div>
       </Li>
     </form>
-
     <form>
-      <CustomerAddressForm
-        formData={formData}
+      <ProductColorForm
+        formData={formData} 
         errors={errors} 
         onInputChange={onInputChange}
       />
     </form>
     <SubmitOrReset
-      buttonName={'Add Address'}
+      buttonName={'Add Color'}
       buttonDisabled={buttonDisabled}
       formSubmit={formSubmit}
       formReset={formReset}
@@ -142,7 +115,6 @@ const CustomerAddressAdd = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectCustomerData,
   alertMessage: selectAlertMessage
 })
 
@@ -152,14 +124,14 @@ const mapDispatchToProps = dispatch => ({
     fetchSuccess, 
     reqBody, 
     setSuccess, 
-    component
+    componnent
   ) => dispatch(patchReq(
-    pathname,
-    fetchSuccess,
-    reqBody,
-    setSuccess,
-    component
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    componnent
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerAddressAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductColorAdd);

@@ -21,7 +21,7 @@ const ProductList = () => {
   }
 
   // this container has 2 main components
-  // search for product and add product
+  // search for product and product details by Id
   // search bar is shown in both components
   
   return <>

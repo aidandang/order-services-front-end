@@ -137,7 +137,7 @@ const ProductColorForm = ({
           </Li>      
         </form>
         <SubmitOrReset 
-          buttonName={'Update'}
+          buttonName={colorTemp ? 'Update' : 'Add'}
           buttonDisabled={buttonDisabled}
           formSubmit={formSubmit}
           formReset={formReset}

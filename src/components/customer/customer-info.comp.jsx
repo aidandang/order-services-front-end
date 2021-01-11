@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 // dependencies
 import { useParams } from 'react-router-dom'
 // components
-import { WhiteCard, Card, Ul, Li, CloseTask } from '../tag/tag.component'
-import CustomerForm from './customer-form.component'
-import CustomerAddress from './customer-address.component'
+import { Card, Ul, Li, CloseTask } from '../tag/tag.comp'
+import CustomerForm from './customer-form.comp'
+import CustomerAddress from './customer-address.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -13,9 +13,9 @@ import { selectCustomerToOrder } from '../../state/order/order.actions'
 import { selectOrderData } from '../../state/order/order.selectors'
 
 const CustomerInfo = ({
-  byId,
+  byId, // onwProps
+  orderData,
   selectCustomerToOrder,
-  orderData
 }) => {
 
   const params = useParams()
@@ -26,10 +26,10 @@ const CustomerInfo = ({
     address = byId.shippingInfo.find(el => el._id === byId.shippingAddress)
   }
 
-  const [active, setActive]  = useState(null)
+  const [isCustomerForm, setIsCustomerForm]  = useState(false)
 
   const setCloseTask = () => {
-    setActive(null)
+    setIsCustomerForm(null)
   }
 
   return <>
@@ -39,19 +39,15 @@ const CustomerInfo = ({
           <Ul>
             <Li>
               {
-                active === 'customer-form'
+                isCustomerForm
                 ? <>
                   <div className="row">
                     <div className="col">
                       <CloseTask setCloseTask={setCloseTask} />
-                      <WhiteCard width="col" title={'Edit'}>
-                        <Ul>
-                          <CustomerForm 
-                            customerTemp={byId}
-                            setActive={setActive}
-                          />
-                        </Ul>
-                      </WhiteCard>
+                      <CustomerForm 
+                        customerTemp={byId}
+                        setIsCustomerForm={setIsCustomerForm}
+                      />
                     </div>
                   </div>
                 </>
@@ -60,7 +56,7 @@ const CustomerInfo = ({
                     <div className="col">
                       <div className="row">
                         <div className="col-4">
-                          <span>Nickname:</span>
+                          <span className="font-weight-bold">Nickname:</span>
                         </div>
                         <div className="col-8">
                           <span>{byId.nickname}</span>
@@ -68,19 +64,20 @@ const CustomerInfo = ({
                       </div>
                       <div className="row">
                         <div className="col-4">
-                          <span>Account Number:</span>
+                          <span className="font-weight-bold">Account Number:</span>
                         </div>
                         <div className="col-8">
-                          <span>{byId.account}</span>
+                          <span className="font-weight-bold">{byId.customerNumber}</span>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-4">
-                          <span>Billing Address:</span>
+                          <span className="font-weight-bold">Billing Address:</span>
                         </div>
                         <div className="col-8">
                           <span>{byId.fullname}</span><br />
-                          <span>{byId.streetAddress1}, {byId.city}, {byId.state}</span><br />
+                          <span>{byId.streetAddress1}, {byId.city}</span><br />
+                          <span>{byId.state}{byId.country === 'United States' && ', ' + byId.zipcode}</span><br />
                           <span>Phone# {byId.phone}</span>
                         </div>
                       </div>
@@ -91,7 +88,7 @@ const CustomerInfo = ({
                             className="a-link-cs"
                             onClick={e => {
                               e.preventDefault()
-                              setActive('customer-form')
+                              setIsCustomerForm(true)
                             }}
                           >
                             Edit Customer Information
@@ -106,7 +103,7 @@ const CustomerInfo = ({
             <Li>
               <div className="row">
                 <div className="col-4">
-                  <span>Shipping Address:</span>
+                  <span className="font-weight-bold">Shipping Address:</span>
                 </div>
                 <div className="col-8 align-self-center">
                   {
@@ -114,7 +111,8 @@ const CustomerInfo = ({
                     ? <span>Same as Billing Address</span>
                     : <>
                       <span>{address.fullname}</span><br />
-                      <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
+                      <span>{address.streetAddress1}, {address.city}</span><br />
+                      <span>{address.state}{address.country === 'United States' && ', ' + address.zipcode}</span><br />
                       <span>Phone# {address.phone}</span>
                     </> 
                   }
@@ -148,7 +146,7 @@ const CustomerInfo = ({
         </Card>
       </div>
       <div className="col-xl-4">
-        <CustomerAddress customerTemp={byId} />
+        <CustomerAddress />
       </div>
     </div>
   </>
