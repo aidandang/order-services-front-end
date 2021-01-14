@@ -3,14 +3,14 @@ import React, { useEffect } from 'react'
 // dependencies
 import * as Yup from "yup"
 // components
-import { WhiteCard, Ul, Li, TextInput, CloseTask } from '../tag/tag.component'
+import { Card, Ul, Li, TextInput } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import { integerStrToNum } from '../utils/helpers'
 import { strToAcct } from '../utils/strToAcct'
 import { acctToStr } from '../utils/acctToStr'
 // redux
-import { connect } from 'react-redux'
+import { connect, batch } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectOrderData } from '../../state/order/order.selectors'
 import { updateItemInOrder } from '../../state/order/order.actions'
@@ -31,8 +31,8 @@ const SHIPPING_PRICE_PER_KG = 10
 var exchangeRate = 24000
 
 const SellingItemForm = ({
+  closeComp, // ownProps
   data,
-  setIsItemForm,
   itemIndex,
   updateItemInOrder
 }) => {
@@ -46,10 +46,6 @@ const SellingItemForm = ({
     buttonDisabled,
     setValues
   ] = useForm(formState, formState, formSchema)
-
-  const setCloseTask = () => {
-    setIsItemForm(null)
-  }
 
   const shippingPriceCalc = () => {
     const weight = strToAcct(formData.weight)
@@ -90,8 +86,10 @@ const SellingItemForm = ({
       return { ...item, ...obj }
     })
 
-    updateItemInOrder({ ...data.byId, items: editItems })
-    setIsItemForm(null)
+    batch(() => {
+      updateItemInOrder({ ...data.byId, items: editItems })
+      closeComp()
+    })
   }
 
   const formReset = () => {
@@ -116,76 +114,68 @@ const SellingItemForm = ({
   }, [])
 
   return <>
-    <div className="row">
-      <div className="col">
-        
-        <CloseTask setCloseTask={setCloseTask} />
-
-        <WhiteCard title={'Edit'}>
-          <Ul>
-            <Li>
-              <div className="row">
-                <div className="col-xl-6">
-                  <TextInput
-                    label="% Est. Interest" 
-                    name="int"
-                    id="currencyMask-order-selling-form-int"
-                    errors={errors}
-                    smallText={`Cost (inc. ${acctToStr(formData.purTaxPct)}% sales tax): đ${acctToStr(costIncludedTaxCalc()).split('.')[0]}`}
-                    value={formData.int}
-                    onChange={onInputChange}
-                  />
-                </div>
-                <div className="col-xl-6">
-                  <TextInput
-                    label="Unit Price" 
-                    name="unitDong"
-                    id="integerMask-order-selling-form-unitDong"
-                    errors={errors}
-                    smallText={`Estimated Price: đ${acctToStr(priceCalc()).split('.')[0]}`}
-                    value={formData.unitDong}
-                    onChange={onInputChange}
-                  />
-                </div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-xl-6">
-                  <TextInput
-                    label="Weight (kg) (*)" 
-                    name="weight"
-                    id="currencyMask-order-selling-form-weight"
-                    errors={errors}
-                    smallText="Weight of each unit in the item (kg)."
-                    value={formData.weight}
-                    onChange={onInputChange}
-                  />
-                </div>
-                <div className="col-xl-6">
-                  <TextInput
-                    label="Unit Shipping Price" 
-                    name="unitShippingDong"
-                    id="integerMask-order-selling-form-unitShippingDong"
-                    errors={errors}
-                    smallText={`Estimated price: đ${acctToStr(shippingPriceCalc()).split('.')[0]}`}
-                    value={formData.unitShippingDong}
-                    onChange={onInputChange}
-                  />
-                </div>
-              </div>
-            </Li>
-            <SubmitOrReset
-              buttonName={'Save'}
-              buttonDisabled={buttonDisabled}
-              formSubmit={formSubmit}
-              formReset={formReset}
-            /> 
-          </Ul>
-        </WhiteCard>
-        
-      </div>
-    </div>
+    <Card title={'Edit'}>
+      <Ul>
+        <Li>
+          <div className="row">
+            <div className="col-xl-6">
+              <TextInput
+                label="% Est. Interest" 
+                name="int"
+                id="currencyMask-order-selling-form-int"
+                errors={errors}
+                smallText={`Cost (inc. ${acctToStr(formData.purTaxPct)}% sales tax): đ${acctToStr(costIncludedTaxCalc()).split('.')[0]}`}
+                value={formData.int}
+                onChange={onInputChange}
+              />
+            </div>
+            <div className="col-xl-6">
+              <TextInput
+                label="Unit Price" 
+                name="unitDong"
+                id="integerMask-order-selling-form-unitDong"
+                errors={errors}
+                smallText={`Estimated Price: đ${acctToStr(priceCalc()).split('.')[0]}`}
+                value={formData.unitDong}
+                onChange={onInputChange}
+              />
+            </div>
+          </div>
+        </Li>
+        <Li>
+          <div className="row">
+            <div className="col-xl-6">
+              <TextInput
+                label="Weight (kg) (*)" 
+                name="weight"
+                id="currencyMask-order-selling-form-weight"
+                errors={errors}
+                smallText="Weight of each unit in the item (kg)."
+                value={formData.weight}
+                onChange={onInputChange}
+              />
+            </div>
+            <div className="col-xl-6">
+              <TextInput
+                label="Unit Shipping Price" 
+                name="unitShippingDong"
+                id="integerMask-order-selling-form-unitShippingDong"
+                errors={errors}
+                smallText={`Estimated price: đ${acctToStr(shippingPriceCalc()).split('.')[0]}`}
+                value={formData.unitShippingDong}
+                onChange={onInputChange}
+              />
+            </div>
+          </div>
+        </Li>
+        <SubmitOrReset
+          buttonName={'Save'}
+          buttonDisabled={buttonDisabled}
+          formSubmit={formSubmit}
+          formReset={formReset}
+        /> 
+      </Ul>
+    </Card>
   </>
 }
 

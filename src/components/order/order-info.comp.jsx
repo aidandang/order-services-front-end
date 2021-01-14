@@ -1,7 +1,7 @@
 import React from 'react'
 
 // components
-import { Card, Ul, Li } from '../tag/tag.component'
+import { Card, Ul, Li } from '../tag/tag.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -9,8 +9,8 @@ import { selectOrderData } from '../../state/order/order.selectors'
 // constants
 const statusColor = {
   'created': 'text-danger',
-  'editing': 'text-warning',
-  'ordered': 'text-success'
+  'ordered': 'text-dark',
+  'cancelled': 'text-muted'
 }
 
 const OrderInfo = ({ 
@@ -20,7 +20,7 @@ const OrderInfo = ({
   const { byId } = data
 
   return <>
-    <Card width="col" title="Order Information">
+    <Card width="col" title="Order">
       <Ul>
         <Li>
           <div className="row">

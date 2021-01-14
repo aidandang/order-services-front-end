@@ -3,19 +3,20 @@ import React, { useState } from 'react'
 // dependencies
 import { useParams } from 'react-router-dom'
 // components
-import { Card, Ul, Li, CloseTask } from '../tag/tag.comp'
+import { Card, Ul, Li, CloseTask, OnClickLink } from '../tag/tag.comp'
 import CustomerForm from './customer-form.comp'
 import CustomerAddress from './customer-address.comp'
 // redux
-import { connect } from 'react-redux'
+import { connect, batch } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectCustomerToOrder } from '../../state/order/order.actions'
+import { selectCustomerToOrder, orderSetComp } from '../../state/order/order.actions'
 import { selectOrderData } from '../../state/order/order.selectors'
 
 const CustomerInfo = ({
   byId, // onwProps
   orderData,
   selectCustomerToOrder,
+  setComp
 }) => {
 
   const params = useParams()
@@ -30,6 +31,17 @@ const CustomerInfo = ({
 
   const setCloseTask = () => {
     setIsCustomerForm(null)
+  }
+
+  const handleSelectCustomerToOrder = () => {
+    batch(() => {
+      selectCustomerToOrder({
+        selling: {
+          customer: byId
+        }
+      })
+      setComp('')
+    })
   }
 
   return <>
@@ -122,24 +134,7 @@ const CustomerInfo = ({
             {
               orderId && orderData.byId && orderId === orderData.byId._id && 
               <Li>
-                <div className="row">
-                  <div className="col">
-                    <a
-                      href="/"
-                      className="a-link-cs"
-                      onClick={e => {
-                        e.preventDefault()
-                        selectCustomerToOrder({
-                          selling: {
-                            customer: byId
-                          }
-                        })
-                      }}
-                    >
-                      Select Customer to Order
-                    </a>
-                  </div>
-                </div>
+                <OnClickLink text={'Select Customer to Order'} action={handleSelectCustomerToOrder} />             
               </Li>
             }
           </Ul>
@@ -156,7 +151,8 @@ const mapStateToProps = createStructuredSelector({
   orderData: selectOrderData
 })
 const mapDispatchToProps = dispatch => ({
-  selectCustomerToOrder: payload => dispatch(selectCustomerToOrder(payload))
+  selectCustomerToOrder: payload => dispatch(selectCustomerToOrder(payload)),
+  setComp: comp => dispatch(orderSetComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerInfo)

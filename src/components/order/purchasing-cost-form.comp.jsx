@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 // dependencies
 import * as Yup from "yup"
 // components
-import { WhiteCard, Ul, Li, TextInput, CloseTask } from '../tag/tag.component'
+import { Card, Ul, Li, TextInput } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import { strToAcct } from '../utils/strToAcct'
@@ -23,9 +23,9 @@ const formState = {
 }
 
 const PurchasingCostForm = ({
+  closeComp,
   data,
-  updatePurchasingInOrder,
-  setIsOtherCostForm
+  updatePurchasingInOrder
 }) => {
 
   const { purchasing } = data.byId
@@ -38,10 +38,6 @@ const PurchasingCostForm = ({
     setValues
   ] = useForm(formState, formState, formSchema)
 
-  const setCloseTask = () => {
-    setIsOtherCostForm(false)
-  }
-
   const formSubmit = () => {
 
     const obj = { ...formData };
@@ -53,7 +49,7 @@ const PurchasingCostForm = ({
         ...purchasing, ...obj
       }
     })
-    setIsOtherCostForm(false)
+    closeComp()
   }
 
   const formReset = () => {
@@ -71,32 +67,28 @@ const PurchasingCostForm = ({
   }, [])
 
   return <>
-    <div className="row">
-      <div className="col">
-        <CloseTask setCloseTask={setCloseTask} />
-        <WhiteCard width="col" title="Update Sales Tax, Other and Total">
-          <Ul>
-            <Li>
-              <TextInput
-                label="Other Cost" 
-                name="otherCost"
-                id="currencyMask-order-cost-form-otherCost"
-                errors={errors}
-                smallText="All other costs. Leave empty if there is no cost."
-                value={formData.otherCost}
-                onChange={onInputChange}
-              />
-            </Li>
-            <SubmitOrReset
-              buttonName={'Save'}
-              buttonDisabled={buttonDisabled}
-              formSubmit={formSubmit}
-              formReset={formReset}
-            />
-          </Ul>
-        </WhiteCard>
-      </div>
-    </div>
+    <Card width="col" title="Update Sales Tax, Other and Total">
+      <Ul>
+        <Li>
+          <TextInput
+            label="Other Cost" 
+            name="otherCost"
+            id="currencyMask-order-cost-form-otherCost"
+            size="col-xl-6"
+            errors={errors}
+            smallText="All other costs. Leave empty if there aren't any."
+            value={formData.otherCost}
+            onChange={onInputChange}
+          />
+        </Li>
+        <SubmitOrReset
+          buttonName={'Save'}
+          buttonDisabled={buttonDisabled}
+          formSubmit={formSubmit}
+          formReset={formReset}
+        />
+      </Ul>
+    </Card>
   </>
 }
 

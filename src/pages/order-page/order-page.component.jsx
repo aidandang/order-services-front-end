@@ -1,24 +1,30 @@
-import React from 'react';
+import React from 'react'
 
 // dependencies
-import { Switch, Route } from 'react-router-dom';
-
+import { Switch, Route, useLocation } from 'react-router-dom'
 // components
-import Title from '../../components/title/title.component';
-import Breadcrumb from '../../components/breadcrumb/breadcrumb.component';
-import routes from '../../routes/private/order.routes';
-
-// initial values
+import Title from '../../components/title/title.component'
+import Breadcrumb from '../../components/breadcrumb/breadcrumb.component'
+import routes from '../../routes/private/order.routes'
+// constants
 const title = {
   name: 'Order',
   message: 'Search for orders(s) by order number, data and items.'
 }
+const titleButtonPath = "/app/order/add"
 
-// main component
 const OrderPage = () => {
 
+  const location = useLocation()
+
   return <>
-    <Title title={title} />
+    <Title 
+      title={title} 
+      button={location.pathname.match(titleButtonPath) 
+        ? undefined
+        : { path: titleButtonPath, text: 'Add'}
+      } 
+    />
     
     <Switch>
       { 
@@ -40,4 +46,4 @@ const OrderPage = () => {
   </>
 }
 
-export default OrderPage;
+export default OrderPage

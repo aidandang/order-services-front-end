@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 // dependencies
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom'
 // components
-import { Card, Ul, Li, Button } from '../tag/tag.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
+import { Card, Ul, Li } from '../tag/tag.comp'
+import AlertMesg from '../alert-mesg/alert-mesg.component'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 // redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { postReq } from '../../state/api/api.requests'; 
-import { OrderActionTypes } from '../../state/order/order.types';
-import { selectOrderData } from '../../state/order/order.selectors';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { postReq } from '../../state/api/api.requests' 
+import { OrderActionTypes } from '../../state/order/order.types'
+import { selectOrderData } from '../../state/order/order.selectors'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
+// constants
+const component = 'order-add'
 
 const OrderAdd = ({
   data,
@@ -27,12 +30,14 @@ const OrderAdd = ({
   const handleSubmit = () => {
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const reqBody = { 
-      status: 'created',
-      costing: {} 
+      status: 'created'
     }
-    const component = 'order-add'
 
     postReq('/orders', fetchSuccess, reqBody, setSuccess, component)
+  }
+
+  const handleCancel = () => {
+    history.push(location.pathname.split('/add')[0])
   }
 
   useEffect(() => {
@@ -42,36 +47,20 @@ const OrderAdd = ({
 
   return <>
 
-    { alertMessage && alertMessage.component === 'order-add' && <AlertMesg /> }
+    { alertMessage && alertMessage.component === component && <AlertMesg /> }
 
     <Card width="col" title="Create a New Order">
       <Ul>
         <Li>
           <span>A new Order Number will be created. Do you want to continue?</span>
         </Li>
-        <Li>
-          <div className="row">
-            <div className="col my-2">
-              <Button
-                onClick={e => {
-                  e.preventDefault();
-                  handleSubmit()
-                }}
-              >
-                Add Order
-              </Button>
-              <span className="mr-3"></span>
-              <Button
-                onClick={e => {
-                  e.preventDefault();
-                  history.push(`${location.pathname.split('/add')[0]}`)
-                }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </Li>  
+        <SubmitOrReset
+          buttonName={'Add Order'}
+          buttonDisabled={false}
+          formSubmit={handleSubmit}
+          formReset={handleCancel}
+          secondButtonName={'Cancel'}
+        />
       </Ul>
     </Card>
   </>
@@ -88,4 +77,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderAdd)

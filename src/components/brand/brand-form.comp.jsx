@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 // dependencies
 import * as Yup from "yup"
 // components
-import { Li, TextInput } from '../tag/tag.component'
+import { Li, TextInput } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 // redux

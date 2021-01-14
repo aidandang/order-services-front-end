@@ -251,3 +251,58 @@ export const CloseTask = ({
     </div>
   )
 }
+
+export const OnClickLink = ({
+  text,
+  action
+}) => {
+  return <>
+    <a href="/" className="a-link-cs" onClick={
+      event => {
+        event.preventDefault()
+        action()
+      }
+    }>
+      {text}
+    </a>
+  </>
+}
+
+export const TableFrame = ({
+  children
+}) => {
+  return <>
+    <div className="row mb-2">
+      <div className="col">
+        <div className="table-responsive-sm">
+          {children}
+        </div>
+      </div>
+    </div>
+  </>
+}
+
+export const CompFrame = ({
+  closeComp,
+  children
+}) => {
+  return <>
+    <div className="row">
+      <div className="col">
+        <div className="row">
+          <div className="col text-right">
+            <i 
+              className="far fa-times-circle span-link-cs"
+              onClick={e => {
+                e.preventDefault();
+                closeComp()
+              }}
+            ></i>
+            <hr className="mt-1 mb-3" />
+          </div>  
+        </div>
+        {children}
+      </div>
+    </div>
+  </>
+}

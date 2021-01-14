@@ -3,7 +3,7 @@ import React from 'react'
 // dependencies
 import { useHistory, useLocation } from 'react-router-dom'
 // components
-import { Card, Ul, Li } from '../tag/tag.component'
+import { Card, Ul, Li, OnClickLink } from '../tag/tag.comp'
 import Purchasing from './purchasing.comp'
 import PurchasingItem from './purchasing-item.comp'
 // redux
@@ -15,18 +15,18 @@ const OrderPurchasing = ({
   data
 }) => {
 
-  // set constants
-  const { purchasing, items } = data.byId
   const history = useHistory()
   const location = useLocation()
+
+  const { purchasing, items } = data.byId
   const purchasingUpdatePath = location.pathname + '/purchasing-update'
 
-  const handlePurchasingUpdateLink = () => {
+  const goPurchasingUpdate = () => {
     history.push(purchasingUpdatePath)
   }
 
   return <>
-    <Card width="col" title="Purchasing Information">
+    <Card width="col" title="Purchasing">
       <Ul>
         { purchasing && <Purchasing purchasing={purchasing} /> }
       </Ul>
@@ -34,22 +34,15 @@ const OrderPurchasing = ({
         items.length > 0 && 
         <div className="row mt-4 mx-1">
           <div className="col">
-            <PurchasingItem orderPurchasing={true} />
+            <div className="table-responsive-sm">
+              <PurchasingItem isPurchasingCalled={true} />
+            </div>
           </div>
         </div> 
       }
       <Ul>
         <Li>
-          <a
-            href="/"
-            className="a-link-cs"
-            onClick={e => {
-              e.preventDefault()
-              handlePurchasingUpdateLink()
-            }}
-          >
-            Purchasing Update
-          </a>
+          <OnClickLink text={'Purchasing Update'} action={goPurchasingUpdate} />
         </Li>
       </Ul>  
     </Card>

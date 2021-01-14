@@ -13,9 +13,10 @@ import { stateList, provinceList } from '../../state/data/data'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectAlertMessage } from '../../state/alert/alert.selectors'
 import { postReq, patchReq } from '../../state/api/api.requests'
 import { CustomerActionTypes } from '../../state/customer/customer.types'
+import { orderSetComp } from '../../state/order/order.actions'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
 // constants
 const formSchema = Yup.object().shape({
   nickname: Yup
@@ -75,7 +76,8 @@ const CustomerForm = ({
   setIsCustomerForm, // ownProps
   patchReq,
   postReq,
-  alertMessage
+  alertMessage,
+  setComp
 }) => {
 
   const history = useHistory()
@@ -134,7 +136,7 @@ const CustomerForm = ({
   useEffect(() => {
     if (success) {
       if (isOrderCalled) {
-        // SOMETHING NEEDED TO CODE HERE
+        setComp('select-customer')
       } else {
         history.push(location.pathname.split('/add')[0])
       }
@@ -328,7 +330,8 @@ const mapDispatchToProps = dispatch => ({
   ),
   patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
+  ),
+  setComp: comp => dispatch(orderSetComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerForm)

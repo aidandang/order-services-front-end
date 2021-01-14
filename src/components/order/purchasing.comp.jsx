@@ -3,7 +3,7 @@ import React from 'react'
 // dependencies
 import moment from 'moment'
 // components
-import { Li } from '../tag/tag.component'
+import { Li } from '../tag/tag.comp'
 
 const Purchasing = ({
   purchasing

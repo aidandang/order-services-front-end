@@ -4,11 +4,11 @@ import React from 'react'
 import * as Yup from "yup"
 import moment from 'moment'
 // components
-import { WhiteCard, Ul, Li, TextInput, SelectInput, DateInput, CloseTask } from '../tag/tag.component'
+import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
-import Merchant from '../merchant/merchant.component'
-import Warehouse from '../warehouse/warehouse.component'
+import Merchant from '../merchant/merchant.comp'
+import Warehouse from '../warehouse/warehouse.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -35,11 +35,11 @@ const formState = {
 }
 
 const PurchasingForm = ({
+  closeComp, // ownProps
   data,
   updatePurchasingInOrder,
   merchantData,
-  warehouseData,
-  setIsInfoForm
+  warehouseData
 }) => {
 
   const { byId } = data
@@ -83,24 +83,21 @@ const PurchasingForm = ({
     updatePurchasingInOrder({
       purchasing: { ...obj }
     })
-    setIsInfoForm(false)
+
+    // close the component
+    closeComp()
   }
 
   const formReset = () => {
     setValues(formState)
   }
 
-  const setCloseTask = () => {
-    setIsInfoForm(false)
-  }
-
   return <>
-    <div className="row mt-2 mx-1">
+    <div className="row">
       <div className="col">
-        <CloseTask setCloseTask={setCloseTask} />
         <div className="row">
           <div className="col-12 col-xl-8">
-            <WhiteCard width="col" title="Purchasing Order">
+            <Card width="col" title="Purchasing Information">
               <Ul>
                 <Li>
                   <SelectInput
@@ -181,19 +178,11 @@ const PurchasingForm = ({
                   formReset={formReset}
                 />
               </Ul>
-            </WhiteCard>        
+            </Card>        
           </div>
           <div className="col-12 col-xl-4">
-            <WhiteCard title="Update Merchant" >
-              <Ul>
-                <Merchant />
-              </Ul>
-            </WhiteCard>
-            <WhiteCard title="Update Warehouse">
-              <Ul>
-                <Warehouse />
-              </Ul>
-            </WhiteCard>
+            <Merchant />
+            <Warehouse /> 
           </div>
         </div>
       </div>

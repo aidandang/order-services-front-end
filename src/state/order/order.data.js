@@ -31,22 +31,6 @@ export const searchList = {
         value: 'ordered'
       },
       {
-        text: 'received',
-        value: 'received'
-      },
-      {
-        text: 'shipped',
-        value: 'shipped'
-      },
-      {
-        text: 'delivered',
-        value: 'delivered'
-      },
-      {
-        text: 'returned',
-        value: 'returned'
-      },
-      {
         text: 'cancelled',
         value: 'cancelled'
       }

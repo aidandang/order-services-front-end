@@ -3,7 +3,7 @@ import React from 'react'
 // dependencies
 import { useHistory, useLocation } from 'react-router-dom'
 // components
-import { Card, Ul, Li } from '../tag/tag.component'
+import { Card, Ul, Li, OnClickLink } from '../tag/tag.comp'
 import Selling from './selling.comp'
 import SellingItem from './selling-item.comp'
 // redux
@@ -15,41 +15,36 @@ const OrderSelling = ({
   data
 }) => {
 
-  // set constants
-  const { selling, items } = data.byId
   const history = useHistory()
   const location = useLocation()
+
+  const { selling, items } = data.byId
   const sellingUpdatePath = location.pathname + '/selling-update'
 
-  const handleSellingUpdateLink = () => {
+  const handleSellingUpdate = () => {
     history.push(sellingUpdatePath)
   }
 
   return <>
-    <Card title="Selling Information">
+    <Card title="Selling">
       <Ul>
         { selling && <Selling selling={selling} /> }
       </Ul>
+
       { 
-        items.length > 0 &&  
+        selling && items.length > 0 &&  
         <div className="row mt-4 mx-1">
           <div className="col">
-            <SellingItem orderSelling={true} />
+            <div className="table-responsive-sm">
+              <SellingItem orderSelling={true} />
+            </div>
           </div>
-        </div> 
+        </div>
       }
+
       <Ul>
         <Li>
-          <a
-            href="/"
-            className="a-link-cs"
-            onClick={e => {
-              e.preventDefault()
-              handleSellingUpdateLink()
-            }}
-          >
-            Selling Update
-          </a>
+          <OnClickLink text={'Selling Update'} action={handleSellingUpdate} />
         </Li>
       </Ul>
     </Card>
