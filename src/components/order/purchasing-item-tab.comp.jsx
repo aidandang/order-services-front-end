@@ -1,34 +1,35 @@
 import React from 'react'
 
 // components
-import { WhiteCard, Ul, Li } from '../tag/tag.component'
+import { Card, Ul, Li } from '../tag/tag.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectPurcItemTabActive } from '../../state/order/order.selectors'
-import { setPurcItemTabActive } from '../../state/order/order.actions'
+import { selectOrderComp } from '../../state/order/order.selectors'
+import { orderSetComp } from '../../state/order/order.actions'
 
-const UpdateItemTab = ({
+const PurchasingItemTab = ({
+  itemIndex,
   isReselectProduct,
-  active,
-  setActive,
-  itemIndex
+  comp,
+  setComp
 }) => {
+
   return <>
-    <WhiteCard>
+    <Card>
       <Ul>
         <Li>
           <div className="row">
             <div className="col-12">
               {
-                active === 'item'
+                comp === ''
                 ? <span className="mr-1">Item</span>
                 : <a
                     href={'/'} 
                     className="a-link-cs mr-1"
                     onClick={e => {
                       e.preventDefault()
-                      setActive('item')
+                      setComp('')
                     }}
                   >
                     Item
@@ -36,14 +37,14 @@ const UpdateItemTab = ({
               }
               <span>{' | '}</span>
               {
-                active === 'select-product'
+                comp === 'select-product'
                 ? <span className="mx-1">{isReselectProduct ? 'Reselect Product' : 'Select Product'}</span>
                 : <a
                     href={'/'} 
                     className="a-link-cs mx-1"
                     onClick={e => {
                       e.preventDefault()
-                      setActive('select-product')
+                      setComp('select-product')
                     }}
                   >
                     {isReselectProduct ? 'Reselect Product' : 'Select Product'}
@@ -51,34 +52,34 @@ const UpdateItemTab = ({
               }
               <span>{' | '}</span>
               {
-                active === 'add-product'
+                comp === 'add-product'
                 ? <span className="mx-1">Add Product</span>
                 : <a
                     href={'/'} 
                     className="a-link-cs mx-1"
                     onClick={e => {
                       e.preventDefault()
-                      setActive('add-product')
+                      setComp('add-product')
                     }}
                   >
                     Add Product
                   </a>
               }
               {
-                itemIndex && <>
+                itemIndex >= 0 && <>
                   <span>{' | '}</span>
                   {
-                    active === 'remove'
-                    ? <span className="ml-1">Remove</span>
+                    comp === 'remove'
+                    ? <span className="ml-1">Remove This Item?</span>
                     : <a
                         href={'/'} 
                         className="a-link-cs ml-1"
                         onClick={e => {
                           e.preventDefault()
-                          setActive('remove')
+                          setComp('remove')
                         }}
                       >
-                        Remove Item
+                        Remove This Item?
                       </a>
                   }
                 </>
@@ -87,15 +88,15 @@ const UpdateItemTab = ({
           </div>
         </Li>
       </Ul>
-    </WhiteCard>
+    </Card>
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  active: selectPurcItemTabActive
+  comp: selectOrderComp
 })
 const mapDispatchToProps = dispatch => ({
-  setActive: payload => dispatch(setPurcItemTabActive(payload))
+  setComp: comp => dispatch(orderSetComp(comp))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateItemTab)
+export default connect(mapStateToProps, mapDispatchToProps)(PurchasingItemTab)

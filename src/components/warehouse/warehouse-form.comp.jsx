@@ -3,30 +3,30 @@ import React, { useState, useEffect } from 'react';
 // dependencies
 import * as Yup from "yup";
 // components
-import { Li, TextInput } from '../tag/tag.component';
+import { Li, TextInput, SelectInput } from '../tag/tag.comp';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 // redux
 import { connect } from 'react-redux';
 import { postReq, patchReq, deleteReq } from '../../state/api/api.requests';
-import { MerchantActionTypes } from '../../state/merchant/merchant.types'; 
+import { WarehouseActionTypes } from '../../state/warehouse/warehouse.types'; 
 
-// initial values
+// form schema
 const formSchema = Yup.object().shape({
   name: Yup
     .string()
     .required(),
-  url: Yup
+  type: Yup
     .string()
     .required()
 });
 const formState = {
   name: "",
-  url: ""
+  type: ""
 };
 
-const MerchantForm = ({
-  merchant,
+const WarehouseForm = ({
+  warehouse,
   action,
   setAction,
   postReq,
@@ -42,20 +42,20 @@ const MerchantForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(merchant ? merchant : formState, formState, formSchema);
+  ] = useForm(warehouse ? warehouse : formState, formState, formSchema);
 
   const formSubmit = (e) => {
-    const fetchSuccess = MerchantActionTypes.MERCHANT_FETCH_SUCCESS;
+    const fetchSuccess = WarehouseActionTypes.WAREHOUSE_FETCH_SUCCESS;
     const obj = { ...formData }
 
     if (action === 'add') {
-      postReq('/merchants', fetchSuccess, obj, setSuccess, 'merchant');
+      postReq('/warehouses', fetchSuccess, obj, setSuccess, 'warehouse');
     }
     if (action === 'edit') {
-      patchReq('/merchants/' + merchant._id, fetchSuccess, obj, setSuccess, 'merchant');
+      patchReq('/warehouses/' + warehouse._id, fetchSuccess, obj, setSuccess, 'warehouse');
     }
     if (action === 'remove') {
-      deleteReq('/merchants/' + merchant._id, fetchSuccess, setSuccess, 'merchant');
+      deleteReq('/warehouses/' + warehouse._id, fetchSuccess, setSuccess, 'warehouse');
     }
   }
 
@@ -100,20 +100,25 @@ const MerchantForm = ({
               name="name"
               errors={errors}
               size="col"
-              smallText="Name of the merchant."
+              smallText="Name of the warehouse."
               value={formData.name}
               onChange={onInputChange}
             />
           </Li>
           <Li>
-            <TextInput
-              label="Official Website" 
-              name="url"
+            <SelectInput
+              label="Warehouse Type" 
+              name="type"
               errors={errors}
               size="col"
-              smallText="The link to merchant's website."
-              value={formData.url}
+              smallText="Company or Customer warehouse."
+              defaultValue=""
+              defaultText="Choose..."
+              value={formData.type ? formData.type : ""}
               onChange={onInputChange}
+              data={[{ type: 'Company'}, { type: 'Customer'}]}
+              valueKey="type"
+              textKey="type" 
             />
           </Li>
         </>
@@ -121,9 +126,9 @@ const MerchantForm = ({
       {
         action === 'remove' &&
         <Li>
-          <span>Do you want to remove?</span>
+          <span>Do you want to remove {`${warehouse ? warehouse.name : null}`}?</span>
         </Li>
-      }
+      }        
     </form>
     <SubmitOrReset
       buttonName={action === 'remove' ? 'Remove' : 'Submit'}
@@ -131,7 +136,7 @@ const MerchantForm = ({
       formSubmit={formSubmit}
       formReset={action === 'remove' ? null : formReset}
     />
-  </>  
+  </>
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -146,4 +151,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(null, mapDispatchToProps)(MerchantForm);
+export default connect(null, mapDispatchToProps)(WarehouseForm);

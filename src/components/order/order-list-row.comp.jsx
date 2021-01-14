@@ -8,7 +8,8 @@ import { acctToStr } from '../utils/acctToStr'
 // initial values
 const statusColor = {
   'created': 'text-danger',
-  'ordered': 'text-success'
+  'ordered': 'text-dark',
+  'cancelled': 'text-muted'
 }
 
 const OrderListRow = ({

@@ -15,7 +15,7 @@ import { patchReq, postReq } from '../../state/api/api.requests'
 import { ProductActionTypes } from '../../state/product/product.types'
 import { selectAlertMessage } from '../../state/alert/alert.selectors'
 import { selectBrandData } from '../../state/brand/brand.selectors'
-import { setPurcItemTabActive } from '../../state/order/order.actions'
+import { orderSetComp } from '../../state/order/order.actions'
 // constants
 const formSchema = Yup.object().shape({
   name: Yup
@@ -70,7 +70,7 @@ const ProductForm = ({
   brandData,
   patchReq,
   postReq,
-  setPurcItemTabActive,
+  setComp,
   alertMessage,
 }) => {
   
@@ -122,7 +122,7 @@ const ProductForm = ({
   useEffect(() => {
     if (success) {
       if (isOrderCalled) {
-        setPurcItemTabActive('select-product')
+        setComp('select-product')
       } else {
         history.push(location.pathname.split('/add')[0])
       }
@@ -243,7 +243,7 @@ const mapDispatchToProps = dispatch => ({
   postReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   ),
-  setPurcItemTabActive: payload => dispatch(setPurcItemTabActive(payload))
+  setComp: comp => dispatch(orderSetComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductForm)

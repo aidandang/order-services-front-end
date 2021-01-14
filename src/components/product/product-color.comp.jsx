@@ -7,11 +7,11 @@ import { Card, Ul, Li, SelectInput } from '../tag/tag.comp'
 import ProductColorForm from './product-color-form.comp'
 import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
-import { connect } from 'react-redux'
+import { connect, batch } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectProductData } from '../../state/product/product.selectors'
 import { selectOrderData } from '../../state/order/order.selectors'
-import { selectProductToOrderItem } from '../../state/order/order.actions'
+import { selectProductToOrderItem, orderSetComp } from '../../state/order/order.actions'
 import { selectAlertMessage } from '../../state/alert/alert.selectors'
 // constants
 const component = 'product-color'
@@ -20,6 +20,7 @@ const ProductColor = ({
   data,
   orderData,
   selectProductToOrderItem,
+  setComp,
   alertMessage
 }) => {
 
@@ -60,9 +61,12 @@ const ProductColor = ({
 
   const handleSelectProductToOrderItem = () => {
     if (orderId && orderData.byId && orderId === orderData.byId._id) {
-      selectProductToOrderItem({ 
-        product: byId,
-        color: colorTemp
+      batch(() => {
+        selectProductToOrderItem({ 
+          product: byId,
+          color: colorTemp
+        })
+        setComp('')
       })
     }
   }
@@ -167,7 +171,8 @@ const mapStateToProps = createStructuredSelector({
   alertMessage: selectAlertMessage
 })
 const mapDispatchToProps = dispatch => ({
-  selectProductToOrderItem: payload => dispatch(selectProductToOrderItem(payload))
+  selectProductToOrderItem: payload => dispatch(selectProductToOrderItem(payload)),
+  setComp: comp => dispatch(orderSetComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductColor)

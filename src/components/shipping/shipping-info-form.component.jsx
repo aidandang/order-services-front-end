@@ -10,7 +10,7 @@ import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 import Consignee from '../consignee/consignee.component';
-import Warehouse from '../warehouse/warehouse.component';
+import Warehouse from '../warehouse/warehouse.comp';
 import Courier from '../courier/courier.component';
 // redux
 import { connect } from 'react-redux';

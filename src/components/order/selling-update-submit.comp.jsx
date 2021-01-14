@@ -3,20 +3,22 @@ import React, { useState, useEffect } from 'react'
 // dependencies
 import { useLocation, useHistory } from 'react-router-dom'
 // components
-import { Card, Ul, Li } from '../tag/tag.component'
+import { Card, Ul, Li, TableFrame, CompFrame } from '../tag/tag.comp'
 import Selling from './selling.comp'
 import SellingItem from './selling-item.comp'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
-import SellingForm from './selling-form.comp'
+import CustomerList from '../customer/customer-list.comp'
+import CustomerAdd from '../customer/customer-add.comp'
+import SellingTab from './selling-tab.comp'
 import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { selectOrderData, selectIsSelectedCustomer } from '../../state/order/order.selectors'
+import { selectOrderData, selectOrderComp } from '../../state/order/order.selectors'
 import { OrderActionTypes } from '../../state/order/order.types'
 import { patchReq } from '../../state/api/api.requests'
 import { selectAlertMessage } from '../../state/alert/alert.selectors'
-import { setIsSelectedCustomer } from '../../state/order/order.actions'
+import { orderSetComp } from '../../state/order/order.actions'
 // constants
 const component = 'selling-update-submit'
 
@@ -24,8 +26,8 @@ const SellingUpdateSubmit = ({
   data,
   patchReq,
   alertMessage,
-  isSelectedCustomer,
-  setIsSelectedCustomer
+  comp,
+  setComp
 }) => {
 
   const location = useLocation()
@@ -44,49 +46,55 @@ const SellingUpdateSubmit = ({
     patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   }
 
-  const handleResetButton = () => {
+  const closeComp = () => {
+    setComp('')
+  }
+  const goBack = () => {
     history.push(`${location.pathname.split('/selling-update')[0]}`)
   }
 
   useEffect(() => {
-    if (success) history.push(`${location.pathname.split('/selling-update')[0]}`)
+    if (success) goBack()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success])
 
   return <>
-
     { alertMessage && alertMessage.component === component && <AlertMesg /> }
 
     <Card width="col-12" title="Customer Information">
-      {
-        isSelectedCustomer === false
-        ? <SellingForm />
-        : 
+      <Ul>
         <Ul>
           <Li>
-            <a 
-              href={'/'}
-              className="a-link-cs"
-              onClick={e => {
-                e.preventDefault()
-                setIsSelectedCustomer(false)
-              }}
-            >
-              { selling && selling.customer ? 'Reselect Customer' : 'Select Customer' }
-            </a>
+            {
+              comp === '' &&
+              <SellingTab isReselect={selling && selling.customer ? true : false} />
+            }
+
+            {
+              comp === 'select-customer' &&
+              <CompFrame closeComp={closeComp}>
+                <CustomerList />
+              </CompFrame>
+            }
+
+            {
+              comp === 'customer-add' &&
+              <CompFrame closeComp={closeComp}>
+                <CustomerAdd />
+              </CompFrame>
+            }
           </Li>
+
           {
             selling && selling.customer && <Selling selling={selling} />
           }
         </Ul>
-      }
+      </Ul>
     </Card>
 
-    <div className="row mb-2">
-      <div className="col">
-        <SellingItem />
-      </div>
-    </div>
+    <TableFrame>
+      <SellingItem />
+    </TableFrame>
 
     <Card width="col-12" title="Update Selling Order">
       <Ul>
@@ -94,7 +102,7 @@ const SellingUpdateSubmit = ({
           buttonName={'Submit'}
           buttonDisabled={selling && items.length > 0 ? false : true}
           formSubmit={handleSubmitButton}
-          formReset={handleResetButton}
+          formReset={goBack}
           secondButtonName={'Cancel'}
         />
       </Ul>
@@ -105,13 +113,13 @@ const SellingUpdateSubmit = ({
 const mapStateToProps = createStructuredSelector({
   data: selectOrderData,
   alertMessage: selectAlertMessage,
-  isSelectedCustomer: selectIsSelectedCustomer
+  comp: selectOrderComp
 })
 const mapDispatchToProps = dispatch => ({
   patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   ),
-  setIsSelectedCustomer: payload => dispatch(setIsSelectedCustomer(payload))
+  setComp: comp => dispatch(orderSetComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SellingUpdateSubmit)

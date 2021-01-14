@@ -2,10 +2,8 @@ import { OrderActionTypes } from './order.types';
 
 const INITIAL_STATE = {
   data: {},
-  itemTemp: {},
-  purcItemTabActive: 'item',
-  customerTabActive: 'customer-list',
-  isSelectedCustomer: true
+  comp: '',
+  itemTemp: {}
 }
 
 const orderReducer = (state = INITIAL_STATE, action) => {
@@ -15,10 +13,10 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: action.payload
       }
-    case OrderActionTypes.COPY_ORDER_TO_EDIT:
+    case OrderActionTypes.ORDER_SET_COMP:
       return {
         ...state,
-        order: action.payload
+        comp: action.payload
       }
     case OrderActionTypes.UPDATE_ITEM_IN_ORDER:
       return {
@@ -50,13 +48,7 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         ...state,
         itemTemp: {
           ...state.itemTemp, ...action.payload
-        },
-        purcItemTabActive: 'item'
-      }
-    case OrderActionTypes.SET_PURC_ITEM_TAB_ACTIVE:
-      return {
-        ...state,
-        purcItemTabActive: action.payload
+        }
       }
     case OrderActionTypes.SELECT_CUSTOMER_TO_ORDER:
       return {
@@ -66,46 +58,11 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           byId: {
             ...state.data.byId, ...action.payload
           }
-        },
-        isSelectedCustomer: true
-      }
-    case OrderActionTypes.SET_CUSTOMER_TAB_ACTIVE:
-      return {
-        ...state,
-        customerTabActive: action.payload
-      }
-    case OrderActionTypes.SET_IS_SELECTED_CUSTOMER:
-      return {
-        ...state,
-        isSelectedCustomer: action.payload
+        }
       }
     default:
       return state;
   }
 }
-
-// function addItemToArray(array, item) {
-//   return [...array, item]
-// }
-
-// function updateItemInArray(array, item, itemIndex) {
-//   return array.map((el, index) => {
-//     if (index !== itemIndex) {
-//       // This isn't the item we care about - keep it as-is
-//       return el
-//     }
-//     // Otherwise, this is the one we want - return an updated value
-//     return {
-//       ...el,
-//       ...item
-//     }
-//   })
-// }
-
-// function removeItemInArray(array, index) {
-//   let newArray = array.slice()
-//   newArray.splice(index, 1)
-//   return newArray
-// }
 
 export default orderReducer;

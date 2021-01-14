@@ -64,7 +64,7 @@ const SearchForm = ({
                                 searchList[el].type === 'select-input' && <>
                                   <select
                                     name={el} 
-                                    className="custom-select text-capitalize"
+                                    className="custom-select"
                                     onChange={onInputChange}
                                     value={query[el]}
                                   >
