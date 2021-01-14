@@ -39,7 +39,7 @@ const OrderListRow = ({
     >
       <th scope="row">{orderNumber} </th>
       <td><span className={statusColor[status] ? statusColor[status] : null}>{status}</span></td>
-      <td>{selling && selling.customer ? `${selling.customer.account} - ${selling.customer.nickname}` : 'n/a'}</td>
+      <td>{selling && selling.customer ? `${selling.customer.customerNumber} - ${selling.customer.nickname}` : 'n/a'}</td>
       <td>{purchasing && purchasing.merchant ? purchasing.merchant.name : 'n/a'}</td>
       <td>{purchasing && purchasing.orderNumber ? purchasing.orderNumber : 'n/a'}</td>
       <td>{purchasing && purchasing.orderDate ? moment(purchasing.orderDate).add(8, 'hours').format('MM-DD-YYYY') : 'n/a'}</td>
