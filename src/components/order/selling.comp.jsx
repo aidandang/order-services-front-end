@@ -31,7 +31,7 @@ const Selling = ({
               <span>Account Number:</span>
             </div>
             <div className="col-8">
-              <span>{customer.account}</span>
+              <span>{customer.customerNumber}</span>
             </div>
           </div>
           <div className="row">
