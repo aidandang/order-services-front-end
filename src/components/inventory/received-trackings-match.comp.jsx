@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 // components
 import { integerMask } from '../utils/helpers'
-import CloseTask from '../close-task/close-task.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -20,10 +19,6 @@ const ReceivedTrackingsMatch = ({
   const { tracking, item } = match
 
   const [pair, setPair] = useState(null)
-
-  const setClose = () => {
-    setMatch(null)
-  }
 
   const formSubmit = () => {
     const obj = {
@@ -49,7 +44,6 @@ const ReceivedTrackingsMatch = ({
   }
   
   return <>
-    <CloseTask setClose={setClose} />
     <div className="row mb-2">
       <div className="col">
         <div className="table-responsive-sm">
