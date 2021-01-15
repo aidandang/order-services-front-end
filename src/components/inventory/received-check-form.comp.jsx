@@ -2,16 +2,13 @@ import React, { useEffect } from 'react'
 
 // dependencies
 import * as Yup from 'yup'
-import { useParams } from 'react-router-dom'
 // components
-import { Li, TextInput } from '../tag/tag.component'
+import { Li, TextInput } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 import { integerStrToNum } from '../utils/helpers'
 // redux
 import { connect } from 'react-redux'
-import { createStructuredSelector } from 'reselect'
-import { selectInventoryData } from '../../state/inventory/inventory.selectors'
 import { updateRecvItems } from '../../state/inventory/inventory.actions'
 // initials
 const formSchema = Yup.object().shape({
@@ -24,15 +21,11 @@ const formState = {
 }
 
 const ReceivedCheckForm = ({
-  data,
+  tracking,
+  closeComp,
   itemEdit,
-  setItemEdit,
   updateRecvItems
 }) => {
-
-  const params = useParams()
-  const { trackingId } = params
-  const tracking = data.trackings.find(el => el._id === trackingId)
 
   const [
     formData,
@@ -57,27 +50,15 @@ const ReceivedCheckForm = ({
       items.push(obj)
     } 
 
-    updateRecvItems(items, trackingId)
-    setItemEdit({
-      index: null
-    })
+    updateRecvItems(items, tracking._id)
+    
+    closeComp()
   }
 
   const formReset = () => {
-    setValues(formState)
-  }
-
-  const handleRemoveItem = () => {
-
-    var items = [ ...tracking.recvItems ]
-
-    if (formData.index !== undefined && formData.index !== 'add') {
-      items.splice(formData.index, 1)
-      updateRecvItems(items, trackingId)
-      setItemEdit({
-        index: null
-      })
-    }
+    setValues(prevState => ({
+      ...prevState, ...formState
+    }))
   }
 
   useEffect(() => {
@@ -118,26 +99,11 @@ const ReceivedCheckForm = ({
       formSubmit={formSubmit}
       formReset={formReset}
     />
-    <Li>
-      <a 
-        href="/"
-        className="a-link-cs"
-        onClick={e => {
-          e.preventDefault()
-          handleRemoveItem()
-        }}
-      >
-        Remove Item
-      </a>
-    </Li>
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectInventoryData
-})
 const mapDispatchToProps = dispatch => ({
-  updateRecvItems: (items, trackingId) => dispatch(updateRecvItems(items, trackingId))
+  updateRecvItems: (items, id) => dispatch(updateRecvItems(items, id))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReceivedCheckForm)
+export default connect(null, mapDispatchToProps)(ReceivedCheckForm)

@@ -4,35 +4,37 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Tab = ({
-  items,
+  itemObj,
   active
 }) => {
+
+  const arr = Object.keys(itemObj)
 
   return <>
     <div className="card mb-4">
       <div className="card-body py-3">
         {
-          items.map((item, index) => 
+          arr.map((key, index) => 
             <span key={index}>
               {
-                active.match(item.link)
+                active.match(itemObj[key].link)
                 ?
-                <span>{item.name}</span>
+                <span>{itemObj[key].name}</span>
                 :
                 <Link 
-                  to={item.link} 
+                  to={itemObj[key].link} 
                   className="a-link-cs"
                 >
-                  {item.name}
+                  {itemObj[key].name}
                 </Link>
               }
               {
-                item.badge > 0 && <>
+                itemObj[key].badge > 0 && <>
                   <span>{' '}</span>
-                  <span className="badge badge-pill badge-danger">{item.badge}</span>
+                  <span className="badge badge-pill badge-danger">{itemObj[key].badge}</span>
                 </>
               }
-              { index < items.length - 1 && <span className="mx-2">{'|'}</span> }
+              { index < arr.length - 1 && <span className="mx-2">{'|'}</span> }
             </span>
           )
         }

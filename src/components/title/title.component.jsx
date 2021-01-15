@@ -18,7 +18,7 @@ const Title = ({
             <span className="h4 align-middle">{title.name}</span>
             {
               button && <>
-                <span className="mx-1">{' '}</span>
+                <span className="ml-1">{' '}</span>
                 <Link to={button.path} className="btn btn-outline-primary title-cs__button py-0">
                   {button.text}
                 </Link>

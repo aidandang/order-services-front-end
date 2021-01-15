@@ -1,23 +1,30 @@
-import React from 'react';
+import React from 'react'
 
 // dependencies
-import { Switch, Route } from 'react-router-dom';
-
+import { Switch, Route, useLocation } from 'react-router-dom'
 // components
-import Title from '../../components/title/title.component';
-import Breadcrumb from '../../components/breadcrumb/breadcrumb.component';
-import routes from '../../routes/private/receiving.routes';
-
-// initial values
+import Title from '../../components/title/title.component'
+import Breadcrumb from '../../components/breadcrumb/breadcrumb.component'
+import routes from '../../routes/private/receiving.routes'
+// constants
 const title = {
   name: 'Receiving',
   message: 'Scan barcode to receive a package. Tracking number can be sorted by couriers.'
 }
+const titleButtonPath = "/app/receiving/add"
 
 const ReceivingPage = () => {
 
+  const location = useLocation()
+
   return <>
-    <Title title={title} />
+    <Title 
+      title={title} 
+      button={location.pathname.match(titleButtonPath) 
+        ? undefined
+        : { path: titleButtonPath, text: 'Add'}
+      } 
+    />
     
     <Switch>
       { 
@@ -39,4 +46,4 @@ const ReceivingPage = () => {
   </>
 }
 
-export default ReceivingPage;
+export default ReceivingPage
