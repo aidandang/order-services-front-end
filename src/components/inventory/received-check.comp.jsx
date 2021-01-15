@@ -66,7 +66,7 @@ const ReceivedCheck = ({
   }
 
   const formSubmit = () => {
-    const pathname = `/inventory/receiving/${tracking._id}`
+    const pathname = `/inventory/receiving/check/${tracking._id}`
     const fetchSuccess = InventoryActionTypes.INVENTORY_FETCH_SUCCESS
     const reqBody = {
       status: 'checked',
@@ -88,7 +88,7 @@ const ReceivedCheck = ({
   }
 
   useEffect(() => {
-    if (success) history.push(prevPath)
+    if (success) history.push(prevPath, 'reload')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success])
 
@@ -111,7 +111,7 @@ const ReceivedCheck = ({
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr className="table-row-no-link-cs">
                     <th scope="col" colSpan="4">
                       {tracking.tracking}
                     </th>

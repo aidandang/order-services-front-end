@@ -40,13 +40,9 @@ const InventoryTab = ({
   }
 
   // display notifications in the tab item 1
-  if (items) {
-    tabItemObj['incomming-items'].badge = items.length
-  }
-
-  // display notifications in the tab item 1
-  if (items) {
-    tabItemObj['in-store-items'].badge = items.length
+  if (items.length > 0) {
+    tabItemObj['incomming-items'].badge = items.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0)
+    tabItemObj['in-store-items'].badge = items.reduce((a, c) => c.status === 'received' || c.status === 'packed' ? a + 1 : a, 0)
   }
 
   return <>
