@@ -1,5 +1,5 @@
-import ReceivingList from '../../components/receiving/receiving-list.component';
-import ReceivingAdd from '../../components/receiving/receiving-add.component';
+import ReceivingList from '../../components/receiving/receiving-list.comp';
+import ReceivingAdd from '../../components/receiving/receiving-add.comp';
 
 const routes = [
   { path: "/app/receiving", name: "Search for Tracking Number", Component: ReceivingList },

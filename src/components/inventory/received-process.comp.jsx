@@ -11,6 +11,7 @@ import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { selectInventoryData } from '../../state/inventory/inventory.selectors'
 import { patchReq } from '../../state/api/api.requests'
 import { InventoryActionTypes } from '../../state/inventory/inventory.types'
 import { selectAlertMessage } from '../../state/alert/alert.selectors'
@@ -19,7 +20,7 @@ const component = 'received-trackings-process'
 const fetchSuccess = InventoryActionTypes.INVENTORY_FETCH_SUCCESS
  
 const ReceivedTrackingsProcess = ({
-  tracking,
+  data,
   orders,
   alertMessage,
   patchReq
@@ -28,6 +29,8 @@ const ReceivedTrackingsProcess = ({
   const params = useParams()
   const location = useLocation()
   const history = useHistory()
+
+  const tracking = data.trackings.find(el => el._id === params.trackingId)
 
   const [match, setMatch] = useState(null)
   const [success, setSuccess] = useState(false)
@@ -107,7 +110,7 @@ const ReceivedTrackingsProcess = ({
                   </tr>
                 </tbody>
                 {
-                  tracking && tracking.items.map(item => 
+                  tracking && tracking.recvItems.map(item => 
                     <tbody key={item._id} >
                       <tr 
                         className="table-row-cs"
@@ -142,7 +145,7 @@ const ReceivedTrackingsProcess = ({
           <Ul>
             <SubmitOrReset
               buttonName="Process"
-              buttonDisabled={tracking.items.length === count ? false : true}
+              buttonDisabled={tracking.recvItems.length === count ? false : true}
               formSubmit={formSubmit}
             />
           </Ul>
@@ -153,6 +156,7 @@ const ReceivedTrackingsProcess = ({
 }
 
 const mapsStateToProps = createStructuredSelector({
+  data: selectInventoryData,
   alertMessage: selectAlertMessage
 })
 const mapDispatchToProps = dispatch => ({
