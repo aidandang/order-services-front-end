@@ -17,47 +17,7 @@ export const Card = ({
             title &&
             <div className="card-header">
               <div className="row">
-                <div className="col text-uppercase h6 mb-0">{title}</div>
-                {
-                  action &&
-                  <div className="col text-right">
-                    <a
-                      href="/"
-                      className="a-link-cs"
-                      onClick={e => {
-                        e.preventDefault()
-                        action.handleAction()
-                      }}
-                    >
-                      {action.name}
-                    </a>
-                  </div>
-                }
-              </div>
-            </div>
-          }
-          {children}
-        </div>
-      </div>
-    </div>
-  </>
-}
-
-export const WhiteCard = ({ 
-  children, 
-  width, 
-  title, 
-  action 
-}) => {
-  return <>
-    <div className="row">
-      <div className={width ? width : 'col'}>
-        <div className="card mb-4">
-          {
-            title &&
-            <div className="card-header bg-light">
-              <div className="row">
-                <div className="col text-uppercase h6 mb-0">{title}</div>
+                <div className="col text-uppercase">{title}</div>
                 {
                   action &&
                   <div className="col text-right">
@@ -294,7 +254,7 @@ export const CompFrame = ({
             <i 
               className="far fa-times-circle span-link-cs"
               onClick={e => {
-                e.preventDefault();
+                e.stopPropagation()
                 closeComp()
               }}
             ></i>

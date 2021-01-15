@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 // dependencies
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useLocation } from 'react-router-dom'
 // components
 import Title from '../../components/title/title.component'
 import Breadcrumb from '../../components/breadcrumb/breadcrumb.component'
@@ -27,12 +27,14 @@ const InventoryPage = ({
   alertMessage
 }) => {
 
+  const location = useLocation()
+
   useEffect(() => {
     const fetchSuccess = InventoryActionTypes.INVENTORY_FETCH_SUCCESS
 
     getReq('/inventory', fetchSuccess, null, null, 'inventory')
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [location.state])
 
   return <>
     <Title title={title} />

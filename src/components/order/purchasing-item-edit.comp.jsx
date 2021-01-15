@@ -6,6 +6,8 @@ import * as Yup from "yup"
 import { Card, Ul, Li } from '../tag/tag.comp'
 import { useForm } from '../hook/use-form'
 import PurchasingItemTab from './purchasing-item-tab.comp'
+import PurchasingItemInfo from './purchasing-item-info.comp'
+import PurchasingItemForm from './purchasing-item-form.comp'
 import ProductList from '../product/product-list.comp'
 import ProductAdd from '../product/product-add.comp'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
@@ -17,10 +19,7 @@ import { connect, batch } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectItemTemp, selectOrderData, selectOrderComp } from '../../state/order/order.selectors'
 import { setItemTempToEdit, updateItemInOrder, orderSetComp } from '../../state/order/order.actions'
-import PurchasingItemForm from './purchasing-item-form.comp'
-import PurchasingItemInfo from './purchasing-item-info.comp'
-
-// initial form state
+// constants
 const formSchema = Yup.object().shape({
   size: Yup.string(),
   qty: Yup.string().required(),
@@ -35,6 +34,7 @@ const formState = {
   purTaxPct: "",
   note: ""
 }
+const WAREHOUSE_NUMBER = 1
 
 const PurchasingItemEdit = ({
   itemIndex, // ownProps
@@ -67,6 +67,7 @@ const PurchasingItemEdit = ({
     obj.itemCost = integerStrToNum(formData.qty) * strToAcct(formData.unitCost)
     obj.product = { ...itemTemp.product}
     obj.color = { ...itemTemp.color }
+    obj.warehouseNumber = WAREHOUSE_NUMBER
     
     let editItems = null
 

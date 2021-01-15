@@ -14,7 +14,7 @@ const updateArray = (array, values) => {
     }
     return { 
       ...el, 
-      items: values.items
+      recvItems: values.recvItems
     }
   })
 }
