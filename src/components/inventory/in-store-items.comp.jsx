@@ -1,6 +1,9 @@
 import React from 'react'
 
+// dependecies
+import moment from 'moment'
 // components
+import { TableFrame } from '../tag/tag.comp'
 import { integerMask } from '../utils/helpers'
 // redux
 import { connect } from 'react-redux'
@@ -11,64 +14,44 @@ const InStoreItems = ({
   data
 }) => {
 
-  const { orders } = data
+  const { items } = data
 
   return <>
-    <div className="row mb-2">
-      <div className="col">
-        <div className="table-responsive-sm">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Order#</th>
-                <th scope="col">Item Description</th>
-                <th scope="col" className="text-right">Qty</th>
+    <TableFrame>
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Order#</th>
+            <th scope="col">Item Description</th>
+            <th scope="col" className="text-right">Qty</th>
+            <th scope="col">Received Date</th>
+            <th scope="col">Received Tracking</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            items && items.reduce((a, c) => c.status === 'received' ? a + 1 : a, 0) > 0 
+            ? items.map(item => 
+              <tr 
+                key={item._id}
+                className={"table-row-no-link-cs"}
+              >
+                <td>{item.orderNumber}</td>
+                <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                <td className="text-right">{integerMask(item.qty.toString())}</td>
+                <td>{moment(item.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
+                <td>{item.receivingNumber}</td>
               </tr>
-            </thead>
-            {
-              orders && orders.length > 0 
-              ? 
-              orders.map(order => {
-                if (order.itemStatus.find(el => el === 'received')) {
-                  return <tbody key={order._id}>
-                    <tr>
-                      <th scope="col" colSpan="3">
-                        {order._id}
-                      </th>
-                    </tr>
-                    {
-                      order.items.map(item => {
-                        if (item.status === 'received') {
-                          return <tr 
-                            key={item._id}
-                            className="table-row-no-link-cs"
-                          >
-                            <td></td>
-                            <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-                            <td className="text-right">{integerMask(item.qty.toString())}</td>
-                          </tr>
-                        } else {
-                          return null
-                        }
-                      })
-                    }
-                  </tbody>
-                } else {
-                  return null
-                }
-              })
-              : <>
-                <tbody>
-                  <tr className="table-row-cs">
-                    <td colSpan="3">No orders needed to process.</td>
-                  </tr>
-                </tbody>
-              </>
-            }
-          </table>
-        </div>
-      </div>
-    </div>
+            )
+            : <>
+              <tr className="table-row-no-link-cs">
+                <td colSpan="3">No items in-store.</td>
+              </tr>
+            </>
+          }
+        </tbody>
+      </table>
+    </TableFrame>
   </>
 }
 

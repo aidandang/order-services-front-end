@@ -24,14 +24,12 @@ const PurchasingItem = ({
   const [isItemEdit, setIsItemEdit] = useState(null)
   const [isOtherCostForm, setIsOtherCostForm] = useState(false)
 
-  const salesTaxCalc = () => {
-    return Number(items.reduce((a, c) => a + c.itemCost * c.purTaxPct / 10000, 0).toFixed(0))
-  }
-
   const totalCalc = () => {
-    var total = items.reduce((a, c) => a + c.itemCost, 0)
-    total += salesTaxCalc()
-    total += purchasing && purchasing.otherCost ? purchasing.otherCost : 0
+    var total = items.reduce((a, c) => a + c.unitCost * c.qty, 0)
+    total += purchasing.shippingCost || 0
+    total += purchasing.purSalesTax || 0 
+    total += purchasing.otherCost || 0
+    total -= purchasing.purDiscount || 0
     
     return total
   }
@@ -133,30 +131,48 @@ const PurchasingItem = ({
               <tbody>
                 <tr className="table-row-no-link-cs">
                   <td colSpan="5" className="text-right">Subtotal</td>
-                  <td colSpan="1" className="text-right">{`$${acctToStr(items.reduce((a, c) => a + c.itemCost, 0))}`}</td>
+                  <td colSpan="1" className="text-right">{`$${acctToStr(items.reduce((a, c) => a + c.unitCost * c.qty, 0))}`}</td>
                 </tr>
-                <tr className="table-row-no-link-cs">
-                  <td colSpan="5" className="text-right">Sales Tax</td>
-                  <td colSpan="1" className="text-right">{`$${acctToStr(salesTaxCalc())}`}</td>
-                </tr>
-                <tr className="table-row-no-link-cs">
-                  <td colSpan="5" className="text-right">Other</td>
-                  <td colSpan="1" className="text-right">{purchasing && purchasing.otherCost ? `$${acctToStr(purchasing.otherCost)}` : '$-'}</td>
-                </tr>      
+                {
+                  purchasing && purchasing.shippingCost > 0 &&
+                  <tr className="table-row-no-link-cs">
+                    <td colSpan="5" className="text-right">Shipping Cost</td>
+                    <td colSpan="1" className="text-right">{`$${acctToStr(purchasing.shippingCost)}`}</td>
+                  </tr>
+                }
+                {
+                  purchasing && purchasing.purSalesTax > 0 &&
+                  <tr className="table-row-no-link-cs">
+                    <td colSpan="5" className="text-right">Sales Tax</td>
+                    <td colSpan="1" className="text-right">{`$${acctToStr(purchasing.purSalesTax)}`}</td>
+                  </tr>
+                }
+                {
+                  purchasing && purchasing.otherCost > 0 &&
+                  <tr className="table-row-no-link-cs">
+                    <td colSpan="5" className="text-right">Other Cost</td>
+                    <td colSpan="1" className="text-right">{`$${acctToStr(purchasing.otherCost)}`}</td>
+                  </tr>
+                }
+                {
+                  purchasing && purchasing.purDiscount > 0 &&
+                  <tr className="table-row-no-link-cs">
+                    <td colSpan="5" className="text-right">Discount Cost</td>
+                    <td colSpan="1" className="text-right">{`$${acctToStr(purchasing.purDiscount)}`}</td>
+                  </tr>
+                }
               </tbody>
               <tbody>
                 <tr className="table-row-no-link-cs">
-                  <th scope="col" colSpan="5" className="text-right">Total</th>
+                  <td>
+                    {
+                      !isPurchasingCalled &&
+                      <OnClickLink text={'Update Total Cost'} action={openOtherCostForm} />
+                    }
+                  </td>
+                  <th scope="col" colSpan="4" className="text-right">Total</th>
                   <th scope="col" colSpan="1" className="text-right">{`$${acctToStr(totalCalc())}`}</th>
                 </tr>
-                {
-                  !isPurchasingCalled &&
-                  <tr className="table-row-no-link-cs">
-                    <td colSpan="6">
-                      <OnClickLink text={'Update Other Cost'} action={openOtherCostForm} />
-                    </td>
-                  </tr>
-                }
               </tbody>
             </>
           }
