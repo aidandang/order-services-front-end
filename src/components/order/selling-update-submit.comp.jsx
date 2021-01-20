@@ -64,29 +64,35 @@ const SellingUpdateSubmit = ({
     <Card width="col-12" title="Customer Information">
       <Ul>
         <Ul>
-          <Li>
-            {
-              comp === '' &&
-              <SellingTab isReselect={selling && selling.customer ? true : false} />
-            }
-
-            {
-              comp === 'select-customer' &&
-              <CompFrame closeComp={closeComp}>
-                <CustomerList />
-              </CompFrame>
-            }
-
-            {
-              comp === 'customer-add' &&
-              <CompFrame closeComp={closeComp}>
-                <CustomerAdd />
-              </CompFrame>
-            }
-          </Li>
+          {
+            comp === '' && <>
+              <Li>
+                <SellingTab isReselect={selling && selling.customer ? true : false} />
+              </Li>
+              {
+                selling && selling.customer && 
+                <Selling selling={selling} />
+              }
+            </>
+          }
 
           {
-            selling && selling.customer && <Selling selling={selling} />
+            comp === 'select-customer' &&
+            <Li>
+              <CompFrame closeComp={closeComp}>
+              <CustomerList />
+              </CompFrame>
+            </Li>
+            
+          }
+
+          {
+            comp === 'customer-add' &&
+            <Li>
+              <CompFrame closeComp={closeComp}>
+              <CustomerAdd isOrderCalled={true} />
+              </CompFrame>
+            </Li>
           }
         </Ul>
       </Ul>

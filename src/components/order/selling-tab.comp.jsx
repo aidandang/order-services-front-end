@@ -13,7 +13,7 @@ const SellingTab = ({
 }) => {
   return <>
     <div className="row">
-      <div className="col-12">
+      <div className="col">
         {
           comp === 'select-customer'
           ? <span className="mr-1">{isReselect ? 'Reselect Customer' : 'Select Customer'}</span>

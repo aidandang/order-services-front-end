@@ -50,7 +50,7 @@ const PurchasingForm = ({
     orderEditing = {
       merchant: byId.purchasing.merchant._id,
       orderNumber: byId.purchasing.orderNumber,
-      orderDate: moment(byId.purchasing.orderDate).format('yyyy-MM-DD'),
+      orderDate: moment(byId.purchasing.orderDate).add(8, 'hours').format('yyyy-MM-DD'),
       type: byId.purchasing.type,
       warehouse: byId.purchasing.warehouse._id,
     }

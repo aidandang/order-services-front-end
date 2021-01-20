@@ -36,7 +36,7 @@ const SellingItem = ({
           <th scope="col">Style#</th>
           <th scope="col">Item/Description</th>
           <th scope="col" className="text-right">Weight</th>
-          <th scope="col" className="text-right">đShipping</th>
+          <th scope="col" className="text-right">đshipping</th>
           <th scope="col" className="text-right">đprice</th>
           <th scope="col" className="text-right">đsubtotal</th>
         </tr>
