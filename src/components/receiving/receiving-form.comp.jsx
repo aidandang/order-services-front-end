@@ -55,7 +55,7 @@ const ReceivingForm = ({
   const formSubmit = () => {
     const obj = {}
     obj.tracking = formData.tracking
-    obj.recvDate = Date.now()
+    obj.receivedDate = Date.now()
     obj.warehouseNumber = WAREHOUSE
 
     addTrackingToList(obj)
