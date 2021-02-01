@@ -40,7 +40,7 @@ const ProductList = () => {
     { 
       active && active.comp === 'product-info' && <>
         <CloseTask setCloseTask={setCloseTask} />
-        <ProductInfo id={active.id}/>
+        <ProductInfo id={active.id} />
       </>
     }
   </>

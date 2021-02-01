@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
-
-// dependencies
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
 
 // components
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-
+import AlertMesg from '../alert-mesg/alert-mesg.component'
 // redux
-import { connect, batch } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { ReceivingActionTypes } from '../../state/receiving/receiving.types';
-import { getReq } from '../../state/api/api.requests';
-import { selectReceivingData } from '../../state/receiving/receiving.selectors';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { clearAlertMessage } from '../../state/alert/alert.actions';
+import { connect, batch } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { ReceivingActionTypes } from '../../state/receiving/receiving.types'
+import { getReq } from '../../state/api/api.requests'
+import { selectReceivingData } from '../../state/receiving/receiving.selectors'
+import { selectAlertMessage } from '../../state/alert/alert.selectors'
+import { clearAlertMessage } from '../../state/alert/alert.actions'
 
 const withReceivingData = (WrapperComponent) => {
   const WithReceivingData = ({ 
@@ -22,18 +18,17 @@ const withReceivingData = (WrapperComponent) => {
     alertMessage,
     queryStr,
     clearAlertMessage, 
+    id,
     ...props 
   }) => {
 
-    let pathname = '/receiving';
-    const params = useParams();
-    const { receivingId } = params;
+    let pathname = '/receiving'
 
-    if (receivingId) pathname = pathname + '/' + receivingId;
+    if (id) pathname = pathname + '/' + id
 
-    const component = pathname;
+    const component = pathname
 
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState(false)
     const fetchSuccess = ReceivingActionTypes.RECEIVING_FETCH_SUCCESS
 
     useEffect(() => {
@@ -57,23 +52,13 @@ const withReceivingData = (WrapperComponent) => {
   })
 
   const mapDispatchToProps = dispatch => ({
-    getReq: (
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
-    ) => dispatch(getReq(
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
+    getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
+      getReq(pathname, fetchSuccess, queryStr, setSuccess, component
     )),
     clearAlertMessage: () => dispatch(clearAlertMessage())
   })
 
-  return connect(mapStateToProps, mapDispatchToProps)(WithReceivingData);
+  return connect(mapStateToProps, mapDispatchToProps)(WithReceivingData)
 }
 
-export default withReceivingData;
+export default withReceivingData

@@ -15,14 +15,14 @@ const tabItemObj = {
     link: '/app/inventory/received-trackings',
     badge: 0
   },
-  'incomming-items': {
-    name: 'Incoming Items',
-    link: '/app/inventory/incoming-items',
+  'incomming-orders': {
+    name: 'Incoming Orders',
+    link: '/app/inventory/incoming-orders',
     badge: 0
   },
-  'in-store-items': {
-    name: 'In-Store Items',
-    link: '/app/inventory/in-store-items',
+  'in-store-orders': {
+    name: 'In-Store Orders',
+    link: '/app/inventory/in-store-orders',
     badge: 0
   }
 }
@@ -32,7 +32,7 @@ const InventoryTab = ({
 }) => {
 
   const location = useLocation()
-  const { trackings, items } = data
+  const { trackings, orders } = data
 
   // display notifications in the tab item 0
   if (trackings) {
@@ -40,9 +40,9 @@ const InventoryTab = ({
   }
 
   // display notifications in the tab item 1
-  if (items.length > 0) {
-    tabItemObj['incomming-items'].badge = items.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0)
-    tabItemObj['in-store-items'].badge = items.reduce((a, c) => c.status === 'received' || c.status === 'packed' ? a + 1 : a, 0)
+  if (orders.length > 0) {
+    tabItemObj['incomming-orders'].badge = orders.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0)
+    tabItemObj['in-store-orders'].badge = orders.reduce((a, c) => c.status === 'received' ? a + 1 : a, 0)
   }
 
   return <>

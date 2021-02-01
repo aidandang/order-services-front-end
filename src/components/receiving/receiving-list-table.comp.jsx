@@ -10,7 +10,8 @@ import PaginationBar from '../pagination-bar/pagination-bar.component'
 import ReceivingListRow from './receiving-list-row.comp'
 
 const ReceivingListTable = ({ 
-  data
+  data,
+  setActive
 }) => {
 
   const location = useLocation()
@@ -54,13 +55,12 @@ const ReceivingListTable = ({
                 <th scope="col">Tracking#</th>
                 <th scope="col">Status</th>
                 <th scope="col">Received Date</th>
-                <th scope="col">Checked Date</th>
                 <th scope="col">Processed Date</th>
               </tr>
             </thead>
             <tbody>
               {allIds.map(receiving => 
-                <ReceivingListRow key={receiving._id} receiving={receiving} />
+                <ReceivingListRow key={receiving._id} receiving={receiving} setActive={setActive} />
               )}
             </tbody>
           </table>

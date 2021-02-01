@@ -17,9 +17,9 @@ const ReceivedTrackings = ({
   
   const { trackings } = data
 
-  const handleById = (tracking) => { 
-    if (tracking.status === 'checked') history.push(`${location.pathname}/process/${tracking._id}`)
-    if (tracking.status === 'received') history.push(`${location.pathname}/check/${tracking._id}`)
+  const handleById = (receiving) => { 
+    const pathname = location.pathname.split('/received-trackings')[0] 
+    history.push(`${pathname}/incoming-orders?tracking=${receiving.tracking}`)
   } 
 
   return <>
