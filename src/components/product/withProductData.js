@@ -52,18 +52,8 @@ const withProductData = (WrapperComponent) => {
   })
 
   const mapDispatchToProps = dispatch => ({
-    getReq: (
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
-    ) => dispatch(getReq(
-      pathname, 
-      fetchSuccess, 
-      queryStr, 
-      setSuccess,
-      component
+    getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
+      getReq(pathname, fetchSuccess, queryStr, setSuccess, component
     )),
     clearAlertMessage: () => dispatch(clearAlertMessage())
   })

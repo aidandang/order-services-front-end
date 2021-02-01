@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 // components
 import { integerMask } from '../utils/helpers'
-import IncomingItems from './imcoming-items.comp'
+import IncomingOrders from './imcoming-orders.comp'
 // redux
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -82,7 +82,7 @@ const ReceivedTrackingsMatch = ({
       </div>
     </div>
 
-    <IncomingItems setPair={setPair} />
+    <IncomingOrders setPair={setPair} />
   </>
 }
 

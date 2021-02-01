@@ -81,6 +81,7 @@ const PurchasingForm = ({
     }
 
     updatePurchasingInOrder({
+      warehouseNumber: warehouseObj.warehouseNumber,
       purchasing: { ...obj }
     })
 
