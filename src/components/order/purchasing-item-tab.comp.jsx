@@ -70,7 +70,7 @@ const PurchasingItemTab = ({
                   <span>{' | '}</span>
                   {
                     comp === 'remove'
-                    ? <span className="ml-1">Remove This Item?</span>
+                    ? <span className="ml-1">Remove Item</span>
                     : <a
                         href={'/'} 
                         className="a-link-cs ml-1"
@@ -79,7 +79,7 @@ const PurchasingItemTab = ({
                           setComp('remove')
                         }}
                       >
-                        Remove This Item?
+                        Remove Item
                       </a>
                   }
                 </>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // components
 import { TableFrame } from '../tag/tag.comp'
@@ -8,13 +8,38 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectOrderData } from '../../state/order/order.selectors'
 import { getReq } from '../../state/api/api.requests'
+import { OrderActionTypes } from '../../state/order/order.types'
+// const
+const component = 'receiving-process'
 
 const ReceivingProcess = ({
+  setFormData,
   data,
   getReq
 }) => {
 
-  const { orders } = data
+  const { allIds } = data
+
+  const handleOnChange = (e, orderId) => {
+    if (e.target.checked === true) {
+      setFormData(prevState => ({
+        ...prevState,
+        [e.target.id]: orderId
+      }))
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        [e.target.id]: null
+      }))
+    }
+  }
+
+  useEffect(() => {
+    const pathname = '/orders/receiving'
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
+    getReq(pathname, fetchSuccess, null, null, component)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return <>
     <TableFrame>
@@ -26,14 +51,14 @@ const ReceivingProcess = ({
             <th scope="col" className="text-right">Qty</th>
           </tr>
         </thead>
-        
           {
-            orders && orders.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0) > 0 
-            ? orders.map(order => <tbody key={order._id}>
+            allIds && allIds.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0) > 0 
+            ? allIds.map(order => <tbody key={order._id}>
                 <tr 
                   key={order._id}
                   className="table-row-cs"
                   onClick={e => {
+                    e.stopPropagation()
                     e.preventDefault()
                   }}
                 >
@@ -41,7 +66,19 @@ const ReceivingProcess = ({
                 </tr>
                 {
                   order.items.map(item => <tr key={item._id}>
-                      <td></td>
+                      <td>
+                        <div className="form-group form-check">
+                          <input 
+                            type="checkbox" 
+                            className="form-check-input" 
+                            id={item._id}
+                            onChange={e => {
+                              e.stopPropagation()
+                              handleOnChange(e, order._id)
+                            }} 
+                          />
+                        </div>
+                      </td>
                       <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
                       <td className="text-right">{integerMask(item.qty.toString())}</td>
                     </tr>
@@ -58,7 +95,6 @@ const ReceivingProcess = ({
               
             </>
           }
-        
       </table>
     </TableFrame>
   </>

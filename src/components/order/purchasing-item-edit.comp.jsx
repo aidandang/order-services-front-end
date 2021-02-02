@@ -135,9 +135,11 @@ const PurchasingItemEdit = ({
       itemIndex={itemIndex >= 0 ? itemIndex : undefined}
     />
 
+    <div className="mb-3"></div>
+
     {
       comp === '' && itemTemp.product && 
-      <Card width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
+      <Card>
         <Ul>
           <PurchasingItemInfo itemTemp={itemTemp} />
           <PurchasingItemForm

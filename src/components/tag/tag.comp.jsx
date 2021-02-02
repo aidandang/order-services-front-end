@@ -12,7 +12,7 @@ export const Card = ({
   return <>
     <div className="row">
       <div className={width ? width : 'col'}>
-        <div className="card mb-4">
+        <div className="card">
           {
             title &&
             <div className="card-header">
@@ -232,7 +232,7 @@ export const TableFrame = ({
   children
 }) => {
   return <>
-    <div className="row mb-2">
+    <div className="row">
       <div className="col">
         <div className="table-responsive-sm">
           {children}
@@ -262,6 +262,11 @@ export const CompFrame = ({
           </div>  
         </div>
         {children}
+        <div className="row">
+          <div className="col">
+            <hr className="mb-0" />
+          </div>
+        </div>
       </div>
     </div>
   </>

@@ -10,7 +10,9 @@ const Order = () => {
 
   return <> 
     <OrderInfo />
+    <div className="mb-4"></div>
     <OrderPurchasing />
+    <div className="mb-4"></div>
     <OrderSelling />
   </>
 }

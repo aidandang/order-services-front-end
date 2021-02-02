@@ -31,7 +31,7 @@ const PurchasingUpdateSubmit = ({
   const { purchasing, _id, items } = data.byId
 
   const [success, setSuccess] = useState(false)
-  const [comp, setComp] = useState('')
+  const [isPurchasingForm, setIsPurchasingForm] = useState(false)
 
   const salesTaxCalc = () => {
     return Number(items.reduce((a, c) => a + c.itemCost * c.purTaxPct / 10000, 0).toFixed(0))
@@ -60,10 +60,10 @@ const PurchasingUpdateSubmit = ({
   }
 
   const openPurchasingForm = () => {
-    setComp('purchasing-form')
+    setIsPurchasingForm(true)
   }
   const closeComp = () => {
-    setComp('')
+    setIsPurchasingForm(false)
   }
   const goBack = () => {
     const path = location.pathname.split('/purchasing-update')[0]
@@ -77,45 +77,50 @@ const PurchasingUpdateSubmit = ({
 
   return <>
     { alertMessage && alertMessage.component === component && <AlertMesg /> }
-
-    {
-      comp === '' && <>
-        <Card width="col" title="Purchasing Order">
-          <Ul>
-            { purchasing && purchasing.orderNumber && <Purchasing purchasing={purchasing} />}
-            <Li>
+    
+    <Card width="col" title="Purchasing Order">
+      <Ul>
+        { purchasing && purchasing.orderNumber && <Purchasing purchasing={purchasing} />}
+        <Li>
+          {
+            isPurchasingForm === false && <>
               <OnClickLink 
                 text={purchasing && purchasing.orderNumber ? 'Update Purchasing Order' : 'Create a Purchasing Order'}
                 action={openPurchasingForm}
               />
-            </Li>
-          </Ul>
-        </Card>
+            </>
+          }
+          {
+            isPurchasingForm === true && <>
+              <CompFrame closeComp={closeComp}>
+                <PurchasingForm closeComp={closeComp} />
+              </CompFrame>
+              <div className="mb-2"></div>
+            </>
+          }
+        </Li>
+      </Ul>
+    </Card>
 
-        <TableFrame>
-          <PurchasingItem />
-        </TableFrame>
+    <div className="mb-4"></div>
     
-        <Card width="col" title="Update Purchasing Order">
-          <Ul>
-            <SubmitOrReset
-              buttonName={'Submit'}
-              buttonDisabled={purchasing && purchasing.orderNumber && items.length > 0 ? false : true}
-              formSubmit={handleSubmit}
-              formReset={goBack}
-              secondButtonName={'Cancel'}
-            />
-          </Ul>
-        </Card>
-      </>
-    }
+    <TableFrame>
+      <PurchasingItem />
+    </TableFrame>
+  
+    <div className="mb-2"></div>
 
-    {
-      comp === 'purchasing-form' &&
-      <CompFrame closeComp={closeComp}>
-        <PurchasingForm closeComp={closeComp} />
-      </CompFrame>
-    }
+    <Card>
+      <Ul>
+        <SubmitOrReset
+          buttonName={'Submit'}
+          buttonDisabled={purchasing && purchasing.orderNumber && items.length > 0 ? false : true}
+          formSubmit={handleSubmit}
+          formReset={goBack}
+          secondButtonName={'Cancel'}
+        />
+      </Ul>
+    </Card>
   </>
 }
 
