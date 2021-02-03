@@ -98,7 +98,7 @@ const PurchasingForm = ({
       <div className="col">
         <div className="row">
           <div className="col-12 col-xl-8">
-            <Card width="col" title="Purchasing Information">
+            <Card>
               <Ul>
                 <Li>
                   <SelectInput
@@ -173,7 +173,7 @@ const PurchasingForm = ({
                   />
                 </Li>
                 <SubmitOrReset
-                  buttonName={'Submit'}
+                  buttonName={'Save'}
                   buttonDisabled={buttonDisabled}
                   formSubmit={formSubmit}
                   formReset={formReset}
@@ -182,7 +182,9 @@ const PurchasingForm = ({
             </Card>        
           </div>
           <div className="col-12 col-xl-4">
+            <div className="mb-3 mb-xl-0"></div>
             <Merchant />
+            <div className="mb-3"></div>
             <Warehouse /> 
           </div>
         </div>

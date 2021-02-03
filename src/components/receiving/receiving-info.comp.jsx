@@ -19,6 +19,8 @@ const ReceivingInfo = ({
   const { byId } = data
   const [isProcessing, setIsProcessing] = useState(false)
 
+  const [formData, setFormData] = useState({})
+
   const closeProcessingComp = () => {
     setIsProcessing(false)
   }
@@ -47,7 +49,7 @@ const ReceivingInfo = ({
                 isProcessing  
                 ? <>
                   <CompFrame closeComp={closeProcessingComp}>
-                    <ReceivingProcess />
+                    <ReceivingProcess setFormData={setFormData} />
                   </CompFrame>
                 </>
                 : <a 

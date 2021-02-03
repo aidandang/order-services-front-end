@@ -8,6 +8,7 @@ import { useForm } from '../hook/use-form'
 import PurchasingItemTab from './purchasing-item-tab.comp'
 import PurchasingItemInfo from './purchasing-item-info.comp'
 import PurchasingItemForm from './purchasing-item-form.comp'
+import PurchasingItemReceiving from './purchasing-item-receiving.comp'
 import ProductList from '../product/product-list.comp'
 import ProductAdd from '../product/product-add.comp'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
@@ -135,9 +136,11 @@ const PurchasingItemEdit = ({
       itemIndex={itemIndex >= 0 ? itemIndex : undefined}
     />
 
+    <div className="mb-3"></div>
+
     {
       comp === '' && itemTemp.product && 
-      <Card width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
+      <Card>
         <Ul>
           <PurchasingItemInfo itemTemp={itemTemp} />
           <PurchasingItemForm
@@ -176,6 +179,8 @@ const PurchasingItemEdit = ({
         </Ul>
       </Card>
     }
+
+    { comp === 'receiving' && <PurchasingItemReceiving order={byId} itemIndex={itemIndex} /> }
   </>
 }
 
