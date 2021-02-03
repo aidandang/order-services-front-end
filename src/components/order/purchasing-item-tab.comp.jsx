@@ -70,10 +70,10 @@ const PurchasingItemTab = ({
                   <span>{' | '}</span>
                   {
                     comp === 'remove'
-                    ? <span className="ml-1">Remove Item</span>
+                    ? <span className="mx-1">Remove Item</span>
                     : <a
                         href={'/'} 
-                        className="a-link-cs ml-1"
+                        className="a-link-cs mx-1"
                         onClick={e => {
                           e.preventDefault()
                           setComp('remove')
@@ -83,6 +83,21 @@ const PurchasingItemTab = ({
                       </a>
                   }
                 </>
+              }
+              <span>{' | '}</span>
+              {
+                comp === 'receiving'
+                ? <span className="mx-1">Receiving</span>
+                : <a
+                    href={'/'} 
+                    className="a-link-cs ml-1"
+                    onClick={e => {
+                      e.preventDefault()
+                      setComp('receiving')
+                    }}
+                  >
+                    Receiving
+                  </a>
               }
             </div>
           </div>

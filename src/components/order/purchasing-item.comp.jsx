@@ -86,7 +86,7 @@ const PurchasingItem = ({
                   </td>
                 : <>
                   <td>{item.product.styleCode}</td>
-                  <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                  <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}${item.recvTracking ? `/recvTracking:${item.recvTracking}` : ''}`}</td>
                   <td className="text-right">{integerMask(item.qty.toString())}</td>
                   <td className="text-right">{acctToStr(item.unitCost)}</td>
                   <td className="text-right">{acctToStr(item.purTaxPct)}</td>

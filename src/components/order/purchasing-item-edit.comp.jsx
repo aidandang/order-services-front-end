@@ -8,6 +8,7 @@ import { useForm } from '../hook/use-form'
 import PurchasingItemTab from './purchasing-item-tab.comp'
 import PurchasingItemInfo from './purchasing-item-info.comp'
 import PurchasingItemForm from './purchasing-item-form.comp'
+import PurchasingItemReceiving from './purchasing-item-receiving.comp'
 import ProductList from '../product/product-list.comp'
 import ProductAdd from '../product/product-add.comp'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
@@ -178,6 +179,8 @@ const PurchasingItemEdit = ({
         </Ul>
       </Card>
     }
+
+    { comp === 'receiving' && <PurchasingItemReceiving order={byId} itemIndex={itemIndex} /> }
   </>
 }
 

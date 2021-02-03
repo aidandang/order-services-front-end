@@ -7,7 +7,7 @@ import WarehouseForm from './warehouse-form.comp'
 
 const Warehouse = ({ data }) => {
   // convert warehouse array to obj
-  const whseObj = {};
+  const whseObj = {}
   if (data.allIds) {
     let i = 0;
     for (i = 0; i < data.allIds.length; i++) {
