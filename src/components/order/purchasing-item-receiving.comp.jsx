@@ -16,12 +16,12 @@ const component = 'purchasing-item-receiving'
 const PurchasingItemReceiving = ({
   order, // ownProp
   itemIndex, // ownProp
+  closeItemEdit, // ownProp
   data,
   getReq,
   updateItemInOrder
 }) => {
 
-  // convert receiving array to obj
   const recvObj = {}
   if (data.allIds) {
     let i = 0;
@@ -30,11 +30,8 @@ const PurchasingItemReceiving = ({
     }
   }
 
-  // set warehouse id state to hold value of a selected input
-  // set action state either add, edit or remove
   const [recvId, setRecvId] = useState('')
 
-  // set id to the state for warehouse changes in the select input
   const onInputChange = e => {
     e.preventDefault();
     const id = e.target.value
@@ -53,11 +50,13 @@ const PurchasingItemReceiving = ({
       }
       return { 
         ...item,
-        recvTracking: recvObj[recvId].tracking
+        recvTracking: recvId.length > 0 ? recvObj[recvId].tracking : ''
       }
     })
 
     updateItemInOrder({ ...order, items: editItems })
+
+    closeItemEdit()
   }
 
   useEffect(() => {
