@@ -180,7 +180,7 @@ const PurchasingItemEdit = ({
       </Card>
     }
 
-    { comp === 'receiving' && <PurchasingItemReceiving order={byId} itemIndex={itemIndex} /> }
+    { comp === 'receiving' && <PurchasingItemReceiving order={byId} itemIndex={itemIndex} closeItemEdit={closeItemEdit} /> }
   </>
 }
 
