@@ -2,7 +2,9 @@
 export const queryState = {
   tracking: "",
   status: "",
-  recvDate: ""
+  receivedDate: "",
+  processedDate: "",
+  returnedDate: ""
 }
 
 export const addLink = {
@@ -28,13 +30,17 @@ export const searchList = {
       }
     ]
   },
-  recvDate: {
+  receivedDate: {
     type: 'date-input',
     placeholder: 'Received Date'
   },
-  procDate: {
+  processedDate: {
     type: 'date-input',
     placeholder: 'Processed Date'
+  },
+  returnedDate: {
+    type: 'date-input',
+    placeholder: 'Returned Date'
   }
 }
 
