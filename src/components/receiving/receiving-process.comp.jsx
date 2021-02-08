@@ -1,112 +1,103 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // components
-import { TableFrame } from '../tag/tag.comp'
-import { integerMask } from '../utils/helpers'
+import { Card, Ul, Li } from '../tag/tag.comp'
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component'
 // redux
 import { connect } from 'react-redux'
-import { createStructuredSelector } from 'reselect'
-import { selectOrderData } from '../../state/order/order.selectors'
-import { getReq } from '../../state/api/api.requests'
-import { OrderActionTypes } from '../../state/order/order.types'
+import { patchReq } from '../../state/api/api.requests'
+import { ReceivingActionTypes } from '../../state/receiving/receiving.types'
 // const
 const component = 'receiving-process'
+const statusTypes = ['received', 'processed', 'returned']
 
 const ReceivingProcess = ({
-  setFormData,
-  data,
-  getReq
-}) => {
+  byId,
+  setCloseTask,
+  patchReq
+}) => {  
 
-  const { allIds } = data
+  const [success, setSuccess] = useState(false)
+  const [radio, setRadio] = useState(byId.status)
 
-  const handleOnChange = (e, orderId) => {
-    if (e.target.checked === true) {
-      setFormData(prevState => ({
-        ...prevState,
-        [e.target.id]: orderId
-      }))
-    } else {
-      setFormData(prevState => ({
-        ...prevState,
-        [e.target.id]: null
-      }))
-    }
+  const handleRadioOnChange = e => {
+    e.stopPropagation()
+    setRadio(e.target.value)
   }
 
+  const handleRadioSubmit = () => {
+    const reqBody = {}
+
+    if (radio === 'processed') {
+      reqBody.status = 'processed'
+      reqBody.processedDate = Date.now()
+      reqBody.returnedDate = null
+    } else if (radio === 'returned') {
+      reqBody.status = 'returned'
+      reqBody.returnedDate = Date.now()
+      reqBody.processedDate = null
+    } else {
+      reqBody.status = 'received'
+      reqBody.processedDate = null
+      reqBody.returnedDate = null
+    }
+
+    const pathname = `/receiving/${byId._id}`
+    const fetchSuccess = ReceivingActionTypes.RECEIVING_FETCH_SUCCESS
+    
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  }
+    
   useEffect(() => {
-    const pathname = '/orders/receiving'
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
-    getReq(pathname, fetchSuccess, null, null, component)
+    if (success) {
+      setCloseTask()
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [success])
+ 
 
   return <>
-    <TableFrame>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Order#</th>
-            <th scope="col">Item Description</th>
-            <th scope="col" className="text-right">Qty</th>
-          </tr>
-        </thead>
-          {
-            allIds && allIds.reduce((a, c) => c.status === 'ordered' ? a + 1 : a, 0) > 0 
-            ? allIds.map(order => <tbody key={order._id}>
-                <tr 
-                  key={order._id}
-                  className="table-row-cs"
-                  onClick={e => {
-                    e.stopPropagation()
-                    e.preventDefault()
-                  }}
-                >
-                  <td colSpan="3">{order.orderNumber}</td>
-                </tr>
-                {
-                  order.items.map(item => <tr key={item._id}>
-                      <td>
-                        <div className="form-group form-check">
-                          <input 
-                            type="checkbox" 
-                            className="form-check-input" 
-                            id={item._id}
-                            onChange={e => {
-                              e.stopPropagation()
-                              handleOnChange(e, order._id)
-                            }} 
-                          />
-                        </div>
-                      </td>
-                      <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-                      <td className="text-right">{integerMask(item.qty.toString())}</td>
-                    </tr>
-                  )
-                }
-              </tbody>
-            )
-            : <>
-              <tbody>
-                <tr className="table-row-no-link-cs">
-                  <td colSpan="3">No orders needed to process.</td>
-                </tr>
-              </tbody>
-              
-            </>
-          }
-      </table>
-    </TableFrame>
+    <Card title="Update receiving status">
+      <Ul>
+        <div onChange={handleRadioOnChange}>
+          <Li>
+            {
+              statusTypes.map((el, idx) => 
+                <div className="row" key={idx}>
+                  <div className="col align-self-center">
+                    <div className="form-check">
+                      <label className="form-check-label" htmlFor="status">
+                        <input 
+                          className="form-check-input" 
+                          type="radio" 
+                          name="status" 
+                          value={el} 
+                          defaultChecked={byId.status === el}
+                        />
+                          <span>{el}</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+          </Li>
+          
+          <SubmitOrReset
+            buttonName={'Update Status'}
+            buttonDisabled={byId.status === radio}
+            formSubmit={handleRadioSubmit}
+          />
+        </div>
+      </Ul>
+    </Card>
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectOrderData
-})
 const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr, setSuccess, component) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr, setSuccess, component)
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReceivingProcess)
+export default connect(null, mapDispatchToProps)(ReceivingProcess)

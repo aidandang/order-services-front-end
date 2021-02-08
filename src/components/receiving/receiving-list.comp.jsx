@@ -36,7 +36,7 @@ const ReceivingList = () => {
     {
       active && active.comp === 'receiving-info' && <>
         <CloseTask setCloseTask={setCloseTask} />
-        <ReceivingInfo id={active.id} />
+        <ReceivingInfo id={active.id} setCloseTask={setCloseTask} />
       </>
     }
     

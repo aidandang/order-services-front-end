@@ -5,7 +5,8 @@ import moment from 'moment'
 // constants
 const textColors = {
   'received': 'text-primary',
-  'processed': 'text-muted'
+  'processed': 'text-muted',
+  'returned': 'text-muted'
 }
 
 const ReceivingListRow = ({
@@ -29,7 +30,8 @@ const ReceivingListRow = ({
       <th scope="row">{receiving.tracking}</th>
       <td><span className={textColors[receiving.status]}>{receiving.status}</span></td>
       <td>{moment(receiving.recvDate).format('MMM Do YYYY, h:mm:ss a')}</td>
-      <td>{receiving.procDate ? moment(receiving.procDate).format('MMM Do YYYY, h:mm:ss a') : '-'}</td>
+      <td>{receiving.processedDate ? moment(receiving.processedDate).format('MMM Do YYYY, h:mm:ss a') : '-'}</td>
+      <td>{receiving.returnedDate ? moment(receiving.returnedDate).format('MMM Do YYYY, h:mm:ss a') : '-'}</td>
     </tr>
   </>
 }

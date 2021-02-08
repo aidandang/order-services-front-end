@@ -11,8 +11,7 @@ const SearchForm = ({
   queryState,
   searchList,
   defaultFilter,
-  addLink,
-  searchTitle
+  addLink
 }) => {
 
   const location = useLocation()

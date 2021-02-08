@@ -48,8 +48,6 @@ const PurchasingUpdateSubmit = ({
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const pathname = '/orders/' + _id
 
-    console.log(data.byId.items.reduce((a, c) => c.recvTracking.length > 0 ? a + 1 : a, 0))
-
     // check if item status to change the order status
     var orderStatus = 'ordered'
     if (data.byId.items.length === data.byId.items.reduce((a, c) => c.recvTracking.length > 0 ? a + 1 : a, 0)) {
