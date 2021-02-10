@@ -48,11 +48,10 @@ const PurchasingUpdateSubmit = ({
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS
     const pathname = '/orders/' + _id
 
-    // check if item status to change the order status
     var orderStatus = 'ordered'
-    if (data.byId.items.length === data.byId.items.reduce((a, c) => c.recvTracking.length > 0 ? a + 1 : a, 0)) {
+    if (items.length === items.reduce((a, c) => c.recvTracking && c.recvTracking.length > 0 ? a + 1 : a, 0)) {
       orderStatus = 'received'
-    } else if (data.byId.items.reduce((a, c) => c.recvTracking.length > 0 ? a + 1 : a, 0) > 0) {
+    } else if (items.reduce((a, c) => c.recvTracking && c.recvTracking.length > 0 ? a + 1 : a, 0) > 0) {
       orderStatus = 'partial-received'
     }
   

@@ -26,10 +26,10 @@ const PurchasingItem = ({
 
   const totalCalc = () => {
     var total = items.reduce((a, c) => a + c.unitCost * c.qty, 0)
-    total += purchasing.shippingCost || 0
-    total += purchasing.purSalesTax || 0 
-    total += purchasing.otherCost || 0
-    total -= purchasing.purDiscount || 0
+    total += purchasing && purchasing.shippingCost ? purchasing.shippingCost : 0
+    total += purchasing && purchasing.purSalesTax ? purchasing.purSalesTax : 0
+    total += purchasing && purchasing.otherCost ? purchasing.otherCost : 0
+    total -= purchasing && purchasing.purDiscount ? purchasing.purDiscount : 0
     
     return total
   }
